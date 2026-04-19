@@ -295,6 +295,27 @@ export const template_v1 = `<!DOCTYPE html>
                         </td>
                     </tr>
 
+                    <!-- Event 3: Kaggle Competition Initiative -->
+                    <tr>
+                        <td style="padding:20px 20px 0;border-top:1px solid #e0e0e0;">
+                            <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse:collapse;">
+                                <tr>
+                                    <td class="responsive-col" valign="top" width="50%" style="padding:0 15px 0 0;">
+                                        <p style="padding:0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333;">
+                                            <strong>3) Kaggle Competition Initiative</strong>
+                                        </p>
+                                        <p style="padding:8px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333;">
+                                            AIRIS organized the event to promote hands-on learning in data science through real-world competitive problem-solving. Members were introduced to how Kaggle competitions operate within the professional data science ecosystem while exploring different models, feature engineering techniques, and score optimization strategies. The experience encouraged analytical thinking, experimentation, and continuous improvement, while fostering a competitive yet collaborative learning environment within AIRIS.
+                                        </p>
+                                    </td>
+                                    <td class="responsive-col" valign="top" width="50%" style="padding:0 0 0 15px;">
+                                        <img src="https://res.cloudinary.com/dgxjcychd/image/upload/f_auto,q_auto/WhatsApp_Image_2026-04-19_at_17.27.10_fxvopr" alt="Kaggle Competition" style="display:block;width:100%;max-width:100%;height:auto;border:0;outline:none;text-decoration:none;margin:0;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
                     <!-- Section: Conclusion -->
                     <tr>
                         <td style="padding:40px 20px;background-color:#ffffff;text-align:left;">
