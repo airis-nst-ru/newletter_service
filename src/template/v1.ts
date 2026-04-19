@@ -282,7 +282,7 @@ export const template_v1 = `<!DOCTYPE html>
                                     </td>
                                     <!-- Event 2 -->
                                     <td class="responsive-col" valign="top" width="50%" style="padding:0 0 0 15px;border-left:1px solid #e0e0e0;">
-                                        <img src="https://res.cloudinary.com/dgxjcychd/image/upload/f_auto,q_auto/WhatsApp_Image_2026-04-19_at_17.27.10_fxvopr" alt="RAG Session" style="display:block;width:100%;max-width:100%;height:auto;border:0;outline:none;text-decoration:none;margin:0;padding:0 0 10px 0;">
+                                        <img src="https://res.cloudinary.com/dgxjcychd/image/upload/q_auto/f_auto/v1776625010/WhatsApp_Image_2026-04-19_at_18.00.27_olaxx9.jpg" alt="RAG Session" style="display:block;width:100%;max-width:100%;height:auto;border:0;outline:none;text-decoration:none;margin:0;padding:0 0 10px 0;">
                                         <p style="padding:0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333;">
                                             <strong>2) Session on Retrieval-Augmented Generation (RAG) by Jivit Rana</strong>
                                         </p>
