@@ -1,0 +1,371 @@
+export const template_v1 = `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="telephone=no" name="format-detection">
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:AllowPNG/>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
+    <title>The AIRIS Chronicle</title>
+    <style type="text/css">
+        /* Reset */
+        body, p, h1, h2, h3 {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            font-family: arial, 'helvetica neue', helvetica, sans-serif;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            background-color: #F0F4F2;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        img {
+            display: block;
+            border: 0;
+            outline: none;
+            text-decoration: none;
+            margin: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        td {
+            border-collapse: collapse;
+        }
+
+        /* Highlight color */
+        .highlight {
+            color: #b654a7;
+        }
+
+        /* Responsive */
+        @media only screen and (max-width: 600px) {
+            .wrapper {
+                width: 100% !important;
+            }
+
+            .responsive-col {
+                display: block !important;
+                width: 100% !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                border-left: none !important;
+            }
+
+            .hero-title {
+                font-size: 30px !important;
+            }
+
+            .footer-col {
+                display: block !important;
+                width: 100% !important;
+                text-align: center !important;
+            }
+
+            .footer-logo {
+                margin: 0 auto !important;
+            }
+
+            .social-table {
+                margin: 16px auto 0 !important;
+            }
+        }
+    </style>
+</head>
+
+<body style="width:100%;height:100%;font-family:arial,'helvetica neue',helvetica,sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;margin:0;background-color:#F0F4F2;">
+
+    <!-- Outer wrapper table for email client compatibility -->
+    <table cellspacing="0" cellpadding="0" width="100%" role="none" style="border-collapse:collapse;border-spacing:0px;padding:0;margin:0;width:100%;height:100%;background-color:#F0F4F2;">
+        <tr>
+            <td valign="top" align="center" style="padding:0;margin:0;">
+
+                <!--[if mso]><table cellspacing="0" cellpadding="0" width="600" align="center"><tr><td><![endif]-->
+                <table class="wrapper" cellspacing="0" cellpadding="0" width="600" align="center" style="max-width:600px;width:100%;background-color:#ffffff;">
+
+                    <!-- Top divider -->
+                    <tr>
+                        <td style="border-bottom:1px solid #cccccc;font-size:0;line-height:0;" height="1">&nbsp;</td>
+                    </tr>
+
+                    <!-- Header bar: Logo + presents -->
+                    <tr>
+                        <td style="padding:10px 20px;background-color:#333333;">
+                            <a target="_blank" href="https://airis-club.vercel.app/">
+                                <img width="100" src="https://eyuczcj.stripocdn.email/content/guids/CABINET_57ad4d3105d6248123e42cec12a1bbaeafffc93664b9a8d59a60d1c1bb2e92f3/images/screenshot_20260416_at_123355pm.png" alt="AIRIS" style="display:block;max-width:100px;height:auto;border:0;outline:none;text-decoration:none;margin:0;">
+                            </a>
+                            <p style="padding:4px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#737373;">presents</p>
+                        </td>
+                    </tr>
+
+                    <!-- Hero section -->
+                    <tr>
+                        <td style="padding:40px 20px;background-color:#333333;text-align:left;">
+                            <h1 class="hero-title" style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:48px;font-weight:700;line-height:1.1;color:#ffffff;letter-spacing:0;">THE AIRIS CHRONICLE</h1>
+                            <p style="padding:10px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:700;line-height:21px;color:#ffffff;">
+                                ARE YOUR 3AM RANTS ACTUALLY ARE MAKING YOUR AI SMARTER ?&nbsp;
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Divider -->
+                    <tr>
+                        <td style="border-bottom:1px solid #cccccc;font-size:0;line-height:0;" height="1">&nbsp;</td>
+                    </tr>
+
+                    <!-- Section 1: The Illusion of Being Heard -->
+                    <tr>
+                        <td style="padding:40px 20px;background-color:#ffffff;text-align:left;">
+                            <h1 style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:30px;font-weight:normal;line-height:36px;color:#333333;">The Illusion of Being Heard</h1>
+                            <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333;">
+                                Let's be real , we've all been there. It's 3 AM, your thoughts are spiraling, and instead of calling a friend or booking a therapy session, you're typing paragraphs into an AI chat box just to feel heard. No judgment. No interruptions. No emotional labor on the other side. Just instant, perfectly phrased responses that seem to understand exactly what you're going through, arguably better than that one friend who replies "hmm" after 20 minutes.<br><br>What makes this interaction powerful is not just the technology, but the experience it creates. The system feels present. It responds instantly, mirrors your tone, and offers validation in a way that feels consistent and reliable. But this sense of understanding is carefully constructed. The AI does not actually experience empathy, it produces responses that align with patterns of empathetic language. The comfort you feel is real, but it is generated through statistical alignment rather than emotional awareness. This creates an environment where vulnerability feels safe, even though it is being processed in a fundamentally mechanical way, like emotional support, but powered by math instead of mutual trauma.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Two-column articles -->
+                    <tr>
+                        <td style="padding:20px 20px 0;">
+                            <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse:collapse;">
+                                <tr>
+                                    <!-- Column 1: Ghibli Trap -->
+                                    <td class="responsive-col" valign="top" width="50%" style="padding:0 15px 0 0;">
+                                        <a target="_blank" href="https://viewstripo.email/">
+                                            <img src="https://eyuczcj.stripocdn.email/content/guids/CABINET_57ad4d3105d6248123e42cec12a1bbaeafffc93664b9a8d59a60d1c1bb2e92f3/images/screenshot_20260416_at_121029pm.png" alt="" style="display:block;width:100%;max-width:100%;height:auto;border:0;outline:none;text-decoration:none;margin:0;">
+                                        </a>
+                                        <h2 style="padding:10px 0 0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:24px;font-weight:normal;line-height:28.8px;color:#b654a7;letter-spacing:0;">
+                                            The Ghibli Trap: How Your Face Became a Server Farm
+                                        </h2>
+                                        <p style="padding:10px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333;">
+                                            That viral anime filter isn't just art—it's Data Ingestion. When you upload a selfie, you're providing a goldmine of Biometric Data (your unique facial geometry) to a model's Latent Space.
+                                        </p>
+                                        <p style="padding:0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333;">
+                                            Through Feature Extraction, the AI maps your face into coordinates to blend it with a Ghibli aesthetic. But there's a catch: most apps use your likeness for Dataset Expansion, meaning your face is now part of the permanent Training Corpus.
+                                        </p>
+                                        <p style="padding:0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333;">
+                                            Even worse, your photos contain EXIF Metadata (location, time, device ID), and once your data is baked into the model's Weights, "deleting" it is technically impossible. Are we sacrificing our Data Sovereignty for a 10-second trend?
+                                        </p>
+                                    </td>
+                                    <!-- Column 2: Alexa Privacy -->
+                                    <td class="responsive-col" valign="top" width="50%" style="padding:0 0 0 15px;border-left:1px solid #e0e0e0;">
+                                        <a href="https://viewstripo.email/" target="_blank">
+                                            <img src="https://eyuczcj.stripocdn.email/content/guids/CABINET_57ad4d3105d6248123e42cec12a1bbaeafffc93664b9a8d59a60d1c1bb2e92f3/images/screenshot_20260416_at_121320pm.png" alt="" style="display:block;width:100%;max-width:100%;height:auto;border:0;outline:none;text-decoration:none;margin:0;">
+                                        </a>
+                                        <h2 style="padding:10px 0 0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:24px;font-weight:normal;line-height:28.8px;color:#b654a7;letter-spacing:0;">
+                                            Siri-ously Alexa-cuting Your Privacy: The Ambient Audit
+                                        </h2>
+                                        <p style="padding:10px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333;">
+                                            While seemingly inactive, modern smart assistants actively participate in Natural Language Understanding (NLU) within the ambient surroundings. In the interest of improving the system's Intent Recognition ability, it continuously analyzes ambient data streams to distinguish between extraneous noises (such as advertisement on TV), and valid user requests. As a result, an Acoustic Profile is created wherein Non-Speech Events, including unique sound patterns (infant crying, sound of cutlery, etc.), are deemed Unstructured Data. Using Contextual Profiling techniques, ambient noise can be turned into valuable data, e.g., detected cough can serve as a trigger signal within health-centered advertisement ecosystems. While Siri, Alexa, and Google pitch "convenience," the underlying architecture treats your home as an unlabeled dataset waiting to be indexed.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Section 2: How Language Becomes Data -->
+                    <tr>
+                        <td style="padding:40px 20px;background-color:#ffffff;text-align:left;">
+                            <h1 style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:30px;font-weight:normal;line-height:36px;color:#333333;">How Language Becomes Data</h1>
+                            <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333;">
+                                To understand what's happening under the hood, you need to look at how <span style="color:#b654a7">Large Language Models</span> process text. When you type a message, it is broken down into <span style="color:#b654a7">tokens</span>, small units of text converted into numerical values. These values are processed through a Transformer based neural network, which analyses relationships between words based on patterns learned during training.<br><br>Inside the model are billions of <span style="color:#b654a7">parameters</span> that encode these patterns. They do not store meaning in a human sense, instead, they represent statistical relationships between words and phrases. When you write something emotional like "I feel empty," the model maps it into a high dimensional space where it sits near similar expressions.<br><br>From there, the system generates a response by calculating a probability distribution over possible next words. Every reply is essentially a prediction, what is the most likely sequence of words that fits this context. So when the AI responds with something empathetic, it is not reacting emotionally. It is selecting the most statistically appropriate continuation of the conversation, basically autocomplete, but with a therapy aesthetic.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Section 3: Feedback Loops, RLHF -->
+                    <tr>
+                        <td style="padding:40px 20px;background-color:#ffffff;text-align:left;">
+                            <h1 style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:30px;font-weight:normal;line-height:36px;color:#333333;">Feedback Loops, RLHF, and Emotional Calibration</h1>
+                            <img src="https://eyuczcj.stripocdn.email/content/guids/CABINET_57ad4d3105d6248123e42cec12a1bbaeafffc93664b9a8d59a60d1c1bb2e92f3/images/7_habits_of_highly_ineffective_people.jpeg" alt="" width="560" style="display:block;width:100%;max-width:100%;height:auto;border:0;outline:none;text-decoration:none;padding:10px 0 0;">
+                            <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333;">
+                                Your interaction with AI does not just end with the response. At scale, millions of such interactions contribute to improving future systems. While your specific conversation is not directly used to retrain the model in real time, aggregated patterns, what users say, how they say it, and which responses work, inform evaluation and refinement processes.<br><br>This is where <span style="color:#b654a7">RLHF (Reinforcement Learning from Human Feedback)</span> comes in. After a model is initially trained, humans review and rank its responses, deciding which ones feel more helpful, natural, or empathetic. The model then learns from this feedback, adjusting itself to produce responses that align better with human preferences.<br><br>So when you get a reply that feels "right," it is often because similar responses were previously rated highly by humans. Your interaction fits into this larger system, not by directly training the model instantly, but by contributing to patterns that influence how future feedback is collected and used.<br><br>This creates a feedback loop. Human emotions are expressed, patterns are observed, responses are refined, future interactions feel better. Over time, this improves sentiment analysis, natural language understanding, and emotional tone matching.<br><br>This process forms what can be called an affective infrastructure, a system that does not just respond to emotions but becomes increasingly effective at anticipating them. The result is a shift from reactive interaction to predictive interaction, where the system is optimized to deliver responses that feel emotionally "right" with growing precision. At this point, it is not just replying, it is low key reading the vibe better than your situationship ever did.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Section 4: Data, Behaviour, and the Future (dark bg) -->
+                    <tr>
+                        <td style="padding:40px 20px;background-color:#666666;text-align:left;">
+                            <h1 style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:30px;font-weight:normal;line-height:36px;color:#ffffff;">Data, Behaviour, and the Future of Interaction</h1>
+                            <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#ffffff;">
+                                As artificial intelligence becomes part of everyday life, it is transforming how people interact with technology. AI relies on data, behavior patterns, and personal inputs to deliver smarter and more personalized experiences. However, this progress comes with serious concerns about data security, privacy invasion, and misuse of personal information. Every search, click, and conversation can leave a digital footprint, making responsible data protection more important than ever. The future of interaction will depend not only on innovation, but on trust, transparency, and safeguarding individual privacy.
+                            </p>
+                            <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#ffffff;">
+                                Artificial intelligence is reshaping the future of interaction by changing how people communicate, learn, work, and connect digitally. Technology is becoming smarter and more personalized through data and behavioral insights. While AI offers faster and smoother experiences, it also raises concerns about privacy, security, and responsible data use. True progress will depend on creating systems that are innovative, trustworthy, and human-centered.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- AIRIS NEWS section heading -->
+                    <tr>
+                        <td style="text-align:left;padding:40px 20px 0;">
+                            <h1 style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:28px;font-weight:normal;line-height:33.6px;">
+                                <span style="color:#b654a7">AIRIS</span> <span style="color:#333333">NEWS</span>
+                            </h1>
+                            <p style="padding:8px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333;">
+                                The AIRIS Club continues to build a strong culture of innovation, research, and practical AI learning through impactful projects, technical sessions, and industry exposure. Here are some upcoming events and projects.
+                            </p>
+                            <h2 style="padding:16px 0 0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:28px;font-weight:700;line-height:33.6px;color:#b654a7;">Projects &amp; Initiatives</h2>
+                        </td>
+                    </tr>
+
+                    <!-- Projects two-column -->
+                    <tr>
+                        <td style="padding:20px 20px 40px;">
+                            <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse:collapse;">
+                                <tr>
+                                    <!-- Project 1 -->
+                                    <td class="responsive-col" valign="top" width="50%" style="padding:0 15px 0 0;text-align:left;">
+                                        <h2 style="padding:10px 0 0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:24px;font-weight:400;line-height:28.8px;color:#333333;">1) RTW Prediction Model</h2>
+                                        <p style="padding:10px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333;">
+                                            <strong>Category: Open-Source Development</strong> Marking a milestone as the first open-source project under the AIRIS GitHub organization, the <strong>RTW (Return-to-Work) Prediction Model</strong> utilizes real workers' compensation claims data to forecast employment outcomes. The project is strategically divided into classification and regression tracks, serving as a primary vehicle for teaching <strong>production-level workflows</strong>. Members gain vital experience in GitHub collaboration, branching strategies, and CI/CD basics, establishing a high standard for teamwork and open-source contribution within the club.
+                                        </p>
+                                    </td>
+                                    <!-- Project 2 -->
+                                    <td class="responsive-col" valign="top" width="50%" style="padding:0 0 0 15px;border-left:1px solid #e0e0e0;text-align:left;">
+                                        <h2 style="padding:10px 0 0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:24px;font-weight:400;line-height:28.8px;color:#333333;">2) Divuze – AI-Based Virtual Try-On Startup Project</h2>
+                                        <p style="padding:10px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333;">
+                                            <strong>Category: Startup &amp; Innovation</strong> <strong>Divuze</strong> is an entrepreneurial venture focused on revolutionizing the e-commerce experience through an AI-powered virtual try-on platform. By allowing users to visualize clothing on their own bodies digitally, the project addresses critical consumer pain points like fit uncertainty and styling confidence. This initiative serves as a bridge between <strong>AI technology and business thinking</strong>, giving members hands-on exposure to product design, prototyping, and the foundational elements of building a tech startup.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Events & Sessions heading -->
+                    <tr>
+                        <td style="padding:40px 20px 0;text-align:left;">
+                            <h2 style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:28px;font-weight:700;line-height:33.6px;color:#b654a7;">Events &amp; Sessions</h2>
+                        </td>
+                    </tr>
+
+                    <!-- Events two-column -->
+                    <tr>
+                        <td style="padding:20px 20px 0;">
+                            <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse:collapse;">
+                                <tr>
+                                    <!-- Event 1 -->
+                                    <td class="responsive-col" valign="top" width="50%" style="padding:0 15px 0 0;">
+                                        <img src="https://res.cloudinary.com/dgxjcychd/image/upload/q_auto/f_auto/v1776601872/WhatsApp_Image_2026-04-19_at_17.27.09_es3mdk.jpg" alt="AI Impact Summit" style="display:block;width:100%;max-width:100%;height:auto;border:0;outline:none;text-decoration:none;margin:0;padding:0 0 10px 0;">
+                                        <p style="padding:0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333;">
+                                            <strong>1) Participation in AI Impact Summit</strong>
+                                        </p>
+                                        <p style="padding:8px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333;">
+                                            On February 18–19, 2026, 27 members of AIRIS attended a high-profile two-day summit centered on innovation and emerging technologies. This engagement provided members with critical exposure to the national AI landscape and the latest advancements in entrepreneurship. Beyond gaining career insights from industry experts and startup leaders, the delegation successfully networked with various companies and universities, significantly strengthening the club's external professional presence.
+                                        </p>
+                                    </td>
+                                    <!-- Event 2 -->
+                                    <td class="responsive-col" valign="top" width="50%" style="padding:0 0 0 15px;border-left:1px solid #e0e0e0;">
+                                        <img src="https://res.cloudinary.com/dgxjcychd/image/upload/f_auto,q_auto/WhatsApp_Image_2026-04-19_at_17.27.10_fxvopr" alt="RAG Session" style="display:block;width:100%;max-width:100%;height:auto;border:0;outline:none;text-decoration:none;margin:0;padding:0 0 10px 0;">
+                                        <p style="padding:0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333;">
+                                            <strong>2) Session on Retrieval-Augmented Generation (RAG) by Jivit Rana</strong>
+                                        </p>
+                                        <p style="padding:8px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333;">
+                                            Led by <strong>Jivit Rana</strong>, this session introduced members to <strong>Retrieval-Augmented Generation (RAG)</strong>, a cornerstone of modern generative AI. The workshop focused on the practical implementation of RAG systems, demonstrating how Large Language Models (LLMs) can be optimized using external knowledge retrieval. By bridging the gap between theory and industry-standard workflows, the session equipped participants with the tools necessary for high-level research and application development.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Section: Conclusion -->
+                    <tr>
+                        <td style="padding:40px 20px;background-color:#ffffff;text-align:left;">
+                            <h1 style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:30px;font-weight:normal;line-height:36px;color:#333333;">CONCLUSION</h1>
+                            <p style="padding:10px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333;">
+                                So, what have we learned. Your 3 AM existential crisis is basically a free internship for a multi billion dollar model, and that Ghibli filter just turned your face into potential long term research material sitting on a server farm in a valley you will probably never visit. Not exactly the fairytale ending, but hey, at least your anime version had better emotional stability than you did at 3 AM.You're now up to date on the latest AI risks and innovations.You're now up to date on the latest AI risks and innovations. Ready to see what comes next in the future of interaction? Here at <strong style="color:#b654a7">THE AIRIS CHRONICLE</strong>, we'll make sure you stay informed every step of the way.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Divider -->
+                    <tr>
+                        <td style="border-bottom:1px solid #cccccc;font-size:0;line-height:0;" height="1">&nbsp;</td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding:20px;background-color:#333333;">
+                            <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse:collapse;">
+                                <tr>
+                                    <td class="footer-col" valign="middle" style="text-align:left;">
+                                        <a target="_blank" href="https://airis-club.vercel.app/">
+                                            <img class="footer-logo" width="180" src="https://eyuczcj.stripocdn.email/content/guids/CABINET_57ad4d3105d6248123e42cec12a1bbaeafffc93664b9a8d59a60d1c1bb2e92f3/images/screenshot_20260416_at_123355pm.png" alt="AIRIS" style="display:block;max-width:180px;height:auto;border:0;outline:none;text-decoration:none;margin:0;">
+                                        </a>
+                                    </td>
+                                    <td class="footer-col" valign="middle" style="text-align:right;">
+                                        <table class="social-table" cellspacing="0" cellpadding="0" align="right" style="border-collapse:collapse;">
+                                            <tr>
+                                                <td style="padding:0 5px 0 0;">
+                                                    <a href="https://www.instagram.com/airis.nstru/?__pwa=1">
+                                                        <img title="Instagram" src="https://eyuczcj.stripocdn.email/content/assets/img/social-icons/square-colored/instagram-square-colored.png" alt="Inst" width="32" height="32" style="display:block;width:32px;height:32px;border:0;outline:none;text-decoration:none;margin:0;">
+                                                    </a>
+                                                </td>
+                                                <td style="padding:0 0 0 5px;">
+                                                    <a href="https://www.linkedin.com/company/airis-ai/posts/?feedView=all">
+                                                        <img src="https://eyuczcj.stripocdn.email/content/assets/img/social-icons/square-colored/linkedin-square-colored.png" alt="IN" width="32" height="32" title="LinkedIn" style="display:block;width:32px;height:32px;border:0;outline:none;text-decoration:none;margin:0;">
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Unsubscribe -->
+                    <tr>
+                        <td style="padding:15px 20px;background-color:#f5f5f5;text-align:center;">
+                            <p style="margin:0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:12px;line-height:18px;color:#999999;">
+                                Don't want to receive these emails?
+                                <a href="{{UNSUBSCRIBE_URL}}" target="_blank" style="color:#b654a7;text-decoration:underline;font-size:12px;">Unsubscribe</a>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Bottom dividers -->
+                    <tr>
+                        <td style="border-bottom:1px solid #cccccc;font-size:0;line-height:0;" height="1">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style="border-bottom:1px solid #cccccc;font-size:0;line-height:0;" height="1">&nbsp;</td>
+                    </tr>
+
+                </table>
+                <!--[if mso]></td></tr></table><![endif]-->
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+</html>`;
