@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn src/server.ts",
+    "build": "prisma generate && tsc",
     "test": "jest",
     "postinstall": "prisma generate"
   },
