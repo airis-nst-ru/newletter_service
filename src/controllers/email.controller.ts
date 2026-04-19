@@ -232,7 +232,7 @@ const submitFeedback = async (req: Request, res: Response) => {
                     }
                     .card img {
                         max-width: 160px;
-                        margin-bottom: 28px;
+                        margin: 0 auto 28px;
                         filter: drop-shadow(0 0 24px rgba(176, 106, 179, 0.35));
                     }
                     .card .checkmark {
@@ -264,8 +264,8 @@ const submitFeedback = async (req: Request, res: Response) => {
             <body>
                 <div class="card">
                     <img src="/logo.png" alt="AIRIS Logo" />
-                    <div class="checkmark">✓</div>
                     <h1>Thank You!</h1>
+                    <div class="checkmark">✓</div>
                     <p>Your feedback has been received. We appreciate you taking the time to share your thoughts.</p>
                 </div>
             </body>
