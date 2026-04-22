@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
+import fs from "fs";
+import path from "path";
 
 const unsubscribeEmail = async (req: Request, res: Response) => {
     const { email } = req.query;
@@ -292,5 +294,15 @@ const submitFeedback = async (req: Request, res: Response) => {
     }
 };
 
+const getTemplate = async (req: Request, res: Response) => {
+    try {
+        const filePath = path.join(process.cwd(), "src", "template", "template.html");
+        const html = fs.readFileSync(filePath, "utf-8");
+        return res.status(200).type("html").send(html);
+    } catch (error) {
+        return res.status(500).send("<h1>Error</h1><p>Failed to load template</p>");
+    }
+};
+
 export default unsubscribeEmail;
-export { submitFeedback };
+export { submitFeedback, getTemplate };
