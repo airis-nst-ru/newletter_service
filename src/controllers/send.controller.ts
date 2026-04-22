@@ -14,10 +14,10 @@ const sendNewsletter = async (req: Request, res: Response) => {
 
     const { emails, subject } = req.body;
 
-    if (!emails || typeof emails !== "string") {
+    if (!emails || !Array.isArray(emails)) {
         return res.status(400).json({
             success: false,
-            message: "emails is required and must be a space-separated string",
+            message: "emails is required and must be an array of strings",
         });
     }
 
