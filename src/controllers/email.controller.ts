@@ -68,6 +68,11 @@ const unsubscribeEmail = async (req: Request, res: Response) => {
                             color: #a0a0a0;
                             margin-top: 8px;
                         }
+                        @media (max-width: 480px) {
+                            body { padding: 16px; }
+                            .card { padding: 32px 24px; }
+                            .card h1 { font-size: 1.5rem; }
+                        }
                     </style>
                 </head>
                 <body>
@@ -166,6 +171,11 @@ const unsubscribeEmail = async (req: Request, res: Response) => {
                     }
                     .card button:hover { opacity: 0.9; transform: translateY(-1px); }
                     .card button:active { transform: translateY(0); }
+                    @media (max-width: 480px) {
+                        body { padding: 16px; }
+                        .card { padding: 32px 24px; }
+                        .card h1 { font-size: 1.5rem; }
+                    }
                 </style>
             </head>
             <body>
@@ -258,6 +268,12 @@ const submitFeedback = async (req: Request, res: Response) => {
                         font-size: 0.95rem;
                         color: #a0a0a0;
                         margin-top: 8px;
+                    }
+                    @media (max-width: 480px) {
+                        body { padding: 16px; }
+                        .card { padding: 32px 24px; }
+                        .card h1 { font-size: 1.5rem; }
+                        .card .checkmark { width: 48px; height: 48px; font-size: 1.4rem; margin-bottom: 16px; }
                     }
                 </style>
             </head>
