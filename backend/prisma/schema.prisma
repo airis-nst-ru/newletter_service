@@ -59,6 +59,7 @@ model NewsletterContent {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   content       String   // Raw HTML content
+  state         String?  // JSON editor state (blocks and variables)
   newsletter    Newsletter @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
   newsletterId  String   @unique @db.ObjectId
   createdAt     DateTime @default(now())

@@ -8,7 +8,7 @@ import prisma from "../config/prisma";
 export const createNewsletter = async (req: Request, res: Response) => {
     try {
         const userId = req.user?.id;
-        const { dueDate, title, content, supportingNewsSection } = req.body;
+        const { dueDate, title, content, state, supportingNewsSection } = req.body;
 
         // Validate input
         if (!userId) {
@@ -43,7 +43,8 @@ export const createNewsletter = async (req: Request, res: Response) => {
                 content: {
                     create: {
                         title,
-                        content
+                        content,
+                        ...(state && { state })
                     }
                 }
             },
@@ -160,7 +161,7 @@ export const updateNewsletter = async (req: Request, res: Response) => {
     try {
         const userId = req.user?.id;
         const id = req.params.id as string;
-        const { dueDate, title, content, sent, supportingNewsSection, sentDate } = req.body;
+        const { dueDate, title, content, sent, supportingNewsSection, sentDate, state } = req.body;
 
         // Validate authorization
         const newsletter = await prisma.newsletter.findUnique({
@@ -219,13 +220,20 @@ export const updateNewsletter = async (req: Request, res: Response) => {
             }
         });
 
-        // Update content if provided
-        if (title || content) {
-            await prisma.newsletterContent.update({
-                where: { newsletterId: id as string },
-                data: {
+        // Update content if provided (upsert to create if missing)
+        if (title || content || state) {
+            await prisma.newsletterContent.upsert({
+                where: { newsletterId: id },
+                create: {
+                    newsletterId: id,
+                    title: title || "Untitled",
+                    content: content || "<div></div>",
+                    ...(state && { state })
+                },
+                update: {
                     ...(title && { title }),
-                    ...(content && { content })
+                    ...(content && { content }),
+                    ...(state && { state })
                 }
             });
 
