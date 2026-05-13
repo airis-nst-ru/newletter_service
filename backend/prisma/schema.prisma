@@ -35,4 +35,32 @@ model User {
   refreshToken String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  
+  // Relationships
+  newsletters  Newsletter[]
+}
+
+model Newsletter {
+  id                      String   @id @default(auto()) @map("_id") @db.ObjectId
+  dueDate                 DateTime
+  sentDate                DateTime?
+  sent                    Boolean  @default(false)
+  supportingNewsSection   Boolean  @default(false)
+  createdBy               User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById             String   @db.ObjectId
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  
+  // Relationships
+  content                 NewsletterContent?
+}
+
+model NewsletterContent {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  content       String   // Raw HTML content
+  newsletter    Newsletter @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
+  newsletterId  String   @unique @db.ObjectId
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
