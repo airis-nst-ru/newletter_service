@@ -89,12 +89,14 @@ import healthCheckRouter from "./routes/healthcheck.routes"
 import emailRouter from "./routes/email.routes"
 import authRouter from "./routes/auth.routes"
 import newsletterRouter from "./routes/newsletter.routes"
+import mediaRouter from "./routes/media.routes"
 
 // url mapping
 app.use("/healthcheck", healthCheckRouter)
 app.use("/api/v1/email", emailRouter)
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/newsletters", newsletterRouter)
+app.use("/api/v1/media", mediaRouter)
 
 
 // global error handler

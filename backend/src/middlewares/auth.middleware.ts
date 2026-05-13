@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyAccessToken } from "../utils/jwt.util";
+import { verifyAccessToken, verifyRefreshToken, generateAccessToken } from "../utils/jwt.util";
+import prisma from "../config/prisma";
 
 /**
  * Extend Express Request to include user data
@@ -19,7 +20,7 @@ declare global {
 /**
  * Middleware to verify Access Token from cookies
  */
-export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+export const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Get access token from cookies or Authorization header
         let token = req.cookies.accessToken;
@@ -41,6 +42,24 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
         const decoded = verifyAccessToken(token);
 
         if (!decoded) {
+            const refreshToken = req.cookies.refreshToken;
+            if (refreshToken) {
+                const decodedRefresh = verifyRefreshToken(refreshToken);
+                if (decodedRefresh) {
+                    const user = await prisma.user.findUnique({ where: { id: decodedRefresh.id } });
+                    if (user && user.refreshToken === refreshToken) {
+                        const newAccessToken = generateAccessToken({ id: user.id, email: user.email, username: user.username });
+                        res.cookie('accessToken', newAccessToken, { 
+                            httpOnly: true, 
+                            secure: process.env.NODE_ENV === "production", 
+                            sameSite: "strict",
+                            maxAge: 15 * 60 * 1000 // 15 minutes
+                        });
+                        req.user = { id: user.id, email: user.email, username: user.username };
+                        return next();
+                    }
+                }
+            }
             return res.status(401).json({
                 success: false,
                 message: "Invalid or expired access token"
