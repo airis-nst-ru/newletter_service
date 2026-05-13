@@ -296,7 +296,7 @@ const submitFeedback = async (req: Request, res: Response) => {
 
 const getTemplate = async (req: Request, res: Response) => {
     try {
-        const filePath = path.join(process.cwd(), "src", "template", "template.html");
+        const filePath = path.join(process.cwd(), "backend","src", "template", "template.html");
         const html = fs.readFileSync(filePath, "utf-8");
         return res.status(200).type("html").send(html);
     } catch (error:any) {
