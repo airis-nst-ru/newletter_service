@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
+import cookieParser from "cookie-parser";
 import { errorHandler } from "./middlewares/error.middleware";
 import { httpLogger } from "./middlewares/httpLogger.middleware";
 
@@ -15,6 +16,7 @@ const app = express();
 app.use(httpLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(express.static("public"));
 
 
@@ -85,10 +87,12 @@ app.get("/", (_req, res) => {
 // router imports
 import healthCheckRouter from "./routes/healthcheck.routes"
 import emailRouter from "./routes/email.routes"
+import authRouter from "./routes/auth.routes"
 
 // url mapping
 app.use("/healthcheck", healthCheckRouter)
 app.use("/api/v1/email", emailRouter)
+app.use("/api/v1/auth", authRouter)
 
 
 // global error handler
