@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import prisma from "../config/prisma";
 import fs from "fs";
 import path from "path";
+import { template_v2 } from "../template/v2";
 
 const unsubscribeEmail = async (req: Request, res: Response) => {
     const { email } = req.query;
@@ -296,8 +297,7 @@ const submitFeedback = async (req: Request, res: Response) => {
 
 const getTemplate = async (req: Request, res: Response) => {
     try {
-        const filePath = path.join(process.cwd(),"src", "template", "template.html");
-        const html = fs.readFileSync(filePath, "utf-8");
+        const html = template_v2;
         return res.status(200).type("html").send(html);
     } catch (error:any) {
         return res.status(500).send(`<h1>Error</h1><p>${error.message}</p>`);
