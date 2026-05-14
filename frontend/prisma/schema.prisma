@@ -1,0 +1,62 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  email        String   @unique
+  username     String   @unique
+  password     String
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  newsletters  Newsletter[]
+}
+
+model Newsletter {
+  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  dueDate               DateTime
+  sentDate              DateTime?
+
+  sent                  Boolean  @default(false)
+
+  supportingNewsSection Boolean  @default(false)
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  createdBy             User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById           String   @db.ObjectId
+
+  content               NewsletterContent?
+}
+
+model NewsletterContent {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  title         String
+
+  content       String
+
+  state         String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  newsletter    Newsletter @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
+
+  newsletterId  String   @unique @db.ObjectId
+}
