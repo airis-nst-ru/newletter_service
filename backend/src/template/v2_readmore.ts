@@ -70,7 +70,7 @@ export const v2_readmore_template = `<!DOCTYPE html>
                   style="max-width:850px;height:auto;display:block;margin:25px auto;border-radius:12px;"
 
                 >
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">Good morning. It is Thursday, May 15, 2026, coinciding with the International Day of Families. While we celebrate the social structures that bind us, the technology world is focused on the physical structures that define our existence. Today marks a definitive shift in the AI narrative: we are graduating from the era of chatbots to the era of World Foundation Models (WFMs).</p>
+                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">Good afternoon. It is Thursday, May 15, 2026, coinciding with the International Day of Families. While we celebrate the social structures that bind us, the technology world is focused on the physical structures that define our existence. Today marks a definitive shift in the AI narrative: we are graduating from the era of chatbots to the era of World Foundation Models (WFMs).</p>
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="https://newletter-service.vercel.app/api/v1/newsletters/version/2?email={{subscriber_email}}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
               </td>
             </tr>
