@@ -70,7 +70,7 @@ export const template_v2 = `<!DOCTYPE html>
                   style="max-width:850px;height:auto;display:block;margin:25px auto;border-radius:12px;"
 
                 >
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">Good morning. It is Thursday, May 15, 2026, coinciding with the International Day of Families. While we celebrate the social structures that bind us, the technology world is focused on the physical structures that define our existence. Today marks a definitive shift in the AI narrative: we are graduating from the era of chatbots to the era of World Foundation Models (WFMs).</p>
+                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">Good afternoon. It is Thursday, May 15, 2026, coinciding with the International Day of Families. While we celebrate the social structures that bind us, the technology world is focused on the physical structures that define our existence. Today marks a definitive shift in the AI narrative: we are graduating from the era of chatbots to the era of World Foundation Models (WFMs).</p>
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">The industry is moving away from purely text-based systems toward grounded intelligence. This evolution is spearheaded by the predictive world modeling research of Yann LeCun at AMI Labs and the spatial intelligence breakthroughs of Fei-Fei Li at World Labs. The goal is no longer just to make a machine that talks like a human, but one that perceives and reasons within a 3D environment just as we do.</p>
               </td>
             </tr>
@@ -496,7 +496,7 @@ export const template_v2 = `<!DOCTYPE html>
 
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">Welcome to the era where <span style="color:#b654a7;font-weight:700">innovation isn't paced by research timelines or ethics panels: it's paced by acquisitions, access, and who gets to stay in the stack.</span> The golden age of AI is real. But it has terms and conditions. And the question our generation needs to stop avoiding is this:</p>
 
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:700;line-height:21px;color:#b654a7;">Are we building the future — or are we just building the next acquisition target?</p>
+                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:700;line-height:21px;color:#b654a7;">Are we building the future, or are we just building the next acquisition target?</p>
 
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">That's what we debate at Airis Club. That's the kind of thinking we believe our generation owes itself. We don't have the answer yet. But we think asking the question out loud is where it starts.</p>
 
