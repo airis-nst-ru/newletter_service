@@ -25,3 +25,129 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.ProseMirror {
+  min-height: 500px;
+  outline: none;
+  font-size: 18px;
+  line-height: 1.9;
+  font-family: Georgia, serif;
+}
+
+.ProseMirror p {
+  margin: 1rem 0;
+}
+
+.ProseMirror h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 2rem 0 1rem;
+}
+
+.ProseMirror h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 1.5rem 0 1rem;
+}
+
+.ProseMirror ul {
+  list-style-type: disc;
+  padding-left: 2rem;
+  margin: 1rem 0;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+  padding-left: 2rem;
+  margin: 1rem 0;
+}
+
+.ProseMirror li {
+  margin: 0.5rem 0;
+}
+
+.ProseMirror strong {
+  font-weight: bold;
+}
+
+.ProseMirror em {
+  font-style: italic;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #737373;
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+
+.ProseMirror {
+  min-height: 700px;
+  outline: none;
+  font-size: 18px;
+  line-height: 1.9;
+  font-family: Georgia, serif;
+}
+
+.ProseMirror h1 {
+  font-size: 2.8rem;
+  font-weight: bold;
+  margin: 2rem 0 1rem;
+}
+
+.ProseMirror h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 1.5rem 0 1rem;
+}
+
+.ProseMirror h3 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.ProseMirror p {
+  margin: 1rem 0;
+}
+
+.ProseMirror ul {
+  list-style: disc;
+  padding-left: 2rem;
+}
+
+.ProseMirror ol {
+  list-style: decimal;
+  padding-left: 2rem;
+}
+
+.ProseMirror img {
+  border-radius: 1rem;
+  margin: 2rem auto;
+  max-width: 100%;
+}
+
+.ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.ProseMirror td,
+.ProseMirror th {
+  border: 1px solid #333;
+  padding: 0.75rem;
+}
+
+.airis-news-card,
+.airis-tool-card,
+.airis-event-card,
+.airis-ai-box {
+  border-radius: 1.5rem;
+  padding: 2rem;
+  margin: 2rem 0;
+  background: #111;
+  border: 1px solid #222;
+}

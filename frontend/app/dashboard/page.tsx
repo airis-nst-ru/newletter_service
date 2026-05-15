@@ -40,7 +40,7 @@ export default function AIRISDashboard() {
       setCreating(true);
 
       const response = await fetch(
-        "/api/v1/newsletter",
+        "/api/v1/newsletters",
         {
           method: "POST",
 
