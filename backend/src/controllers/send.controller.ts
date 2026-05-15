@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { organiseEmails, sendBulkEmail } from "../service/mail.service";
-import { template_v2 } from "../template/v2";
+import { v2_readmore_template } from "./../template/v2_readmore";
 
 const sendNewsletter = async (req: Request, res: Response) => {
     const apiKey = req.headers["x-api-key"];
@@ -33,7 +33,7 @@ const sendNewsletter = async (req: Request, res: Response) => {
     const emailSubject = subject || "The AIRIS Chronicle";
 
     try {
-        const results = await sendBulkEmail(organised, emailSubject, template_v2);
+        const results = await sendBulkEmail(organised, emailSubject, v2_readmore_template);
 
         const succeeded = results.filter((r) => r.success).length;
         const failed = results.filter((r) => !r.success).length;

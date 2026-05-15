@@ -74,7 +74,9 @@ const sendEmail = async (
     html: string
 ): Promise<EmailResult> => {
     const unsubscribeUrl = `${process.env.BASE_URL}/api/v1/email/unsubscribe?email=${encodeURIComponent(email)}`;
-    const personalizedHtml = html.replace(/\{\{UNSUBSCRIBE_URL\}\}/g, unsubscribeUrl);
+    const personalizedHtml = html
+        .replace(/\{\{UNSUBSCRIBE_URL\}\}/g, unsubscribeUrl)
+        .replace(/\{\{subscriber_email\}\}/g, encodeURIComponent(email));
 
     try {
         await transporter.sendMail({

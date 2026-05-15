@@ -417,7 +417,7 @@ export const getNewsLetterByVersion = async (req: Request, res: Response) => {
 
             await prisma.newsletter.update({
                 where: { id: newsletter.id },
-                data: { viewCount: { increment: 1 } }
+                data: { viewCount: (newsletter.viewCount ?? 0) + 1 }
             });
         }
 

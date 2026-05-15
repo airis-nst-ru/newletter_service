@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+export const v2_readmore_template = `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
   <head>
     <meta charset="UTF-8">
@@ -71,7 +71,7 @@
 
                 >
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">Good morning. It is Thursday, May 15, 2026, coinciding with the International Day of Families. While we celebrate the social structures that bind us, the technology world is focused on the physical structures that define our existence. Today marks a definitive shift in the AI narrative: we are graduating from the era of chatbots to the era of World Foundation Models (WFMs).</p>
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="https://your-domain.com/api/v1/newsletters/version/2?email={{subscriber_email}}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
+                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="https://newletter-service.vercel.app/api/v1/newsletters/version/2?email={{subscriber_email}}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
               </td>
             </tr>
 
@@ -93,7 +93,7 @@
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">A key research direction in this space is Joint Embedding Predictive Architecture (JEPA). Unlike traditional generative models that try to reconstruct every pixel (a process that is computationally wasteful and prone to hallucinating physical laws), JEPA learns by predicting the relationship between objects in an abstract latent space.</p>
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333"><strong>Yann LeCun's Contribution: The Architect of Common Sense</strong></p>
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">Yann LeCun has long argued that LLMs lack the common sense of a house cat. His fundamental contribution is the Objective Driven AI framework, realized through V-JEPA (Video Joint Embedding Predictive Architecture).</p>
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="https://your-domain.com/api/v1/newsletters/version/2?email={{subscriber_email}}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
+                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="https://newletter-service.vercel.app/api/v1/newsletters/version/2?email={{subscriber_email}}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
 
               </td>
             </tr>
@@ -134,7 +134,7 @@
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">
                   1) <strong>Large World Models:</strong> Li's team has pioneered models that go beyond video, creating persistent, navigable 3D environments.
                  </p>
-                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="https://your-domain.com/api/v1/newsletters/version/2?email={{subscriber_email}}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
+                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="https://newletter-service.vercel.app/api/v1/newsletters/version/2?email={{subscriber_email}}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
 
 
 
@@ -267,7 +267,7 @@
                 <h1 style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:30px;font-weight:normal;line-height:36px;color:#333333">BUILDING FROM FIRST PRINCIPLES: Suryansh's Machine Learning Course</h1>
 
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">Not every learning experience happens in a classroom. Sometimes it happens when a student, unsatisfied with the surface-level treatment of a subject, decides to build something deeper from scratch, for everyone. That is exactly what <strong>Suryansh</strong>, a member of the AIRIS community, has been doing.</p>
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="https://your-domain.com/api/v1/newsletters/version/2?email={{subscriber_email}}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
+                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="https://newletter-service.vercel.app/api/v1/newsletters/version/2?email={{subscriber_email}}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
 
 
                 <!-- What the course covers -->
@@ -436,7 +436,7 @@
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">If you've felt like the internet is becoming a lonely place for humans lately, you aren't wrong. <span style="color:#b654a7;font-weight:700">The hottest social network of 2026 doesn't even let you post.</span></p>
 
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">In a move that solidifies the <span style="color:#b654a7;font-weight:700">"Dead Internet Theory" as actual corporate strategy</span>, Meta announced this Tuesday that it has acquired Moltbook, the viral "Reddit-for-AI" platform where agents argue, bond, and share memes while humans are relegated to the role of silent spectators.</p>
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="https://your-domain.com/api/v1/newsletters/version/2?email={{subscriber_email}}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
+                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="https://newletter-service.vercel.app/api/v1/newsletters/version/2?email={{subscriber_email}}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
 
                 
               </td>
@@ -504,4 +504,4 @@
       </tr>
     </table>
   </body>
-</html>
+</html>`
