@@ -49,9 +49,9 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
                     const user = await prisma.user.findUnique({ where: { id: decodedRefresh.id } });
                     if (user && user.refreshToken === refreshToken) {
                         const newAccessToken = generateAccessToken({ id: user.id, email: user.email, username: user.username });
-                        res.cookie('accessToken', newAccessToken, { 
-                            httpOnly: true, 
-                            secure: process.env.NODE_ENV === "production", 
+                        res.cookie('accessToken', newAccessToken, {
+                            httpOnly: true,
+                            secure: process.env.NODE_ENV === "production",
                             sameSite: "strict",
                             maxAge: 15 * 60 * 1000 // 15 minutes
                         });

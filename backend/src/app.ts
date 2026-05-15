@@ -99,6 +99,7 @@ app.use("/api/v1/newsletters", newsletterRouter)
 app.use("/api/v1/media", mediaRouter)
 
 
+
 // global error handler
 app.use(errorHandler);
 

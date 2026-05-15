@@ -377,3 +377,53 @@ export const deleteNewsletter = async (req: Request, res: Response) => {
         });
     }
 };
+
+
+
+export const getNewsLetterByVersion = async (req: Request, res: Response) => {
+    try {
+        const version = Number(req.params.version);
+        const email = req.query.email as string | undefined;
+
+        if (isNaN(version) || version <= 0) {
+            return res.status(400).type('html').send("Invalid version format");
+        }
+
+        const newsletter = await prisma.newsletter.findFirst({
+            where: { version },
+            include: {
+                content: true,
+                createdBy: {
+                    select: {
+                        id: true,
+                        email: true,
+                        username: true
+                    }
+                }
+            }
+        });
+
+        if (!newsletter || !newsletter.content?.content) {
+            return res.status(404).type('html').send("Newsletter not found");
+        }
+
+        // Track view if email provided
+        if (email) {
+            await prisma.newsletterView.upsert({
+                where: { email_newsletterId: { email, newsletterId: newsletter.id } },
+                create: { email, newsletterId: newsletter.id },
+                update: { viewedAt: new Date() }
+            });
+
+            await prisma.newsletter.update({
+                where: { id: newsletter.id },
+                data: { viewCount: { increment: 1 } }
+            });
+        }
+
+        return res.status(200).type('html').send(newsletter.content.content);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).type('html').send("Internal server error");
+    }
+};

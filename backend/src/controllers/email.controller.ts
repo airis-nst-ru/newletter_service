@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
-import fs from "fs";
-import path from "path";
 import { template_v2 } from "../template/v2";
 
 const unsubscribeEmail = async (req: Request, res: Response) => {
