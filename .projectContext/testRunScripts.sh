@@ -25,3 +25,8 @@ curl -X POST https://newletter-service.onrender.com/api/v1/email/send \
     "emails": "anurag.tiwari2024@nst.rishihood.edu.in",
     "subject": "The AIRIS Chronicle – Latest Edition"
   }'
+
+
+node send.js core_emails.json
+# or with any other file
+node send.js /path/to/emails.json
