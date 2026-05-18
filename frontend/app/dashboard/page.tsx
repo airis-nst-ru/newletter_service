@@ -3,23 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
+import { useAuth } from "@/app/context/AuthContext";
+import type { Newsletter } from "@/types/Newsletter";
 
-interface Newsletter {
-  id: string;
-  dueDate: string;
-  sent: boolean;
-  supportingNewsSection: boolean;
-  createdBy: {
-    id: string;
-    email: string;
-    username: string;
-  };
-  content?: {
-    title: string;
-    content: string;
-    state?: string;
-  } | null;
-}
 
 export default function AIRISDashboard() {
   const router = useRouter();
@@ -34,6 +20,8 @@ export default function AIRISDashboard() {
   const [newsletterTitle, setNewsletterTitle] = useState("");
   const [newsletterDueDate, setNewsletterDueDate] = useState("");
   const [supportingNewsSection, setSupportingNewsSection] = useState(false);
+
+  const { setLogoutState } = useAuth()
 
   const handleCreateNewsletter = async () => {
     try {
@@ -93,21 +81,17 @@ export default function AIRISDashboard() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch(
-        "/api/v1/auth/logout",
-        {
+      // TODO: create a logout service
+      const response = await fetch("/api/v1/auth/logout",{
           method: "POST",
         }
       );
-
       const data = await response.json();
-
       if (!response.ok) {
         console.log(data.message);
         return;
       }
-
-      // Redirect to login page
+      setLogoutState()
       router.push("/auth/login");
     } catch (error) {
       console.log(error);
