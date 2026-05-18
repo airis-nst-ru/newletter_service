@@ -18,6 +18,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if(user?.accountType != "Editor"){
+      return NextResponse.json({
+        success: false,
+        message: "You are not authorized to create a newsletter",
+      }, {status: 401})
+    }
+
     const {
       dueDate,
       title,

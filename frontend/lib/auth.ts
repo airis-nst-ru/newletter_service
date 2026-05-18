@@ -19,6 +19,8 @@ export async function verifyToken(
     ) as {
       id: string;
       email: string;
+      accountType: string;
+      username: string;
     };
 
     return decoded;
