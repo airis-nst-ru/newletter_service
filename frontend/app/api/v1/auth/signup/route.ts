@@ -11,7 +11,17 @@ export async function POST(req: Request) {
       username,
       password,
       secretKey,
+      accountType
     } = await req.json();
+
+    if (accountType == "Editor" || accountType == "Approver" || accountType == "Sender"){
+      return NextResponse.json({
+        success: false,
+        message: "Account type not allowed for signup"
+      },
+      {status: 403})
+    }
+
 
     // Secret key validation
     if (
@@ -31,13 +41,14 @@ export async function POST(req: Request) {
     if (
       !email ||
       !username ||
-      !password
+      !password || 
+      !accountType
     ) {
       return NextResponse.json(
         {
           success: false,
           message:
-            "Email, username and password are required",
+            "Email, username, password and accountType is required",
         },
         { status: 400 }
       );
@@ -117,6 +128,7 @@ export async function POST(req: Request) {
           email,
           username,
           password: hashedPassword,
+          accountType
         },
       });
 

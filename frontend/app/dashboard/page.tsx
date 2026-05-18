@@ -135,7 +135,7 @@ export default function AIRISDashboard() {
       }
 
       setNewsletters(data.data || []);
-      router.push("/auth/login")
+      // router.push("/auth/login")
     } catch (error) {
       console.log(error);
     } finally {
@@ -144,7 +144,11 @@ export default function AIRISDashboard() {
   };
 
   useEffect(() => {
-    fetchNewsletters();
+    fetchNewsletters()
+    .then(()=>console.log("Newsletters fetched successfully"))
+    .catch((error) => {
+      console.log("Error fetching newsletters:", error);
+    });
   }, []);
 
   const handleMarkAsSent = async (

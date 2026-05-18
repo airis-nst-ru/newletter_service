@@ -5,7 +5,7 @@ const path = require("path");
 
 // --- Config ---
 const API_URL = "http://localhost:5001/api/v1/email/send";
-const API_KEY = "";
+const API_KEY = "wewillwin";
 const SUBJECT = "The AIRIS Chronicle";
 
 // --- Read file path from args ---

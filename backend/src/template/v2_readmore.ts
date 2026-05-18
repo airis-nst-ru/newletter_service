@@ -266,6 +266,14 @@ export const v2_readmore_template = `<!DOCTYPE html>
 
                 <h1 style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:30px;font-weight:normal;line-height:36px;color:#333333">BUILDING FROM FIRST PRINCIPLES: Suryansh's Machine Learning Course</h1>
 
+                <!-- Session Image -->
+                <img 
+                  src="https://res.cloudinary.com/dgxjcychd/image/upload/q_auto/f_auto/v1778837042/WhatsApp_Image_2026-05-15_at_14.48.54_ki78qd.jpg"
+                  alt="NumPy Session by Arnav Goyal"
+                  width="100%"
+                  style="max-width:850px;height:auto;display:block;margin:25px auto;border-radius:12px;"
+                >
+
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">Not every learning experience happens in a classroom. Sometimes it happens when a student, unsatisfied with the surface-level treatment of a subject, decides to build something deeper from scratch, for everyone. That is exactly what <strong>Suryansh</strong>, a member of the AIRIS community, has been doing.</p>
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="https://newletter-service.vercel.app/api/v1/newsletters/version/2?email={{subscriber_email}}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
 
@@ -351,7 +359,7 @@ export const v2_readmore_template = `<!DOCTYPE html>
 
               <!-- Session Image -->
               <img 
-                src="https://res.cloudinary.com/dgxjcychd/image/upload/q_auto/f_auto/v1778821121/WhatsApp_Image_2026-05-14_at_23.11.40_mtikb3.jpg"
+                src="https://res.cloudinary.com/dgxjcychd/image/upload/q_auto/f_auto/v1778836996/WhatsApp_Image_2026-05-15_at_14.42.35_olkn2b.jpg"
                 alt="NumPy Session by Arnav Goyal"
                 width="100%"
                 style="max-width:850px;height:auto;display:block;margin:25px auto;border-radius:12px;"

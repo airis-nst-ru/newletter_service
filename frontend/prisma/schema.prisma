@@ -9,6 +9,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum AccountType{
+  Editor
+  Approver
+  Sender
+}
+
 model User {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
 
@@ -19,8 +25,17 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  accountType  AccountType @default(Sender)
+
   // Relations
   newsletters  Newsletter[]
+}
+
+enum NewsletterStatus{
+  Draft
+  Approved
+  Ready_To_Send
+  Sent
 }
 
 model Newsletter {
@@ -30,6 +45,8 @@ model Newsletter {
   sentDate              DateTime?
 
   sent                  Boolean  @default(false)
+
+  status                NewsletterStatus @default(Draft)
 
   supportingNewsSection Boolean  @default(false)
 

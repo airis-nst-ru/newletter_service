@@ -1,6 +1,7 @@
 // app/api/v1/auth/signin/route.ts
 
 import { NextResponse } from "next/server";
+import { User } from "@/types/User";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -75,10 +76,21 @@ export async function POST(req: Request) {
             }
         );
 
+        const userData:User={
+            id : user.id,
+            email:user.email,
+            username :user.username,
+            accountType: user.accountType || "Editor"
+        }
+
         const response = NextResponse.json(
             {
                 success: true,
                 message: "Login successful",
+                data: {
+                    user : userData,
+                    token
+                }
             },
             { status: 200 }
         );

@@ -1,27 +1,52 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/ui/button";
+import { useAuth } from "@/app/context/AuthContext";
 
 function Home() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const [loading, setLoading] =
-    useState(false);
+  const { setLoginState } = useAuth()
 
-  const [error, setError] =
-    useState("");
+  // Enter Key Down for submit button
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        handleLogin();
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [])
+
+  const handleSubmit = () => {
+    if (!email) {
+      throw new Error("Email is required!")
+    }
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+    if (!emailRegex.test(email)) {
+      throw new Error("Invalid email address!")
+    }
+    if (!password) {
+      throw new Error("Password is required!")
+    }
+    return true;
+  }
 
   const handleLogin = async () => {
     try {
+      handleSubmit();
       setLoading(true);
       setError("");
 
+      // TODO: create a service which calls the login api and returns the response. Use axios and typescript for better type safety and error handling.
       const response = await fetch(
         "/api/v1/auth/signin",
         {
@@ -42,25 +67,24 @@ function Home() {
       if (!response.ok) {
         setError(
           data.message ||
-            "Something went wrong"
-        );
-        return;
+          "Something went wrong"
+        )
+        return
       }
-
-      console.log(data);
-
-      // redirect after login
+      setLoginState(data.data.user)
       router.push("/dashboard");
-    } catch (error) {
-      console.log(error);
-
-      setError(
-        "Something went wrong"
-      );
+    } catch (error: any) {
+      setError(error.message);
     } finally {
       setLoading(false);
     }
   };
+
+  const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  }
 
   return (
     <div className="bg-[rgba(255,255,255,0.04)] w-full min-h-screen flex flex-col items-center justify-center gap-4 px-4">
@@ -130,6 +154,7 @@ function Home() {
             onClick={handleLogin}
             buttonType="Primary"
             className="w-full cursor-pointer"
+            onKeyDown={handleEnterKeyDown}
           />
         </div>
       </div>
