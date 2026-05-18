@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import { useAuth } from "@/app/context/AuthContext";
 import type { Newsletter } from "@/types/Newsletter";
+import { validateAuth } from "@/utils/validateAuth.utils";
 
 
 export default function AIRISDashboard() {
@@ -21,7 +22,7 @@ export default function AIRISDashboard() {
   const [newsletterDueDate, setNewsletterDueDate] = useState("");
   const [supportingNewsSection, setSupportingNewsSection] = useState(false);
 
-  const { setLogoutState } = useAuth()
+  const { setLogoutState, setLoginState } = useAuth()
 
   const handleCreateNewsletter = async () => {
     try {
@@ -82,9 +83,9 @@ export default function AIRISDashboard() {
   const handleLogout = async () => {
     try {
       // TODO: create a logout service
-      const response = await fetch("/api/v1/auth/logout",{
-          method: "POST",
-        }
+      const response = await fetch("/api/v1/auth/logout", {
+        method: "POST",
+      }
       );
       const data = await response.json();
       if (!response.ok) {
@@ -129,11 +130,26 @@ export default function AIRISDashboard() {
 
   useEffect(() => {
     fetchNewsletters()
-    .then(()=>console.log("Newsletters fetched successfully"))
-    .catch((error) => {
-      console.log("Error fetching newsletters:", error);
-    });
+      .then(() => console.log("Newsletters fetched successfully"))
+      .catch((error) => {
+        console.log("Error fetching newsletters:", error);
+      });
   }, []);
+
+  useEffect(() => {
+    validateAuth()
+      .then((res) => {
+        if (!res) {
+          router.push("/auth/login")
+          return
+        }
+        setLoginState(res)
+      })
+      .catch(() => {
+        setLogoutState()
+        router.push("/auth/login")
+      })
+  }, [])
 
   const handleMarkAsSent = async (
     id: string
@@ -505,7 +521,7 @@ export default function AIRISDashboard() {
                         : null
                     }
 
-                    onChange={(date:any) => {
+                    onChange={(date: any) => {
                       if (date) {
                         setNewsletterDueDate(
                           date.toISOString()
@@ -566,14 +582,14 @@ export default function AIRISDashboard() {
                       )
                     }
                     className={`w-14 h-8 rounded-full transition-all relative ${supportingNewsSection
-                        ? "bg-white"
-                        : "bg-neutral-700"
+                      ? "bg-white"
+                      : "bg-neutral-700"
                       }`}
                   >
                     <div
                       className={`absolute top-1 w-6 h-6 rounded-full transition-all ${supportingNewsSection
-                          ? "bg-black left-7"
-                          : "bg-white left-1"
+                        ? "bg-black left-7"
+                        : "bg-white left-1"
                         }`}
                     />
                   </button>
@@ -609,8 +625,8 @@ export default function AIRISDashboard() {
                     }
 
                     className={`px-5 py-3 rounded-2xl font-semibold transition-all ${creating
-                        ? "bg-neutral-700 text-neutral-400 cursor-not-allowed"
-                        : "bg-white text-black hover:scale-105"
+                      ? "bg-neutral-700 text-neutral-400 cursor-not-allowed"
+                      : "bg-white text-black hover:scale-105"
                       }`}
                   >
                     {creating
