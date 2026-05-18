@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/ui/button";
 import { useAuth } from "@/app/context/AuthContext";
+import { validateAuth } from "@/utils/validateAuth.utils";
 
 function Home() {
   const router = useRouter();
@@ -13,7 +14,7 @@ function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const { setLoginState } = useAuth()
+  const { setLoginState , setLogoutState} = useAuth()
 
   // Enter Key Down for submit button
   useEffect(() => {
@@ -24,6 +25,22 @@ function Home() {
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [])
+
+  // validate if user is already authenticated
+  useEffect(() => {
+    validateAuth()
+      .then((res) => {
+        if(res){
+          setLoginState(res)
+          router.push("/dashboard")
+        }else{
+          setLogoutState()
+        }
+      })
+      .catch(() => {
+        setLogoutState()
+      })
   }, [])
 
   const handleSubmit = () => {
