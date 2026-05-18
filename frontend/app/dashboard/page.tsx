@@ -22,7 +22,7 @@ export default function AIRISDashboard() {
   const [newsletterDueDate, setNewsletterDueDate] = useState("");
   const [supportingNewsSection, setSupportingNewsSection] = useState(false);
 
-  const { setLogoutState, setLoginState } = useAuth()
+  const { setLogoutState, setLoginState, user } = useAuth()
 
   const handleCreateNewsletter = async () => {
     try {
@@ -136,6 +136,7 @@ export default function AIRISDashboard() {
       });
   }, []);
 
+  // check if user is authenticated
   useEffect(() => {
     validateAuth()
       .then((res) => {
@@ -255,14 +256,13 @@ export default function AIRISDashboard() {
   return (
     <div className="min-h-screen bg-black text-white p-6">
       <div className="max-w-7xl mx-auto">
+        
+        {/* navbar */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-4xl font-bold tracking-tight">
               AIRIS Chronicle
             </h1>
-            <p className="text-neutral-400 mt-2">
-              Newsletter Management Dashboard
-            </p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -270,43 +270,14 @@ export default function AIRISDashboard() {
               Logout
             </button>
 
-            <button
+            {user?.accountType === "Editor" && <button
               onClick={() =>
                 setShowCreateModal(true)
               }
               className="bg-white text-black px-5 py-3 rounded-2xl font-semibold hover:scale-105 transition-all duration-200 cursor-pointer"
             >
               + Create Newsletter
-            </button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-          <div className="border border-neutral-800 rounded-3xl p-6 bg-neutral-950">
-            <p className="text-neutral-400 text-sm mb-2">
-              Total Newsletters
-            </p>
-            <h2 className="text-4xl font-bold">
-              {totalNewsletters}
-            </h2>
-          </div>
-
-          <div className="border border-neutral-800 rounded-3xl p-6 bg-neutral-950">
-            <p className="text-neutral-400 text-sm mb-2">
-              Sent
-            </p>
-            <h2 className="text-4xl font-bold">
-              {sentNewsletters}
-            </h2>
-          </div>
-
-          <div className="border border-neutral-800 rounded-3xl p-6 bg-neutral-950">
-            <p className="text-neutral-400 text-sm mb-2">
-              Pending
-            </p>
-            <h2 className="text-4xl font-bold">
-              {pendingNewsletters}
-            </h2>
+            </button>}
           </div>
         </div>
 

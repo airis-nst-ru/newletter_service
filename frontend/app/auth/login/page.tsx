@@ -14,56 +14,59 @@ function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const { setLoginState , setLogoutState} = useAuth()
-
-  // Enter Key Down for submit button
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter") {
-        handleLogin();
-      }
-    }
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [])
+  const { setLoginState, setLogoutState } =
+    useAuth();
 
   // validate if user is already authenticated
   useEffect(() => {
     validateAuth()
       .then((res) => {
-        if(res){
-          setLoginState(res)
-          router.push("/dashboard")
-        }else{
-          setLogoutState()
+        if (res) {
+          setLoginState(res);
+          router.push("/dashboard");
+        } else {
+          setLogoutState();
         }
       })
       .catch(() => {
-        setLogoutState()
-      })
-  }, [])
+        setLogoutState();
+      });
+  }, []);
 
   const handleSubmit = () => {
+    console.log(
+      `email: ${email} password: ${password}`
+    );
+
     if (!email) {
-      throw new Error("Email is required!")
+      throw new Error("Email is required!");
     }
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+
+    const emailRegex =
+      /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
     if (!emailRegex.test(email)) {
-      throw new Error("Invalid email address!")
+      throw new Error(
+        "Invalid email address!"
+      );
     }
+
     if (!password) {
-      throw new Error("Password is required!")
+      throw new Error(
+        "Password is required!"
+      );
     }
+
     return true;
-  }
+  };
 
   const handleLogin = async () => {
     try {
       handleSubmit();
+
       setLoading(true);
       setError("");
 
-      // TODO: create a service which calls the login api and returns the response. Use axios and typescript for better type safety and error handling.
       const response = await fetch(
         "/api/v1/auth/signin",
         {
@@ -84,11 +87,13 @@ function Home() {
       if (!response.ok) {
         setError(
           data.message ||
-          "Something went wrong"
-        )
-        return
+            "Something went wrong"
+        );
+        return;
       }
-      setLoginState(data.data.user)
+
+      setLoginState(data.data.user);
+
       router.push("/dashboard");
     } catch (error: any) {
       setError(error.message);
@@ -96,12 +101,6 @@ function Home() {
       setLoading(false);
     }
   };
-
-  const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (e.key === "Enter") {
-      handleLogin();
-    }
-  }
 
   return (
     <div className="bg-[rgba(255,255,255,0.04)] w-full min-h-screen flex flex-col items-center justify-center gap-4 px-4">
@@ -114,7 +113,13 @@ function Home() {
         AIRIS.
       </p>
 
-      <div className="border border-white rounded-lg px-6 py-6 w-full max-w-md">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleLogin();
+        }}
+        className="border border-white rounded-lg px-6 py-6 w-full max-w-md"
+      >
         <p className="text-2xl font-semibold text-center mb-6">
           Login
         </p>
@@ -168,13 +173,11 @@ function Home() {
                 ? "Logging in..."
                 : "Login"
             }
-            onClick={handleLogin}
             buttonType="Primary"
             className="w-full cursor-pointer"
-            onKeyDown={handleEnterKeyDown}
           />
         </div>
-      </div>
+      </form>
     </div>
   );
 }

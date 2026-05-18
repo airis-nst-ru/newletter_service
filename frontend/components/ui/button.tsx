@@ -1,5 +1,5 @@
 type ButtonProps = {
-    onClick: () => void;
+    onClick?: () => void;
     buttonType: "Primary" | "Secondary" | "Destructive";
     buttonName: string;
     className?: string;
