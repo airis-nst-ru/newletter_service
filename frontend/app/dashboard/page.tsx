@@ -23,7 +23,7 @@ export default function AIRISDashboard() {
   const [creating, setCreating] = useState(false);
   const [newsletterTitle, setNewsletterTitle] = useState("");
   const [newsletterDueDate, setNewsletterDueDate] = useState("");
-  const [supportingNewsSection, setSupportingNewsSection] = useState(false);
+  const [hasSupportingNews, setHasSupportingNews] = useState(false);
   const [editionNumber, setEditionNumber] = useState("");
 
   const { setLogoutState, setLoginState, user } = useAuth()
@@ -54,7 +54,7 @@ export default function AIRISDashboard() {
             content:
               "<div></div>",
 
-            supportingNewsSection,
+            hasSupportingNews,
             editionNumber: Number(editionNumber),
           }),
         }
@@ -317,9 +317,10 @@ export default function AIRISDashboard() {
               <thead>
                 <tr className="border-b border-neutral-800 text-neutral-400 text-sm text-left">
                   <th className="px-6 py-4 font-medium">Title</th>
+                  <th className="px-6 py-4 font-medium">Edition Number</th>
                   <th className="px-6 py-4 font-medium">Due Date</th>
                   <th className="px-6 py-4 font-medium">Author</th>
-                  <th className="px-6 py-4 font-medium">Support News</th>
+                  <th className="px-6 py-4 font-medium">Has Supporting News</th>
                   <th className="px-6 py-4 font-medium">Status</th>
                   <th className="px-6 py-4 font-medium">Actions</th>
                 </tr>
@@ -355,6 +356,10 @@ export default function AIRISDashboard() {
                           "Untitled Newsletter"}
                       </td>
 
+                      <td className="px-6 py-5 font-medium">
+                        {newsletter.editionNumber ? `#${newsletter.editionNumber}` : "N/A"}
+                      </td>
+
                       <td className="px-6 py-5 text-neutral-300">
                         {new Date(
                           newsletter.dueDate
@@ -369,11 +374,11 @@ export default function AIRISDashboard() {
                       <td className="px-6 py-5">
                         {newsletter.supportingNewsSection ? (
                           <span className="text-green-400">
-                            Enabled
+                            Yes
                           </span>
                         ) : (
                           <span className="text-neutral-500">
-                            Disabled
+                            No
                           </span>
                         )}
                       </td>
@@ -391,7 +396,7 @@ export default function AIRISDashboard() {
                       </td>
 
                       <td className="px-6 py-5">
-                        <div className="flex items-center gap-3">
+                        {/* <div className="flex items-center gap-3">
                           <button className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer">
                             Edit
                           </button>
@@ -425,7 +430,7 @@ export default function AIRISDashboard() {
                             Delete
                           </button>
 
-                        </div>
+                        </div> */}
                       </td>
                     </tr>
                   )))}
@@ -539,7 +544,7 @@ export default function AIRISDashboard() {
 
                   <div>
                     <p className="font-semibold">
-                      Supporting News Section
+                      Will have Supporting News?
                     </p>
 
                     <p className="text-sm text-neutral-500 mt-1">
@@ -549,17 +554,17 @@ export default function AIRISDashboard() {
 
                   <button
                     onClick={() =>
-                      setSupportingNewsSection(
-                        !supportingNewsSection
+                      setHasSupportingNews(
+                        !hasSupportingNews
                       )
                     }
-                    className={`w-14 h-8 rounded-full transition-all relative ${supportingNewsSection
+                    className={`w-14 h-8 rounded-full transition-all relative ${hasSupportingNews
                       ? "bg-white"
                       : "bg-neutral-700"
                       }`}
                   >
                     <div
-                      className={`absolute top-1 w-6 h-6 rounded-full transition-all ${supportingNewsSection
+                      className={`absolute top-1 w-6 h-6 rounded-full transition-all ${hasSupportingNews
                         ? "bg-black left-7"
                         : "bg-white left-1"
                         }`}

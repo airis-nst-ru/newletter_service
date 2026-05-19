@@ -50,7 +50,7 @@ model Newsletter {
 
   status                NewsletterStatus @default(Draft)
 
-  supportingNewsSection Boolean  @default(false)
+  hasSupportingNews     Boolean  @default(false)
   
   editionNumber         Int?     @default(1)
 

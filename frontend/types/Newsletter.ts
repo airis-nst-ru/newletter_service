@@ -3,6 +3,7 @@ export interface Newsletter {
   dueDate: string;
   sent: boolean;
   supportingNewsSection: boolean;
+  editionNumber?: number | null;
   createdBy: {
     id: string;
     email: string;
