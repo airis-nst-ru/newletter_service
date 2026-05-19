@@ -10,6 +10,7 @@ import { capitalize } from "@/utils/helpers/string.helpers";
 
 
 
+
 export default function AIRISDashboard() {
   const router = useRouter();
 
@@ -23,6 +24,7 @@ export default function AIRISDashboard() {
   const [newsletterTitle, setNewsletterTitle] = useState("");
   const [newsletterDueDate, setNewsletterDueDate] = useState("");
   const [supportingNewsSection, setSupportingNewsSection] = useState(false);
+  const [editionNumber, setEditionNumber] = useState("");
 
   const { setLogoutState, setLoginState, user } = useAuth()
 
@@ -53,6 +55,7 @@ export default function AIRISDashboard() {
               "<div></div>",
 
             supportingNewsSection,
+            editionNumber: Number(editionNumber),
           }),
         }
       );
@@ -241,18 +244,6 @@ export default function AIRISDashboard() {
     filter,
   ]);
 
-  const totalNewsletters =
-    newsletters.length;
-
-  const sentNewsletters =
-    newsletters.filter(
-      (newsletter) => newsletter.sent
-    ).length;
-
-  const pendingNewsletters =
-    newsletters.filter(
-      (newsletter) => !newsletter.sent
-    ).length;
 
 
   return (
@@ -283,11 +274,14 @@ export default function AIRISDashboard() {
           </div>
         </div>
 
+        {/* greeting */}
         <div className="mb-6">
           <p className="text-lg font-medium text-neutral-400">Hey {capitalize(user?.username || '')}, welcome to your dashboard!</p>
         </div>
         
+        {/* newsletters table */}
         <div className="border border-neutral-800 rounded-3xl bg-neutral-950 overflow-hidden">
+          {/* Top Heading and Search and Filter Options */}
           <div className="flex items-center justify-between px-6 py-5 border-b border-neutral-800">
             <h2 className="text-2xl font-semibold">
               Newsletters
@@ -368,8 +362,8 @@ export default function AIRISDashboard() {
                       </td>
 
                       <td className="px-6 py-5 text-neutral-300">
-                        {newsletter.createdBy
-                          ?.username}
+                        {capitalize(newsletter.createdBy
+                          ?.username)}
                       </td>
 
                       <td className="px-6 py-5">
@@ -430,6 +424,7 @@ export default function AIRISDashboard() {
                           >
                             Delete
                           </button>
+
                         </div>
                       </td>
                     </tr>
@@ -570,6 +565,22 @@ export default function AIRISDashboard() {
                         }`}
                     />
                   </button>
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-sm text-neutral-400">
+                    Edition Number (optional)
+                  </label>
+
+                  <input
+                    type="number"
+                    placeholder="Enter edition number"
+                    value={editionNumber}
+                    onChange={(e) =>
+                      setEditionNumber(e.target.value)
+                    }
+                    className="w-full bg-black border border-neutral-700 rounded-2xl px-4 py-3 outline-none"
+                  />
                 </div>
 
                 {/* ACTIONS */}
