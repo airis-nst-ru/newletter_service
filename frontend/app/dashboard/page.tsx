@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import { useAuth } from "@/app/context/AuthContext";
 import type { Newsletter } from "@/types/Newsletter";
 import { validateAuth } from "@/utils/validateAuth.utils";
 import { capitalize } from "@/utils/helpers/string.helpers";
+
+// icons import
+import { SlOptionsVertical } from "react-icons/sl";
 
 
 
@@ -19,6 +22,19 @@ export default function AIRISDashboard() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [menuPosition, setMenuPosition] = useState<{ top: number; left: number } | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpenMenuId(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const [creating, setCreating] = useState(false);
   const [newsletterTitle, setNewsletterTitle] = useState("");
@@ -312,7 +328,7 @@ export default function AIRISDashboard() {
             </div>
           </div>
 
-          <div className="overflow-x-auto">
+          <div>
             <table className="w-full">
               <thead>
                 <tr className="border-b border-neutral-800 text-neutral-400 text-sm text-left">
@@ -396,41 +412,30 @@ export default function AIRISDashboard() {
                       </td>
 
                       <td className="px-6 py-5">
-                        {/* <div className="flex items-center gap-3">
-                          <button className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer">
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => router.push(`/editor/${newsletter.id}`)}
+                            className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer text-sm"
+                          >
                             Edit
                           </button>
 
-                          <button className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer">
-                            Preview
-                          </button>
-
-                          {!newsletter.sent && (
-                            <button
-                              onClick={() =>
-                                handleMarkAsSent(
-                                  newsletter.id
-                                )
-                              }
-                              className="px-4 py-2 rounded-xl bg-white text-black font-medium hover:scale-105 transition-all cursor-pointer"
-                            >
-                              Mark as Sent
-                            </button>
-                          )
-                          }
-
-                          <button
-                            onClick={() =>
-                              handleDelete(
-                                newsletter.id
-                              )
-                            }
-                            className="px-4 py-2 rounded-xl border border-red-500 text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
-                          >
-                            Delete
-                          </button>
-
-                        </div> */}
+                          <div ref={menuRef}>
+                            <SlOptionsVertical
+                              className="cursor-pointer hover:text-neutral-300 transition-colors"
+                              onClick={(e) => {
+                                const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                                if (openMenuId === newsletter.id) {
+                                  setOpenMenuId(null);
+                                  setMenuPosition(null);
+                                } else {
+                                  setOpenMenuId(newsletter.id);
+                                  setMenuPosition({ top: rect.bottom + 6, left: rect.right - 176 });
+                                }
+                              }}
+                            />
+                          </div>
+                        </div>
                       </td>
                     </tr>
                   )))}
@@ -440,6 +445,48 @@ export default function AIRISDashboard() {
         </div>
 
       </div>
+
+      {openMenuId && menuPosition && (
+        <div
+          ref={menuRef}
+          style={{ top: menuPosition.top, left: menuPosition.left }}
+          className="fixed z-[9999] bg-neutral-900 border border-neutral-700 rounded-xl shadow-xl overflow-hidden w-44"
+        >
+          <button
+            onClick={() => {
+              setOpenMenuId(null);
+              router.push(`/preview/${openMenuId}`);
+            }}
+            className="w-full text-left px-4 py-3 text-sm hover:bg-neutral-800 transition-colors cursor-pointer"
+          >
+            Preview
+          </button>
+
+          {!newsletters.find((n) => n.id === openMenuId)?.sent && (
+            <button
+              onClick={() => {
+                const id = openMenuId;
+                setOpenMenuId(null);
+                handleMarkAsSent(id);
+              }}
+              className="w-full text-left px-4 py-3 text-sm hover:bg-neutral-800 transition-colors cursor-pointer"
+            >
+              Mark as Sent
+            </button>
+          )}
+
+          <button
+            onClick={() => {
+              const id = openMenuId;
+              setOpenMenuId(null);
+              handleDelete(id);
+            }}
+            className="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+          >
+            Delete
+          </button>
+        </div>
+      )}
 
       {
         showCreateModal && (
