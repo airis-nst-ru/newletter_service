@@ -51,6 +51,8 @@ model Newsletter {
   status                NewsletterStatus @default(Draft)
 
   supportingNewsSection Boolean  @default(false)
+  
+  editionNumber         Int?     @default(1)
 
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt

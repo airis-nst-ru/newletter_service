@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
     const {
       dueDate,
       title,
+      editionNumber,
       content,
       state,
       supportingNewsSection,
@@ -60,9 +61,9 @@ export async function POST(req: NextRequest) {
       await prisma.newsletter.create({
         data: {
           dueDate: dueDateObj,
-          supportingNewsSection:
-            supportingNewsSection || false,
+          supportingNewsSection: supportingNewsSection || false,
           createdById: user.id,
+          editionNumber: editionNumber,
 
           content: {
             create: {
