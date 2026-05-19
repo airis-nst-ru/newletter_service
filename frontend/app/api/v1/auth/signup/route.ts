@@ -14,7 +14,7 @@ export async function POST(req: Request) {
       accountType
     } = await req.json();
 
-    if (accountType == "Editor" || accountType == "Approver" || accountType == "Sender"){
+    if (accountType !== "Editor" && accountType !== "Approver" && accountType !== "Sender"){
       return NextResponse.json({
         success: false,
         message: "Account type not allowed for signup"

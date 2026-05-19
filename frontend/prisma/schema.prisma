@@ -27,6 +27,8 @@ model User {
 
   accountType  AccountType @default(Editor)
 
+  active       Boolean  @default(true)
+
   // Relations
   newsletters  Newsletter[]
 }

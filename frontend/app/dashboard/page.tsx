@@ -6,6 +6,8 @@ import DatePicker from "react-datepicker";
 import { useAuth } from "@/app/context/AuthContext";
 import type { Newsletter } from "@/types/Newsletter";
 import { validateAuth } from "@/utils/validateAuth.utils";
+import { capitalize } from "@/utils/helpers/string.helpers";
+
 
 
 export default function AIRISDashboard() {
@@ -281,6 +283,10 @@ export default function AIRISDashboard() {
           </div>
         </div>
 
+        <div className="mb-6">
+          <p className="text-lg font-medium text-neutral-400">Hey {capitalize(user?.username || '')}, welcome to your dashboard!</p>
+        </div>
+        
         <div className="border border-neutral-800 rounded-3xl bg-neutral-950 overflow-hidden">
           <div className="flex items-center justify-between px-6 py-5 border-b border-neutral-800">
             <h2 className="text-2xl font-semibold">
