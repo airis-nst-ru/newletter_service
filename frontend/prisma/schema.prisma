@@ -83,3 +83,16 @@ model NewsletterContent {
 
   newsletterId  String   @unique @db.ObjectId
 }
+
+model Recipients{
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  email         String   @unique
+
+  isfromUniversity Boolean? @default(false)
+
+  isSubscribed Boolean? @default(true)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
