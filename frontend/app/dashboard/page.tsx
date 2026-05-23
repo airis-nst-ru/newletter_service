@@ -388,7 +388,7 @@ export default function AIRISDashboard() {
                       </td>
 
                       <td className="px-6 py-5">
-                        {newsletter.supportingNewsSection ? (
+                        {newsletter.hasSupportingNews ? (
                           <span className="text-green-400">
                             Yes
                           </span>
@@ -565,7 +565,7 @@ export default function AIRISDashboard() {
                         : null
                     }
 
-                    onChange={(date: any) => {
+                    onChange={(date: Date | null) => {
                       if (date) {
                         setNewsletterDueDate(
                           date.toISOString()
