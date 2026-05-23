@@ -265,7 +265,7 @@ export default function AIRISDashboard() {
   return (
     <div className="min-h-screen bg-black text-white p-6">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* navbar */}
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -294,7 +294,7 @@ export default function AIRISDashboard() {
         <div className="mb-6">
           <p className="text-lg font-medium text-neutral-400">Hey {capitalize(user?.username || '')}, welcome to your dashboard!</p>
         </div>
-        
+
         {/* newsletters table */}
         <div className="border border-neutral-800 rounded-3xl bg-neutral-950 overflow-hidden">
           {/* Top Heading and Search and Filter Options */}
@@ -413,12 +413,32 @@ export default function AIRISDashboard() {
 
                       <td className="px-6 py-5">
                         <div className="flex items-center gap-3">
-                          <button
-                            onClick={() => router.push(`/editor/${newsletter.id}`)}
-                            className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer text-sm"
-                          >
-                            Edit
-                          </button>
+                          {user?.accountType === "Approver" && (
+                            <button
+                              onClick={() => router.push(`/editor/${newsletter.id}`)}
+                              className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer text-sm"
+                            >
+                              Approve
+                            </button>
+                          )}
+
+                          {user?.accountType === "Editor" && (
+                            <button
+                              onClick={() => router.push(`/editor/${newsletter.id}`)}
+                              className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer text-sm"
+                            >
+                              Edit
+                            </button>
+                          )}
+
+                          {user?.accountType === "Sender" && (
+                            <button
+                              onClick={() => router.push(`/editor/${newsletter.id}`)}
+                              className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer text-sm"
+                            >
+                              Send
+                            </button>
+                          )}
 
                           <div ref={menuRef}>
                             <SlOptionsVertical
