@@ -7,6 +7,7 @@ import { useAuth } from "@/app/context/AuthContext";
 import type { Newsletter } from "@/types/Newsletter";
 import { validateAuth } from "@/utils/validateAuth.utils";
 import { capitalize } from "@/utils/helpers/string.helpers";
+import { useTitle } from "@/app/context/TitleContext";
 
 // icons import
 import { SlOptionsVertical } from "react-icons/sl";
@@ -16,6 +17,7 @@ import { SlOptionsVertical } from "react-icons/sl";
 
 export default function AIRISDashboard() {
   const router = useRouter();
+  const setTitle = useTitle().setPageTitle;
 
   const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,6 +45,11 @@ export default function AIRISDashboard() {
   const [editionNumber, setEditionNumber] = useState("");
 
   const { setLogoutState, setLoginState, user } = useAuth()
+
+  useEffect(() => {
+    const name = capitalize(user?.username || "")
+    setTitle(`${name}'s Dashboard`);
+  }, [setTitle, user])
 
   const handleCreateNewsletter = async () => {
     try {
@@ -440,11 +447,12 @@ export default function AIRISDashboard() {
                             </button>
                           )}
 
-                          <div ref={menuRef}>
+                          <div>
                             <SlOptionsVertical
                               className="cursor-pointer hover:text-neutral-300 transition-colors"
+                              onMouseDown={(e) => e.stopPropagation()}
                               onClick={(e) => {
-                                const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                                const rect = (e.currentTarget as Element).getBoundingClientRect();
                                 if (openMenuId === newsletter.id) {
                                   setOpenMenuId(null);
                                   setMenuPosition(null);
@@ -470,7 +478,7 @@ export default function AIRISDashboard() {
         <div
           ref={menuRef}
           style={{ top: menuPosition.top, left: menuPosition.left }}
-          className="fixed z-[9999] bg-neutral-900 border border-neutral-700 rounded-xl shadow-xl overflow-hidden w-44"
+          className="fixed z-9999 bg-neutral-900 border border-neutral-700 rounded-xl shadow-xl overflow-hidden w-44"
         >
           <button
             onClick={() => {

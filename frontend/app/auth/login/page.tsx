@@ -5,10 +5,14 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/ui/button";
 import { useAuth } from "@/app/context/AuthContext";
 import { validateAuth } from "@/utils/validateAuth.utils";
+import { useTitle } from "@/app/context/TitleContext";
 
 function Home() {
   const router = useRouter();
-
+  const setTitle = useTitle().setPageTitle;
+  useEffect(() => {
+    setTitle("Login")
+  }, [setTitle])
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
