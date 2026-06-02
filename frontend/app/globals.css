@@ -198,13 +198,13 @@ body {
 }
 
 .newsletter-editor.dark-theme header div.flex {
-  border-color: #202026 !important;
-  background-color: rgba(255, 255, 255, 0.03) !important;
+  border-color: transparent !important;
+  background-color: transparent !important;
 }
 
 .newsletter-editor.dark-theme header input {
-  background-color: #0c0c0e !important;
-  border-color: #222228 !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
   color: #f4f4f5 !important;
 }
 
@@ -370,13 +370,13 @@ body {
 }
 
 .newsletter-editor.light-theme header div.flex {
-  border-color: #e4e4e7 !important;
-  background-color: #fafafb !important;
+  border-color: transparent !important;
+  background-color: transparent !important;
 }
 
 .newsletter-editor.light-theme header input {
-  background-color: #fafafb !important;
-  border-color: #e4e4e7 !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
   color: #09090b !important;
 }
 

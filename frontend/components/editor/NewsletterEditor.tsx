@@ -6,7 +6,6 @@ import MediaManager from "@/components/editor/MediaManager";
 import {
   ArrowLeft,
   Save,
-  Plus,
   Check,
   Eye,
   Code,
@@ -82,14 +81,6 @@ function NewsletterEditorContent() {
           >
             <ArrowLeft size={14} />
             Back
-          </button>
-
-          <button
-            onClick={() => setShowAddBlockOverlay(true)}
-            className="bg-transparent hover:bg-neutral-900/60 text-neutral-300 hover:text-white px-3 py-1.5 rounded-xl font-semibold transition-all duration-150 cursor-pointer text-xs flex items-center gap-1.5"
-          >
-            <Plus size={14} className="text-[#b654a7]" />
-            Add Block
           </button>
 
           <div className="h-4 w-[1px] bg-neutral-900 mx-1" />

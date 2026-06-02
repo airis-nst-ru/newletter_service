@@ -19,7 +19,7 @@ import { UnsubscribeHtml } from "../../components/editor/templates/UnsubscribeBl
 import { DividerHtml } from "../../components/editor/templates/DividerBlock";
 
 function generateHtmlFromBlocks(blocks: Block[]): string {
-  const bodyRows = blocks.map(block => {
+  const bodyRows = blocks.filter(block => !block.hidden).map(block => {
     switch (block.type) {
       case "header":
         return HeaderHtml(block);

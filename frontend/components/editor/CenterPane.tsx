@@ -1,8 +1,20 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useEditor } from "../../app/context/EditorContext";
-import { Monitor, Tablet, Smartphone, Eye, Code } from "lucide-react";
+import { Monitor, Tablet, Smartphone, Eye, Code, Copy, ChevronDown, ChevronRight, Layers } from "lucide-react";
+import { HeaderHtml } from "./templates/HeaderBlock";
+import { HeroHtml } from "./templates/HeroBlock";
+import { SectionHtml } from "./templates/SectionBlock";
+import { FeatureComparisonHtml } from "./templates/FeatureComparisonBlock";
+import { BenchmarkTableHtml } from "./templates/BenchmarkTableBlock";
+import { MemberSpotlightHtml } from "./templates/MemberSpotlightBlock";
+import { TechnicalSessionHtml } from "./templates/TechnicalSessionBlock";
+import { AirisReadsHtml } from "./templates/AirisReadsBlock";
+import { ConclusionHtml } from "./templates/ConclusionBlock";
+import { FooterHtml } from "./templates/FooterBlock";
+import { UnsubscribeHtml } from "./templates/UnsubscribeBlock";
+import { DividerHtml } from "./templates/DividerBlock";
 import { HeaderPreview } from "./templates/HeaderBlock";
 import { HeroPreview } from "./templates/HeroBlock";
 import { SectionPreview } from "./templates/SectionBlock";
@@ -27,6 +39,34 @@ export default function CenterPane() {
     setPreviewDevice,
     compiledHtml
   } = useEditor();
+
+  const [htmlView, setHtmlView] = useState<"blocks" | "full">("blocks");
+  const [expandedBlockId, setExpandedBlockId] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const getBlockHtml = (block: typeof blocks[0]): string => {
+    switch (block.type) {
+      case "header": return HeaderHtml(block);
+      case "hero": return HeroHtml(block);
+      case "section": return SectionHtml(block);
+      case "featureComparison": return FeatureComparisonHtml(block);
+      case "benchmarkTable": return BenchmarkTableHtml(block);
+      case "memberSpotlight": return MemberSpotlightHtml(block);
+      case "technicalSession": return TechnicalSessionHtml(block);
+      case "airisReads": return AirisReadsHtml(block);
+      case "conclusion": return ConclusionHtml(block);
+      case "footer": return FooterHtml(block);
+      case "unsubscribe": return UnsubscribeHtml(block);
+      case "divider": return DividerHtml(block);
+      default: return "";
+    }
+  };
+
+  const copyToClipboard = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 1500);
+  };
 
   return (
     <main className="flex-1 bg-black overflow-y-auto p-6 flex flex-col items-center min-h-0">
@@ -202,25 +242,101 @@ export default function CenterPane() {
           </div>
         </div>
       ) : (
-        /* HTML Source Code Mode Container */
-        <div className="w-full max-w-4xl bg-neutral-950 border border-neutral-900 rounded-[2.5rem] p-6 h-[80vh] flex flex-col overflow-hidden">
-          <div className="flex justify-between items-center mb-4">
-            <h4 className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Compiled HTML (Read Only)</h4>
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(compiledHtml);
-                alert("HTML source code copied to clipboard!");
-              }}
-              className="text-xs text-neutral-400 hover:text-white font-semibold bg-neutral-900 border border-neutral-850 px-3 py-1.5 rounded-xl cursor-pointer transition-all duration-200"
-            >
-              Copy Source
-            </button>
+        /* HTML Source Code Mode */
+        <div className="w-full max-w-4xl flex flex-col gap-4">
+
+          {/* Sub-view toggle: Per Block vs Full HTML */}
+          <div className="flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-1 bg-neutral-950 border border-neutral-850 p-1 rounded-2xl shadow-md">
+              <button
+                onClick={() => setHtmlView("blocks")}
+                className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold cursor-pointer transition-all duration-150 ${
+                  htmlView === "blocks" ? "bg-neutral-900 text-white" : "text-neutral-400 hover:text-neutral-200"
+                }`}
+              >
+                <Layers size={13} />
+                Per Block
+              </button>
+              <button
+                onClick={() => setHtmlView("full")}
+                className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold cursor-pointer transition-all duration-150 ${
+                  htmlView === "full" ? "bg-neutral-900 text-white" : "text-neutral-400 hover:text-neutral-200"
+                }`}
+              >
+                <Code size={13} />
+                Complete HTML
+              </button>
+            </div>
+            {htmlView === "full" && (
+              <button
+                onClick={() => copyToClipboard(compiledHtml, "__full__")}
+                className="text-xs text-neutral-400 hover:text-white font-semibold bg-neutral-950 border border-neutral-850 px-3 py-1.5 rounded-xl cursor-pointer transition-all duration-200 flex items-center gap-1.5"
+              >
+                <Copy size={12} />
+                {copiedId === "__full__" ? "Copied!" : "Copy All"}
+              </button>
+            )}
           </div>
-          <textarea
-            value={compiledHtml}
-            readOnly
-            className="flex-1 bg-neutral-950 border border-neutral-850 rounded-xl p-4 font-mono text-xs leading-relaxed text-neutral-300 focus:outline-none resize-none"
-          />
+
+          {htmlView === "blocks" ? (
+            /* Per-block accordion */
+            <div className="flex flex-col gap-2">
+              {blocks.filter(b => !b.hidden).map((block) => {
+                const isOpen = expandedBlockId === block.id;
+                const blockHtml = getBlockHtml(block);
+                return (
+                  <div
+                    key={block.id}
+                    className="bg-neutral-950 border border-neutral-900 rounded-2xl overflow-hidden"
+                  >
+                    {/* Accordion header */}
+                    <button
+                      onClick={() => setExpandedBlockId(isOpen ? null : block.id)}
+                      className="w-full flex items-center justify-between px-5 py-3.5 cursor-pointer hover:bg-neutral-900/50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        {isOpen
+                          ? <ChevronDown size={14} className="text-[#b654a7] shrink-0" />
+                          : <ChevronRight size={14} className="text-neutral-500 shrink-0" />
+                        }
+                        <span className="text-xs font-bold text-neutral-300 capitalize">
+                          {block.type.replace(/([A-Z])/g, ' $1')} Block
+                        </span>
+                      </div>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); copyToClipboard(blockHtml, block.id); }}
+                        className="flex items-center gap-1 text-[10px] font-bold text-neutral-500 hover:text-white bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
+                      >
+                        <Copy size={10} />
+                        {copiedId === block.id ? "Copied!" : "Copy"}
+                      </button>
+                    </button>
+
+                    {/* Accordion body */}
+                    {isOpen && (
+                      <div className="border-t border-neutral-900 px-5 py-4">
+                        <pre className="text-[11px] font-mono leading-relaxed text-neutral-300 whitespace-pre-wrap break-all overflow-x-auto max-h-80 overflow-y-auto">
+                          {blockHtml}
+                        </pre>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+              {blocks.filter(b => b.hidden).length > 0 && (
+                <p className="text-[10px] text-neutral-600 text-center py-2">
+                  {blocks.filter(b => b.hidden).length} hidden block(s) excluded from output
+                </p>
+              )}
+            </div>
+          ) : (
+            /* Full compiled HTML */
+            <div className="bg-neutral-950 border border-neutral-900 rounded-2xl p-5 flex flex-col" style={{ minHeight: "60vh" }}>
+              <pre className="flex-1 font-mono text-xs leading-relaxed text-neutral-300 whitespace-pre-wrap break-all overflow-auto">
+                {compiledHtml}
+              </pre>
+            </div>
+          )}
         </div>
       )}
     </main>
