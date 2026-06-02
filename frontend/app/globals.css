@@ -151,3 +151,347 @@ body {
   background: #111;
   border: 1px solid #222;
 }
+
+/* ==========================================
+   Newsletter Editor Themes
+   ========================================== */
+.newsletter-editor {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* --- Dark Theme (Soft Zinc/Slate, not pitch black) --- */
+.newsletter-editor.dark-theme {
+  background-color: #0e0e11 !important; /* Soft deep charcoal background */
+  color: #e4e4e7 !important; /* Soft zinc-200 text */
+}
+
+.newsletter-editor.dark-theme header {
+  background-color: #121216 !important; /* Zinc header */
+  border-color: #202026 !important; /* Soft border */
+}
+
+.newsletter-editor.dark-theme header button {
+  border-color: transparent !important;
+  background-color: transparent !important;
+  color: #a1a1aa !important;
+}
+
+.newsletter-editor.dark-theme header button:hover {
+  background-color: #1a1a22 !important;
+  color: #ffffff !important;
+}
+
+/* Exceptions for styled buttons in header dark mode */
+.newsletter-editor.dark-theme header button.bg-white {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.newsletter-editor.dark-theme header button.btn-approve {
+  background-color: #b654a7 !important;
+  color: #ffffff !important;
+}
+
+.newsletter-editor.dark-theme header button.bg-green-600 {
+  background-color: #16a34a !important;
+  color: #ffffff !important;
+}
+
+.newsletter-editor.dark-theme header div.flex {
+  border-color: #202026 !important;
+  background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+.newsletter-editor.dark-theme header input {
+  background-color: #0c0c0e !important;
+  border-color: #222228 !important;
+  color: #f4f4f5 !important;
+}
+
+.newsletter-editor.dark-theme header input::placeholder {
+  color: #52525b !important;
+}
+
+.newsletter-editor.dark-theme aside {
+  background-color: #121216 !important; /* Soft zinc-900 */
+  border-color: #202026 !important;
+}
+
+.newsletter-editor.dark-theme aside h3 {
+  color: #71717a !important;
+}
+
+.newsletter-editor.dark-theme aside .group {
+  border-color: transparent !important;
+}
+
+.newsletter-editor.dark-theme aside .group.bg-neutral-900 {
+  background-color: #1a1a22 !important; /* Highlight block item */
+  border-color: #2e2e38 !important;
+  color: #ffffff !important;
+}
+
+.newsletter-editor.dark-theme aside .group.bg-transparent:hover {
+  background-color: #16161c !important;
+  color: #f4f4f5 !important;
+}
+
+.newsletter-editor.dark-theme aside .group span.text-neutral-200 {
+  color: #f4f4f5 !important;
+}
+
+.newsletter-editor.dark-theme aside .group span.text-neutral-400 {
+  color: #a1a1aa !important;
+}
+
+.newsletter-editor.dark-theme aside .group p.text-neutral-500 {
+  color: #71717a !important;
+}
+
+.newsletter-editor.dark-theme aside .group div.bg-neutral-900\/60 {
+  background-color: #181820 !important;
+  color: #71717a !important;
+}
+
+.newsletter-editor.dark-theme aside .group.bg-neutral-900 div.bg-neutral-800 {
+  background-color: #22222a !important;
+  color: #b654a7 !important;
+}
+
+.newsletter-editor.dark-theme main {
+  background-color: #0c0c0e !important; /* Middle visual canvas is slightly darker */
+}
+
+.newsletter-editor.dark-theme main .bg-neutral-950 {
+  background-color: #121216 !important;
+  border-color: #1e1e24 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.newsletter-editor.dark-theme main .text-neutral-500 {
+  color: #71717a !important;
+  border-color: #202026 !important;
+}
+
+/* Right inspector panel */
+.newsletter-editor.dark-theme aside.w-\[420px\] {
+  background-color: #121216 !important;
+  border-color: #202026 !important;
+}
+
+.newsletter-editor.dark-theme aside.w-\[420px\] label {
+  color: #a1a1aa !important;
+}
+
+.newsletter-editor.dark-theme aside.w-\[420px\] input,
+.newsletter-editor.dark-theme aside.w-\[420px\] textarea,
+.newsletter-editor.dark-theme aside.w-\[420px\] select {
+  background-color: #16161c !important;
+  border-color: #272730 !important;
+  color: #f4f4f5 !important;
+}
+
+.newsletter-editor.dark-theme aside.w-\[420px\] input:focus,
+.newsletter-editor.dark-theme aside.w-\[420px\] textarea:focus {
+  border-color: #b654a7 !important;
+}
+
+.newsletter-editor.dark-theme aside.w-\[420px\] button.bg-neutral-900 {
+  background-color: #1a1a22 !important;
+  border-color: #272730 !important;
+  color: #e4e4e7 !important;
+}
+
+.newsletter-editor.dark-theme aside.w-\[420px\] button.bg-neutral-900:hover {
+  background-color: #22222a !important;
+}
+
+.newsletter-editor.dark-theme header button.bg-white {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.newsletter-editor.dark-theme header button.bg-white:hover {
+  background-color: #f4f4f5 !important;
+}
+
+.newsletter-editor.dark-theme .text-neutral-400 {
+  color: #a1a1aa !important;
+}
+
+.newsletter-editor.dark-theme .border-neutral-850 {
+  border-color: #202026 !important;
+}
+
+.newsletter-editor.dark-theme .border-neutral-800 {
+  border-color: #222228 !important;
+}
+
+.newsletter-editor.dark-theme .bg-black {
+  background-color: #0c0c0e !important;
+}
+
+/* --- Light Theme (Warm Sand / Eye-friendly light grey) --- */
+.newsletter-editor.light-theme {
+  background-color: #f3f3f6 !important; /* Soft warm tinted grey background */
+  color: #27272a !important; /* Soft off-black */
+}
+
+.newsletter-editor.light-theme header {
+  background-color: #ffffff !important;
+  border-color: #e4e4e7 !important;
+}
+
+.newsletter-editor.light-theme header button {
+  border-color: transparent !important;
+  background-color: transparent !important;
+  color: #4f4f56 !important;
+}
+
+.newsletter-editor.light-theme header button:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+  color: #09090b !important;
+}
+
+/* Exceptions for styled buttons in header light mode */
+.newsletter-editor.light-theme header button.bg-white {
+  background-color: #09090b !important;
+  color: #ffffff !important;
+}
+
+.newsletter-editor.light-theme header button.btn-approve {
+  background-color: #b654a7 !important;
+  color: #ffffff !important;
+}
+
+.newsletter-editor.light-theme header button.bg-green-600 {
+  background-color: #16a34a !important;
+  color: #ffffff !important;
+}
+
+.newsletter-editor.light-theme header div.flex {
+  border-color: #e4e4e7 !important;
+  background-color: #fafafb !important;
+}
+
+.newsletter-editor.light-theme header input {
+  background-color: #fafafb !important;
+  border-color: #e4e4e7 !important;
+  color: #09090b !important;
+}
+
+.newsletter-editor.light-theme header input::placeholder {
+  color: #a1a1aa !important;
+}
+
+.newsletter-editor.light-theme aside {
+  background-color: #fafafb !important; /* Soft tinted panel background */
+  border-color: #e4e4e7 !important;
+}
+
+.newsletter-editor.light-theme aside h3 {
+  color: #71717a !important;
+}
+
+.newsletter-editor.light-theme aside .group {
+  border-color: transparent !important;
+}
+
+.newsletter-editor.light-theme aside .group.bg-neutral-900 {
+  background-color: #f4f4f7 !important; /* active item */
+  border-color: #e4e4e7 !important;
+  color: #09090b !important;
+}
+
+.newsletter-editor.light-theme aside .group.bg-transparent:hover {
+  background-color: #f1f1f4 !important;
+  color: #09090b !important;
+}
+
+.newsletter-editor.light-theme aside .group span.text-neutral-200 {
+  color: #09090b !important;
+}
+
+.newsletter-editor.light-theme aside .group span.text-neutral-400 {
+  color: #4f4f56 !important;
+}
+
+.newsletter-editor.light-theme aside .group p.text-neutral-500 {
+  color: #71717a !important;
+}
+
+.newsletter-editor.light-theme aside .group div.bg-neutral-900\/60 {
+  background-color: #eaeaea !important;
+  color: #71717a !important;
+}
+
+.newsletter-editor.light-theme aside .group.bg-neutral-900 div.bg-neutral-800 {
+  background-color: #ffffff !important;
+  color: #b654a7 !important;
+}
+
+.newsletter-editor.light-theme main {
+  background-color: #eef0f3 !important; /* eye-friendly blue-gray canvas background */
+}
+
+.newsletter-editor.light-theme main .bg-neutral-950 {
+  background-color: #ffffff !important;
+  border-color: #e4e4e7 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025) !important;
+}
+
+.newsletter-editor.light-theme main .text-neutral-500 {
+  color: #71717a !important;
+  border-color: #e4e4e7 !important;
+}
+
+/* Right inspector panel */
+.newsletter-editor.light-theme aside.w-\[420px\] {
+  background-color: #fafafb !important;
+  border-color: #e4e4e7 !important;
+}
+
+.newsletter-editor.light-theme aside.w-\[420px\] label {
+  color: #4f4f56 !important;
+}
+
+.newsletter-editor.light-theme aside.w-\[420px\] input,
+.newsletter-editor.light-theme aside.w-\[420px\] textarea,
+.newsletter-editor.light-theme aside.w-\[420px\] select {
+  background-color: #ffffff !important;
+  border-color: #d4d4d8 !important;
+  color: #09090b !important;
+}
+
+.newsletter-editor.light-theme aside.w-\[420px\] input:focus,
+.newsletter-editor.light-theme aside.w-\[420px\] textarea:focus {
+  border-color: #a1a1aa !important;
+}
+
+.newsletter-editor.light-theme aside.w-\[420px\] button.bg-neutral-900 {
+  background-color: #f4f4f7 !important;
+  border-color: #e4e4e7 !important;
+  color: #4f4f56 !important;
+}
+
+.newsletter-editor.light-theme aside.w-\[420px\] button.bg-neutral-900:hover {
+  background-color: #eaeaea !important;
+}
+
+/* Toolbar buttons compatibility */
+
+.newsletter-editor.light-theme .text-neutral-400 {
+  color: #4f4f56 !important;
+}
+
+.newsletter-editor.light-theme .border-neutral-850 {
+  border-color: #e4e4e7 !important;
+}
+
+.newsletter-editor.light-theme .border-neutral-800 {
+  border-color: #e4e4e7 !important;
+}
+
+.newsletter-editor.light-theme .bg-black {
+  background-color: #f3f3f6 !important;
+}

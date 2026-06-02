@@ -98,6 +98,7 @@ export async function PUT(
       sent,
       sentDate,
       supportingNewsSection,
+      status,
     } = body;
 
     const newsletter =
@@ -117,7 +118,7 @@ export async function PUT(
     }
 
     if (
-      newsletter.createdById !== user.id
+      newsletter.createdById !== user.id && user.accountType !== "Approver"
     ) {
       return NextResponse.json(
         {
@@ -131,6 +132,10 @@ export async function PUT(
 
     const updateData:
       Record<string, unknown> = {};
+
+    if (status) {
+      updateData.status = status;
+    }
 
     if (dueDate) {
       updateData.dueDate =
