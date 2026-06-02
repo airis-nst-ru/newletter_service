@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { PrismaClient } from "@prisma/client";
 import { verifyToken } from "@/lib/auth";
+
+const localPrisma = new PrismaClient();
 
 // GET: list comments for a newsletter
 // POST: create a comment (Approver only)
 export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await context.params;
-    const comments = await prisma.comment.findMany({
+    const comments = await localPrisma.comment.findMany({
       where: { newsletterId: id },
       include: { replies: { include: { author: true } }, author: true },
       orderBy: { createdAt: 'asc' }
@@ -35,7 +37,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
 
     if (!blockId || !content) return NextResponse.json({ success: false, message: "Missing fields" }, { status: 400 });
 
-    const created = await prisma.comment.create({
+    const created = await localPrisma.comment.create({
       data: {
         newsletterId: id,
         blockId,

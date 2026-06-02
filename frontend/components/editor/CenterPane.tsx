@@ -69,7 +69,7 @@ export default function CenterPane() {
   };
 
   return (
-    <main className="flex-1 bg-black overflow-y-auto p-6 flex flex-col items-center min-h-0">
+    <main className="flex-1 bg-black p-6 flex flex-col items-center min-h-0">
       <div className={`w-full flex items-center justify-between mb-6 select-none shrink-0 ${viewMode === "visual" ? "max-w-[750px]" : "max-w-4xl"}`}>
         {/* Device Viewport Buttons */}
         <div>
@@ -132,10 +132,10 @@ export default function CenterPane() {
       {viewMode === "visual" ? (
         <div
           className={`w-full bg-neutral-950 border border-neutral-900 shadow-2xl flex flex-col simulated-device-shell transition-all duration-300 ${previewDevice === "mobile"
-              ? "max-w-[375px] rounded-[3.2rem] border-8 border-neutral-800 relative pt-12 pb-8 px-3 shadow-3xl min-h-[80vh]"
+              ? "max-w-[375px] rounded-[3.2rem] border-8 border-neutral-800 overflow-auto relative pt-12 pb-8 px-3 shadow-3xl h-[80vh]"
               : previewDevice === "tablet"
-                ? "max-w-[576px] rounded-[2.5rem] border-4 border-neutral-850 relative pt-10 pb-6 px-4 min-h-[82vh]"
-                : "max-w-[750px] rounded-[2rem] border border-neutral-900 relative pt-12 pb-6 px-6 min-h-[85vh]"
+                ? "max-w-[576px] rounded-[2.5rem] border-4 border-neutral-850 overflow-auto relative pt-10 pb-6 px-4 h-[82vh]"
+                : "max-w-[750px] rounded-[2rem] border border-neutral-900 overflow-auto relative pt-12 pb-6 px-6 h-[85vh]"
             }`}
         >
           {/* Premium Device Shell Layouts */}
@@ -189,7 +189,7 @@ export default function CenterPane() {
             {previewDevice === "mobile" && "Mobile Preview (Responsive layout)"}
           </div>
 
-          <div className="bg-[#ffffff] text-black font-sans leading-normal overflow-hidden rounded-xl">
+          <div className="bg-[#ffffff] text-black font-sans leading-normal overflow-y-auto rounded-xl">
             <table cellPadding="0" cellSpacing="0" role="none" className="w-full border-collapse bg-[#F0F4F2]">
               <tbody>
                 <tr>
