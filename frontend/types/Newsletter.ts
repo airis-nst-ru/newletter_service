@@ -2,6 +2,7 @@ export interface Newsletter {
   id: string;
   dueDate: string;
   sent: boolean;
+  status?: string;
   hasSupportingNews: boolean;
   editionNumber?: number | null;
   createdBy: {
@@ -12,6 +13,6 @@ export interface Newsletter {
   content?: {
     title: string;
     content: string;
-    state?: string;
+    state?: string | any;
   } | null;
 }

@@ -252,8 +252,9 @@ export default function AIRISDashboard() {
         }
 
         if (filter === "Pending") {
+          // show newsletters which are explicitly sent for approval
           return (
-            !newsletter.sent &&
+            newsletter.status === "Seeking_Approval" &&
             matchesSearch
           );
         }
@@ -410,6 +411,14 @@ export default function AIRISDashboard() {
                         {newsletter.sent ? (
                           <span className="bg-green-500/15 text-green-400 px-3 py-1 rounded-full text-sm">
                             Sent
+                          </span>
+                        ) : newsletter.status === "Seeking_Approval" ? (
+                          <span className="bg-yellow-500/15 text-yellow-400 px-3 py-1 rounded-full text-sm">
+                            Pending Approval
+                          </span>
+                        ) : newsletter.status === "Approved" ? (
+                          <span className="bg-purple-500/15 text-purple-400 px-3 py-1 rounded-full text-sm">
+                            Approved
                           </span>
                         ) : (
                           <span className="bg-yellow-500/15 text-yellow-400 px-3 py-1 rounded-full text-sm">

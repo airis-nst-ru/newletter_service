@@ -334,7 +334,7 @@ body {
 /* --- Light Theme (Warm Sand / Eye-friendly light grey) --- */
 .newsletter-editor.light-theme {
   background-color: #f3f3f6 !important; /* Soft warm tinted grey background */
-  color: #27272a !important; /* Soft off-black */
+  color: var(--foreground) !important; /* Use root foreground for improved contrast */
 }
 
 .newsletter-editor.light-theme header {
@@ -381,7 +381,7 @@ body {
 }
 
 .newsletter-editor.light-theme header input::placeholder {
-  color: #a1a1aa !important;
+  color: #6b6b72 !important; /* slightly darker placeholder for better readability */
 }
 
 .newsletter-editor.light-theme aside {
@@ -494,4 +494,56 @@ body {
 
 .newsletter-editor.light-theme .bg-black {
   background-color: #f3f3f6 !important;
+  color: var(--foreground) !important; /* ensure components using bg-black show readable text in light theme */
+}
+
+/* Ensure right inspector and other side panels use readable foreground color even when utility classes (bg-black/text-white) are present */
+.newsletter-editor.light-theme aside,
+.newsletter-editor.light-theme aside .bg-black,
+.newsletter-editor.light-theme aside textarea,
+.newsletter-editor.light-theme aside input,
+.newsletter-editor.light-theme aside .text-white {
+  color: var(--foreground) !important;
+}
+
+.newsletter-editor.light-theme aside textarea::placeholder,
+.newsletter-editor.light-theme aside input::placeholder {
+  color: #6b6b72 !important; /* slightly darker placeholder */
+}
+
+/* Force readable text colors for common utility classes used in template previews */
+.newsletter-editor.light-theme .text-white {
+  color: var(--foreground) !important;
+}
+.newsletter-editor.light-theme .text-neutral-50,
+.newsletter-editor.light-theme .text-neutral-100,
+.newsletter-editor.light-theme .text-neutral-200,
+.newsletter-editor.light-theme .text-neutral-300,
+.newsletter-editor.light-theme .text-neutral-400 {
+  color: #6b6b72 !important; /* darker neutral for labels/placeholders */
+}
+.newsletter-editor.light-theme .text-neutral-500,
+.newsletter-editor.light-theme .text-neutral-600 {
+  color: #52525b !important;
+}
+.newsletter-editor.light-theme .text-neutral-700,
+.newsletter-editor.light-theme .text-neutral-800,
+.newsletter-editor.light-theme .text-neutral-900,
+.newsletter-editor.light-theme .text-neutral-950 {
+  color: #171717 !important; /* strong foreground for main copy */
+}
+
+/* If components use explicit hex whites (e.g., text-white) inside preview, ensure their backgrounds remain correct */
+.newsletter-editor.light-theme .bg-black,
+.newsletter-editor.light-theme .bg-neutral-900 {
+  background-color: #111827 !important; /* keep dark preview panels dark */
+  color: #fff !important; /* but these are preview inner areas — white text is fine */
+}
+
+/* Specific override for template table text (many templates render tables with text-neutral-700) */
+.newsletter-editor.light-theme table td,
+.newsletter-editor.light-theme table th,
+.newsletter-editor.light-theme table p,
+.newsletter-editor.light-theme table span {
+  color: #171717 !important;
 }

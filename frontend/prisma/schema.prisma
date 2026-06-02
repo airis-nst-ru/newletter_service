@@ -9,90 +9,133 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum AccountType{
+enum AccountType {
   Editor
   Approver
   Sender
 }
 
 model User {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  email        String   @unique
-  username     String   @unique
-  password     String
+  email    String @unique
+  username String @unique
+  password String
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  accountType  AccountType @default(Editor)
+  accountType AccountType @default(Editor)
 
-  active       Boolean  @default(true)
+  active Boolean @default(true)
 
   // Relations
-  newsletters  Newsletter[]
+  newsletters    Newsletter[]
+  comments       Comment[]
+  commentReplies CommentReply[]
 }
 
-enum NewsletterStatus{
+enum NewsletterStatus {
   Draft
+  Seeking_Approval
   Approved
   Ready_To_Send
   Sent
 }
 
 model Newsletter {
-  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  dueDate               DateTime
-  sentDate              DateTime?
+  dueDate  DateTime
+  sentDate DateTime?
 
-  sent                  Boolean  @default(false)
+  sent Boolean @default(false)
 
-  status                NewsletterStatus @default(Draft)
+  status NewsletterStatus @default(Draft)
 
-  hasSupportingNews     Boolean  @default(false)
-  
-  editionNumber         Int?     @default(1)
+  hasSupportingNews Boolean @default(false)
 
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  editionNumber Int? @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
-  createdBy             User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
-  createdById           String   @db.ObjectId
+  createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String @db.ObjectId
 
-  content               NewsletterContent?
+  content  NewsletterContent?
+  comments Comment[]
 }
 
 model NewsletterContent {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  title         String
+  title String
 
-  content       String
+  content String
 
-  state         String?
+  state Json?
 
-  variables     String?
+  variables String?
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
-  newsletter    Newsletter @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
+  newsletter Newsletter @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
 
-  newsletterId  String   @unique @db.ObjectId
+  newsletterId String @unique @db.ObjectId
 }
 
-model Recipients{
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+// Comments and replies attached to specific blocks within a newsletter
+model Comment {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  email         String   @unique
+  newsletter   Newsletter @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
+  newsletterId String     @db.ObjectId
+
+  blockId String
+
+  author   User?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorId String? @db.ObjectId
+
+  content  String
+  resolved Boolean @default(false)
+
+  replies CommentReply[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CommentReply {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String  @db.ObjectId
+
+  author   User?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorId String? @db.ObjectId
+
+  // type: "text" | "voice"
+  type     String  @default("text")
+  text     String?
+  voiceUrl String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Recipients {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  email String @unique
 
   isfromUniversity Boolean? @default(false)
 
   isSubscribed Boolean? @default(true)
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

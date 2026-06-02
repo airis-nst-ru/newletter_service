@@ -41,6 +41,7 @@ function NewsletterEditorContent() {
     newsletterStatus,
     loading,
     saving,
+    saveState,
     approving,
     sending,
     viewMode,
@@ -54,9 +55,14 @@ function NewsletterEditorContent() {
     handleSave,
     handleApprove,
     handleSend,
+    handleSendForApproval,
+    handleMediaSelect,
     addBlock,
-    handleMediaSelect
+    hasUnsavedChanges
   } = useEditor();
+
+  const [showSendForApprovalModal, setShowSendForApprovalModal] = React.useState(false);
+  const [showUnsavedModal, setShowUnsavedModal] = React.useState(false);
 
   if (loading) {
     return (
@@ -76,7 +82,7 @@ function NewsletterEditorContent() {
       <header className="flex h-14 items-center justify-between border-b border-neutral-900 bg-neutral-950 px-4 shrink-0">
         <div className="flex items-center gap-2">
           <button
-            onClick={() => router.push("/dashboard")}
+            onClick={() => { if (hasUnsavedChanges) { setShowUnsavedModal(true); } else { router.push("/dashboard"); } }}
             className="bg-transparent hover:bg-neutral-900/60 text-neutral-400 hover:text-white px-3 py-1.5 rounded-xl font-semibold transition-all duration-150 cursor-pointer text-xs flex items-center gap-1.5"
           >
             <ArrowLeft size={14} />
@@ -101,6 +107,20 @@ function NewsletterEditorContent() {
               }`}>
               {newsletterStatus}
             </span>
+
+            {/* Auto-save indicator */}
+            {saveState === "saving" && (
+              <span className="flex items-center gap-1 text-[10px] text-neutral-500 font-medium">
+                <span className="h-2 w-2 animate-spin rounded-full border border-neutral-500 border-t-transparent" />
+                Saving…
+              </span>
+            )}
+            {saveState === "saved" && (
+              <span className="text-[10px] text-green-500 font-semibold">✓ Saved</span>
+            )}
+            {saveState === "error" && (
+              <span className="text-[10px] text-red-400 font-semibold">✗ Save failed</span>
+            )}
           </div>
         </div>
 
@@ -130,7 +150,19 @@ function NewsletterEditorContent() {
             Save
           </button>
 
-          {user?.accountType === "Approver" && newsletterStatus === "Draft" && (
+          {/* Send for Approval (visible to non-approvers while in Draft) */}
+          {user?.accountType !== "Approver" && newsletterStatus === "Draft" && (
+            <button
+              onClick={() => setShowSendForApprovalModal(true)}
+              disabled={saveState === "saving"}
+              className="btn-approve bg-[#b654a7] hover:bg-[#a04692] text-white px-4 py-1.5 rounded-xl font-semibold transition-all duration-150 cursor-pointer text-xs flex items-center gap-1.5"
+            >
+              <Check size={14} />
+              Send for Approval
+            </button>
+          )}
+
+          {user?.accountType === "Approver" && (newsletterStatus === "Draft" || newsletterStatus === "Seeking_Approval") && (
             <button
               onClick={handleApprove}
               disabled={approving}
@@ -168,6 +200,47 @@ function NewsletterEditorContent() {
         <CenterPane />
         <RightPane />
       </div>
+
+      {/* SEND FOR APPROVAL MODAL */}
+      {showSendForApprovalModal && (
+        <div
+          onClick={() => setShowSendForApprovalModal(false)}
+          className="fixed inset-0 z-60 bg-black/60 flex items-center justify-center p-6"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-neutral-950 border border-neutral-850 rounded-2xl p-6 w-full max-w-md"
+          >
+            <h3 className="text-lg font-bold mb-2">Send for approval?</h3>
+            <p className="text-sm text-neutral-400 mb-4">This will save current changes and set the newsletter status to "Seeking_Approval". Approvers will be notified.</p>
+            <div className="flex justify-end gap-2">
+              <button onClick={() => setShowSendForApprovalModal(false)} className="px-3 py-2 rounded-md bg-neutral-800 text-white">Cancel</button>
+              <button onClick={async () => { setShowSendForApprovalModal(false); await handleSendForApproval(); }} className="px-3 py-2 rounded-md bg-[#b654a7] text-white">Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* UNSAVED CHANGES MODAL */}
+      {showUnsavedModal && (
+        <div
+          onClick={() => setShowUnsavedModal(false)}
+          className="fixed inset-0 z-60 bg-black/60 flex items-center justify-center p-6"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-neutral-950 border border-neutral-850 rounded-2xl p-6 w-full max-w-md"
+          >
+            <h3 className="text-lg font-bold mb-2">Unsaved changes</h3>
+            <p className="text-sm text-neutral-400 mb-4">You have unsaved changes. Save before leaving?</p>
+            <div className="flex justify-end gap-2">
+              <button onClick={() => { setShowUnsavedModal(false); router.push('/dashboard'); }} className="px-3 py-2 rounded-md bg-neutral-800 text-white">Discard</button>
+              <button onClick={async () => { await handleSave(); setShowUnsavedModal(false); router.push('/dashboard'); }} className="px-3 py-2 rounded-md bg-white text-black">Save & Leave</button>
+              <button onClick={() => setShowUnsavedModal(false)} className="px-3 py-2 rounded-md bg-neutral-700 text-white">Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* MEDIA MANAGER MODAL */}
       {showMediaModal && (

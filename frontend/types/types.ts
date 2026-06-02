@@ -25,5 +25,7 @@ export interface Block {
   linkedinUrl?: string;
   text?: string;
   unsubscribeUrl?: string;
+  buttonText?: string;
+  buttonUrl?: string;
   hidden?: boolean;
 }

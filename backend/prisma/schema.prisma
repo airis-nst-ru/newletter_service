@@ -46,6 +46,7 @@ model Newsletter {
   sentDate                DateTime?
   sent                    Boolean  @default(false)
   supportingNewsSection   Boolean  @default(false)
+  status                  NewsletterStatus @default(Draft)
   createdBy               User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById             String   @db.ObjectId
   createdAt               DateTime @default(now())
@@ -62,7 +63,7 @@ model NewsletterContent {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   content       String   // Raw HTML content
-  state         String?  // JSON editor state (blocks and variables)
+  state         Json?  // JSON editor state (blocks and variables)
   newsletter    Newsletter @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
   newsletterId  String   @unique @db.ObjectId
   createdAt     DateTime @default(now())
@@ -77,4 +78,13 @@ model NewsletterView {
   viewedAt      DateTime   @default(now())
 
   @@unique([email, newsletterId])
+}
+
+// Newsletter status enum
+enum NewsletterStatus{
+  Draft
+  Seeking_Approval
+  Approved
+  Ready_To_Send
+  Sent
 }
