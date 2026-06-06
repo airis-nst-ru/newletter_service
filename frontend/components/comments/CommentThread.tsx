@@ -3,12 +3,24 @@
 import React, { useEffect, useState } from "react";
 import CommentItem from "./CommentItem";
 import ReplyComposer from "./ReplyComposer";
+import { useAuth } from "@/app/context/AuthContext";
 import type { Comment as C } from "@/types/Comment";
+import { useEditor } from "../../app/context/EditorContext";
 
 export default function CommentThread({ newsletterId, blockId }: { newsletterId: string; blockId: string }) {
   const [comments, setComments] = useState<C[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const { user } = useAuth();
+
+  // Call global refresh if available in editor context
+  let globalFetchComments: (() => Promise<void>) | undefined;
+  try {
+    const editorCtx = useEditor();
+    globalFetchComments = editorCtx?.fetchComments;
+  } catch (e) {
+    // Not in editor context (e.g. in approver view)
+  }
 
   const fetchComments = async () => {
     try {
@@ -17,6 +29,7 @@ export default function CommentThread({ newsletterId, blockId }: { newsletterId:
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed");
       setComments((data.data || []).filter((c: C) => c.blockId === blockId));
+      globalFetchComments?.();
     } catch (err) {
       console.error(err);
     } finally { setLoading(false); }
@@ -98,24 +111,26 @@ export default function CommentThread({ newsletterId, blockId }: { newsletterId:
         ))}
       </div>
 
-      <div className="mt-4">
-        <h5 className="text-xs font-semibold text-neutral-400 mb-2">Add a new comment</h5>
-        <ReplyComposer onSend={async (p) => { if (p.type === 'text' && p.text) await handleNewComment(p.text); else if (p.type === 'voice' && p.voiceUrl) {
-          setUploading(true);
-          try {
-            const up = await fetch(`/api/v1/uploads/voice`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ base64: p.voiceUrl }) });
-            const d = await up.json();
-            if (!up.ok) throw new Error(d.message||'Upload failed');
-            // create a comment containing a short note and voice reply as first reply
-            const res = await fetch(`/api/v1/newsletters/${newsletterId}/comments`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ blockId, content: 'Voice comment' }) });
-            const cd = await res.json();
-            if (!res.ok) throw new Error(cd.message||'Failed to create comment');
-            const commentId = cd.data.id;
-            await handleNewReply(commentId, { type: 'voice', voiceUrl: d.url });
-          } catch (err) { console.error(err); alert('Failed to add voice comment'); }
-          finally { setUploading(false); }
-        } }} uploading={uploading} />
-      </div>
+      {user?.accountType === "Approver" && (
+        <div className="mt-4">
+          <h5 className="text-xs font-semibold text-neutral-400 mb-2">Add a new comment</h5>
+          <ReplyComposer onSend={async (p) => { if (p.type === 'text' && p.text) await handleNewComment(p.text); else if (p.type === 'voice' && p.voiceUrl) {
+            setUploading(true);
+            try {
+              const up = await fetch(`/api/v1/uploads/voice`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ base64: p.voiceUrl }) });
+              const d = await up.json();
+              if (!up.ok) throw new Error(d.message||'Upload failed');
+              // create a comment containing a short note and voice reply as first reply
+              const res = await fetch(`/api/v1/newsletters/${newsletterId}/comments`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ blockId, content: 'Voice comment' }) });
+              const cd = await res.json();
+              if (!res.ok) throw new Error(cd.message||'Failed to create comment');
+              const commentId = cd.data.id;
+              await handleNewReply(commentId, { type: 'voice', voiceUrl: d.url });
+            } catch (err) { console.error(err); alert('Failed to add voice comment'); }
+            finally { setUploading(false); }
+          } }} uploading={uploading} />
+        </div>
+      )}
     </div>
   );
 }

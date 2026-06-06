@@ -3,6 +3,7 @@
 import React from "react";
 import { useEditor } from "../../app/context/EditorContext";
 import { Settings, Trash2, Image as ImageIcon } from "lucide-react";
+import CommentThread from "@/components/comments/CommentThread";
 
 interface AutoResizingTextareaProps {
   value: string;
@@ -44,11 +45,22 @@ export default function RightPane() {
     deleteBlock,
     updateSelectedBlockField,
     openMediaLibraryForField,
-    setShowMediaModal
+    setShowMediaModal,
+    newsletterId,
+    commentsByBlock
   } = useEditor();
+
+  const [activeTab, setActiveTab] = React.useState<"settings" | "comments">("settings");
+
+  React.useEffect(() => {
+    setActiveTab("settings");
+  }, [selectedBlock?.id]);
 
   const supportsLogo = selectedBlock ? ["header", "footer"].includes(selectedBlock.type) : false;
   const supportsImage = selectedBlock ? ["section", "featureComparison", "memberSpotlight", "technicalSession"].includes(selectedBlock.type) : false;
+
+  const blockComments = selectedBlock ? commentsByBlock[selectedBlock.id] || [] : [];
+  const unresolvedCommentsCount = blockComments.filter(c => !c.resolved).length;
 
   return (
     <aside className="w-96 flex flex-col border-l border-neutral-900 bg-neutral-950 overflow-y-auto p-5 shrink-0">
@@ -87,8 +99,36 @@ export default function RightPane() {
             </div>
           </div>
 
-          {/* Block Editable Settings Fields */}
-          <div className="space-y-4">
+          {/* Tab Switcher */}
+          <div className="flex border border-neutral-900 p-0.5 bg-neutral-990 rounded-2xl mb-2">
+            <button
+              type="button"
+              onClick={() => setActiveTab("settings")}
+              className={`flex-1 text-center py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                activeTab === "settings" ? "bg-neutral-900 text-white" : "text-neutral-400 hover:text-neutral-200"
+              }`}
+            >
+              Configure
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("comments")}
+              className={`flex-1 text-center py-2 text-xs font-bold rounded-xl transition-all cursor-pointer relative ${
+                activeTab === "comments" ? "bg-neutral-900 text-white" : "text-neutral-400 hover:text-neutral-200"
+              }`}
+            >
+              Comments
+              {unresolvedCommentsCount > 0 && (
+                <span className="absolute -top-1.5 -right-1 bg-yellow-500 text-black text-[9px] font-bold px-1.5 py-0.5 rounded-full border-2 border-neutral-950">
+                  {unresolvedCommentsCount}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {activeTab === "settings" ? (
+            /* Block Editable Settings Fields */
+            <div className="space-y-4">
 
             {/* LOGO URL */}
             {(selectedBlock.logoUrl !== undefined || supportsLogo) && (
@@ -403,6 +443,11 @@ export default function RightPane() {
             )}
 
           </div>
+          ) : (
+            <div className="pt-2">
+              <CommentThread newsletterId={newsletterId} blockId={selectedBlock.id} />
+            </div>
+          )}
         </div>
       ) : (
         <div className="flex h-full flex-col items-center justify-center text-center text-neutral-500 p-6">

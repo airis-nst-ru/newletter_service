@@ -264,6 +264,7 @@ export function EditorProvider({ children, newsletterId }: { children: React.Rea
         if (newsletter.content?.content) {
           setCompiledHtml(newsletter.content.content);
         }
+        fetchComments();
       } catch (error) {
         console.error("Error fetching newsletter:", error);
       } finally {
