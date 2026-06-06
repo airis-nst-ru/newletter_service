@@ -316,7 +316,6 @@ export function EditorProvider({ children, newsletterId }: { children: React.Rea
 
       setCompiledHtml(data.compiledHtml);
       if (data.state && Array.isArray(data.state)) {
-        setBlocks(data.state);
         lastSavedStateRef.current = JSON.stringify(data.state);
       } else {
         lastSavedStateRef.current = JSON.stringify(stateToSave);
