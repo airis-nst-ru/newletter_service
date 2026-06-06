@@ -29,6 +29,7 @@ export default function ApproverReviewClient({ newsletterId, compiledHtml, meta 
   const router = useRouter();
   const [approving, setApproving] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
+  const [status, setStatus] = useState(meta?.status || "Draft");
 
   useEffect(() => {
     validateAuth()
@@ -83,6 +84,9 @@ export default function ApproverReviewClient({ newsletterId, compiledHtml, meta 
         const res = await fetch(`/api/v1/newsletters/${newsletterId}`);
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || '');
+        if (data.data?.status) {
+          setStatus(data.data.status);
+        }
         const state = data.data.content?.state;
         if (Array.isArray(state)) {
           const mapped = state.map((b: any) => ({ id: b.id, type: b.type, title: b.title || (b.type + ' block') }));
@@ -186,9 +190,11 @@ export default function ApproverReviewClient({ newsletterId, compiledHtml, meta 
           <button onClick={() => setShowSendModal(true)} className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${theme === 'dark' ? 'bg-neutral-800 hover:bg-neutral-700 text-white' : 'bg-neutral-200 hover:bg-neutral-300 text-black'}`}>
             <Send size={16} /> Send
           </button>
-          <button onClick={() => setShowApproveModal(true)} disabled={approving} className="px-3 py-2 rounded-lg bg-[#b654a7] hover:bg-[#a54a97] text-white text-sm font-medium transition-colors flex items-center gap-2">
-            <CheckCircle size={16} /> {approving ? 'Approving…' : 'Approve'}
-          </button>
+          {status === "Seeking_Approval" && (
+            <button onClick={() => setShowApproveModal(true)} disabled={approving} className="px-3 py-2 rounded-lg bg-[#b654a7] hover:bg-[#a54a97] text-white text-sm font-medium transition-colors flex items-center gap-2">
+              <CheckCircle size={16} /> {approving ? 'Approving…' : 'Approve'}
+            </button>
+          )}
         </div>
       </header>
 

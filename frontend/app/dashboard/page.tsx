@@ -430,12 +430,21 @@ export default function AIRISDashboard() {
                       <td className="px-6 py-5">
                         <div className="flex items-center gap-3">
                           {user?.accountType === "Approver" && (
-                            <button
-                              onClick={() => router.push(`/approver/${newsletter.id}`)}
-                              className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer text-sm"
-                            >
-                              Approve
-                            </button>
+                            newsletter.status === "Seeking_Approval" ? (
+                              <button
+                                onClick={() => router.push(`/approver/${newsletter.id}`)}
+                                className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer text-sm"
+                              >
+                                Approve
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => router.push(`/approver/${newsletter.id}`)}
+                                className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer text-sm text-neutral-400 hover:text-white"
+                              >
+                                View
+                              </button>
+                            )
                           )}
 
                           {user?.accountType === "Editor" && (
