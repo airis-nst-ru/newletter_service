@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { Mic, Send } from "lucide-react";
+import { Mic, Send, Loader2 } from "lucide-react";
 
 type ReplyComposerProps = {
   onSend: (payload: { type: 'text' | 'voice'; text?: string; voiceUrl?: string }) => Promise<void>;
@@ -60,19 +60,33 @@ export default function ReplyComposer({ onSend, uploading }: ReplyComposerProps)
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Write a reply or record voice..."
-        className="flex-1 bg-neutral-900 border border-neutral-50 rounded-xl px-3 py-2 text-sm outline-none text-white"
+        placeholder={uploading ? "Uploading voice comment..." : "Write a reply or record voice..."}
+        disabled={uploading}
+        className={`flex-1 bg-neutral-900 border border-neutral-50 rounded-xl px-3 py-2 text-sm outline-none text-white transition-opacity ${
+          uploading ? "opacity-50" : ""
+        }`}
       />
       <button
+        type="button"
         onClick={() => {
           if (recording) stopRecording(); else startRecording();
         }}
-        className={`px-3 py-2 rounded-xl ${recording ? 'bg-red-600' : 'bg-neutral-800'} text-white`}
-        title={recording ? 'Stop recording' : 'Record voice'}
+        disabled={uploading}
+        className={`px-3 py-2 rounded-xl transition-all ${
+          recording ? 'bg-red-600 animate-pulse' : uploading ? 'bg-neutral-900 text-neutral-600' : 'bg-neutral-800'
+        } text-white flex items-center justify-center`}
+        title={recording ? 'Stop recording' : uploading ? 'Uploading...' : 'Record voice'}
       >
-        <Mic size={16} />
+        {uploading ? <Loader2 className="animate-spin" size={16} /> : <Mic size={16} />}
       </button>
-      <button onClick={handleSendText} disabled={uploading} className="px-3 py-2 rounded-xl bg-white text-black">
+      <button
+        type="button"
+        onClick={handleSendText}
+        disabled={uploading || !text.trim()}
+        className={`px-3 py-2 rounded-xl text-black transition-all ${
+          uploading || !text.trim() ? 'bg-neutral-800 text-neutral-600 cursor-not-allowed' : 'bg-white hover:bg-neutral-200'
+        }`}
+      >
         <Send size={14} />
       </button>
     </div>
