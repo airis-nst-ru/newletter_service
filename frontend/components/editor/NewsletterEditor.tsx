@@ -33,9 +33,35 @@ import { DividerSkeleton } from "./templates/DividerBlock";
 import { FaSyncAlt } from "react-icons/fa";
 import { SiTicktick } from "react-icons/si";
 import { MdError } from "react-icons/md";
+import { useAuth } from "@/app/context/AuthContext";
+import { validateAuth } from "@/utils/validateAuth.utils";
 
 function NewsletterEditorContent() {
   const router = useRouter();
+  const { setLoginState, setLogoutState } = useAuth();
+  const [authLoading, setAuthLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    validateAuth()
+      .then((res) => {
+        if (!res) {
+          setLogoutState();
+          router.push("/auth/login");
+          return;
+        }
+        setLoginState(res);
+        if (res.accountType !== "Editor") {
+          router.push("/dashboard");
+          return;
+        }
+        setAuthLoading(false);
+      })
+      .catch(() => {
+        setLogoutState();
+        router.push("/auth/login");
+      });
+  }, [router, setLoginState, setLogoutState]);
+
   const {
     user,
     blocks,
@@ -66,6 +92,17 @@ function NewsletterEditorContent() {
 
   const [showSendForApprovalModal, setShowSendForApprovalModal] = React.useState(false);
   const [showUnsavedModal, setShowUnsavedModal] = React.useState(false);
+
+  if (authLoading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-black text-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#b654a7] border-t-transparent"></div>
+          <p className="text-neutral-400">Verifying editor access...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

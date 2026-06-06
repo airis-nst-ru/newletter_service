@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
+import { validateAuth } from "@/utils/validateAuth.utils";
 import CommentThread from "@/components/comments/CommentThread";
 import { Layout, Sparkles, AlignLeft, Columns, Table as TableIcon, User, Cpu, BookOpen, Settings, AlertCircle, Minus, ArrowLeft, CheckCircle, Send, Moon, Sun } from 'lucide-react';
 import { TiThMenu } from "react-icons/ti";
@@ -24,16 +25,31 @@ const blockTypeIcons: Record<string, React.ComponentType<any>> = {
 };
 
 export default function ApproverReviewClient({ newsletterId, compiledHtml, meta }: { newsletterId: string; compiledHtml: string; meta?: any }) {
-  const { user } = useAuth();
+  const { user, setLoginState, setLogoutState } = useAuth();
   const router = useRouter();
   const [approving, setApproving] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
-    if (user.accountType !== 'Approver') {
-      router.push('/dashboard');
-    }
-  }, [user, router]);
+    validateAuth()
+      .then((res) => {
+        if (!res) {
+          setLogoutState();
+          router.push("/auth/login");
+          return;
+        }
+        setLoginState(res);
+        if (res.accountType !== "Approver") {
+          router.push("/dashboard");
+          return;
+        }
+        setAuthLoading(false);
+      })
+      .catch(() => {
+        setLogoutState();
+        router.push("/auth/login");
+      });
+  }, [router, setLoginState, setLogoutState]);
 
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [selectedBlock, setSelectedBlock] = useState<string | null>(null);
@@ -137,6 +153,17 @@ export default function ApproverReviewClient({ newsletterId, compiledHtml, meta 
     const nid = idsWithComments[nextIndex];
     setSelectedBlock(nid);
   };
+
+  if (authLoading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-black text-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#b654a7] border-t-transparent"></div>
+          <p className="text-neutral-400">Verifying approver access...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`h-screen overflow-hidden approver-root flex flex-col ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-black'}`}>
