@@ -47,6 +47,9 @@ export default function RightPane() {
     setShowMediaModal
   } = useEditor();
 
+  const supportsLogo = selectedBlock ? ["header", "footer"].includes(selectedBlock.type) : false;
+  const supportsImage = selectedBlock ? ["section", "featureComparison", "memberSpotlight", "technicalSession"].includes(selectedBlock.type) : false;
+
   return (
     <aside className="w-96 flex flex-col border-l border-neutral-900 bg-neutral-950 overflow-y-auto p-5 shrink-0">
       {selectedBlock ? (
@@ -54,6 +57,21 @@ export default function RightPane() {
 
           {/* Block Header Info */}
           <div className="flex flex-col gap-3 border-b border-neutral-900 pb-4">
+            <button
+              onClick={() => {
+                if (selectedBlock.imageUrl !== undefined || supportsImage) {
+                  openMediaLibraryForField(selectedBlock.id, "imageUrl");
+                } else if (selectedBlock.logoUrl !== undefined || supportsLogo) {
+                  openMediaLibraryForField(selectedBlock.id, "logoUrl");
+                } else {
+                  setShowMediaModal(true);
+                }
+              }}
+              className="w-full flex items-center justify-center gap-1.5 text-xs text-neutral-300 hover:text-white font-semibold bg-neutral-900 border border-neutral-850 hover:border-neutral-750 rounded-2xl py-2.5 cursor-pointer transition-all duration-200"
+            >
+              <ImageIcon size={12} />
+              Open Media Library
+            </button>
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold text-white capitalize">{selectedBlock.type} Block</h2>
@@ -67,41 +85,28 @@ export default function RightPane() {
                 Delete
               </button>
             </div>
-            <button
-              onClick={() => {
-                if (selectedBlock.imageUrl !== undefined) {
-                  openMediaLibraryForField(selectedBlock.id, "imageUrl");
-                } else if (selectedBlock.logoUrl !== undefined) {
-                  openMediaLibraryForField(selectedBlock.id, "logoUrl");
-                } else {
-                  setShowMediaModal(true);
-                }
-              }}
-              className="w-full flex items-center justify-center gap-1.5 text-xs text-neutral-300 hover:text-white font-semibold bg-neutral-900 border border-neutral-850 hover:border-neutral-750 rounded-2xl py-2.5 cursor-pointer transition-all duration-200"
-            >
-              <ImageIcon size={12} />
-              Open Media Library
-            </button>
           </div>
 
           {/* Block Editable Settings Fields */}
           <div className="space-y-4">
 
             {/* LOGO URL */}
-            {selectedBlock.logoUrl !== undefined && (
+            {(selectedBlock.logoUrl !== undefined || supportsLogo) && (
               <div>
                 <label className="block mb-2 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Logo Image URL</label>
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                   <AutoResizingTextarea
                     value={selectedBlock.logoUrl || ""}
                     onChange={(e) => updateSelectedBlockField("logoUrl", e.target.value)}
                     className="flex-1 bg-black border border-neutral-800 focus:border-neutral-600 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none transition-all duration-200"
                   />
                   <button
+                    type="button"
                     onClick={() => openMediaLibraryForField(selectedBlock.id, "logoUrl")}
-                    className="bg-neutral-950 border border-neutral-800 rounded-2xl px-4 py-2 text-xs font-semibold hover:bg-neutral-900 transition-all cursor-pointer text-white"
+                    className="p-3 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white rounded-2xl transition-all cursor-pointer shrink-0"
+                    title="Choose from Media Library"
                   >
-                    Browse
+                    <ImageIcon size={16} />
                   </button>
                 </div>
               </div>
@@ -156,27 +161,29 @@ export default function RightPane() {
             )}
 
             {/* IMAGE URL */}
-            {selectedBlock.imageUrl !== undefined && (
+            {(selectedBlock.imageUrl !== undefined || supportsImage) && (
               <div>
                 <label className="block mb-2 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Banner/Section Image URL</label>
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                   <AutoResizingTextarea
                     value={selectedBlock.imageUrl || ""}
                     onChange={(e) => updateSelectedBlockField("imageUrl", e.target.value)}
                     className="flex-1 bg-black border border-neutral-800 focus:border-neutral-600 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none transition-all duration-200"
                   />
                   <button
+                    type="button"
                     onClick={() => openMediaLibraryForField(selectedBlock.id, "imageUrl")}
-                    className="bg-neutral-950 border border-neutral-800 rounded-2xl px-4 py-2 text-xs font-semibold hover:bg-neutral-900 transition-all cursor-pointer text-white"
+                    className="p-3 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 text-neutral-300 hover:text-white rounded-2xl transition-all cursor-pointer shrink-0"
+                    title="Choose from Media Library"
                   >
-                    Browse
+                    <ImageIcon size={16} />
                   </button>
                 </div>
               </div>
             )}
 
             {/* IMAGE ALT */}
-            {selectedBlock.imageAlt !== undefined && (
+            {(selectedBlock.imageAlt !== undefined || supportsImage) && (
               <div>
                 <label className="block mb-2 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Image Alt Description</label>
                 <AutoResizingTextarea

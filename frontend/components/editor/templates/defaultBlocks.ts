@@ -136,6 +136,8 @@ export function createBlockWithDefaults(type: string, id: string): Block {
       newBlock = {
         ...newBlock,
         title: "New Section",
+        imageUrl: "",
+        imageAlt: "",
         paragraphs: "Enter section content here...",
         readMoreUrl: ""
       };
@@ -144,6 +146,8 @@ export function createBlockWithDefaults(type: string, id: string): Block {
       newBlock = {
         ...newBlock,
         title: "New Comparison Table",
+        imageUrl: "",
+        imageAlt: "",
         paragraphs: "Enter intro description here...",
         tableHeaders: "Feature,Column A,Column B",
         tableRows: "Row 1 Name|Value A|Value B\nRow 2 Name|Value A|Value B",
@@ -168,6 +172,8 @@ export function createBlockWithDefaults(type: string, id: string): Block {
         quoteText: "Inspiring quote text goes here.",
         quoteAuthor: "Author Name, Title",
         title: "Building From First Principles",
+        imageUrl: "",
+        imageAlt: "",
         paragraphs: "Describe the member's project or course detail here...",
         gridCardsTitle: "What is covered",
         gridCards: "Topic 1|Brief description\nTopic 2|Brief description"
@@ -178,6 +184,8 @@ export function createBlockWithDefaults(type: string, id: string): Block {
         ...newBlock,
         sectionLabel: "Technical Session  ·  Foundations",
         title: "Technical Session Title",
+        imageUrl: "",
+        imageAlt: "",
         paragraphs: "Detail about the technical session or lecture...",
         gridCards: "Card 1 Title|Card 1 Info\nCard 2 Title|Card 2 Info",
         endingParagraph: "Wrap up paragraph..."

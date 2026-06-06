@@ -175,10 +175,10 @@ export default function MediaManager({ onSelect }: Props) {
               key={item.public_id}
               className="group bg-neutral-900 border border-neutral-850 hover:border-neutral-800 rounded-2xl overflow-hidden flex flex-col justify-between transition-all"
             >
-              {/* IMAGE THUMBNAIL (Clicking copies the link) */}
+              {/* IMAGE THUMBNAIL (Clicking selects the image) */}
               <div
-                onClick={() => copyUrlToClipboard(item.secure_url)}
-                title="Click to copy public link"
+                onClick={() => onSelect(item.secure_url)}
+                title="Click to insert image"
                 className="relative aspect-video cursor-pointer overflow-hidden bg-black/25 flex items-center justify-center group-hover:opacity-90 transition-opacity"
               >
                 <Image
@@ -189,9 +189,9 @@ export default function MediaManager({ onSelect }: Props) {
                   unoptimized
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <div className="bg-neutral-950/80 backdrop-blur text-white text-[10px] px-2.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 shadow-lg border border-neutral-800">
-                    <Copy size={10} />
-                    Copy URL
+                  <div className="bg-[#b654a7]/90 backdrop-blur text-white text-[10px] px-2.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 shadow-lg border border-[#b654a7]">
+                    <ArrowUpRight size={10} />
+                    Insert Image
                   </div>
                 </div>
               </div>

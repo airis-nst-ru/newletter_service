@@ -30,6 +30,9 @@ import { ConclusionSkeleton } from "./templates/ConclusionBlock";
 import { FooterSkeleton } from "./templates/FooterBlock";
 import { UnsubscribeSkeleton } from "./templates/UnsubscribeBlock";
 import { DividerSkeleton } from "./templates/DividerBlock";
+import { FaSyncAlt } from "react-icons/fa";
+import { SiTicktick } from "react-icons/si";
+import { MdError } from "react-icons/md";
 
 function NewsletterEditorContent() {
   const router = useRouter();
@@ -110,16 +113,16 @@ function NewsletterEditorContent() {
 
             {/* Auto-save indicator */}
             {saveState === "saving" && (
-              <span className="flex items-center gap-1 text-[10px] text-neutral-500 font-medium">
-                <span className="h-2 w-2 animate-spin rounded-full border border-neutral-500 border-t-transparent" />
-                Saving…
+              <span className="flex items-center gap-1 text-[12px] text-neutral-100 font-medium">
+                {/* <span className="h-2 w-2 animate-spin rounded-full border border-neutral-500 border-t-transparent" /> */}
+                <FaSyncAlt className="animate-spin" />
               </span>
             )}
             {saveState === "saved" && (
-              <span className="text-[10px] text-green-500 font-semibold">✓ Saved</span>
+              <span className="text-[12px] text-neutral-100 font-semibold"><SiTicktick /></span>
             )}
             {saveState === "error" && (
-              <span className="text-[10px] text-red-400 font-semibold">✗ Save failed</span>
+              <span className="text-[12px] text-neutral-100 font-semibold"><MdError /></span>
             )}
           </div>
         </div>
