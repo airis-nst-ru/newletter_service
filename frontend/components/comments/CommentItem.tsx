@@ -4,6 +4,7 @@ import React from "react";
 import type { Comment as C, CommentReply } from "@/types/Comment";
 import { formatDistanceToNow } from "date-fns";
 import { useAuth } from "@/app/context/AuthContext";
+import { Check, Trash2 } from "lucide-react";
 
 export default function CommentItem({ comment, onReply, onToggleResolve, onDelete }: { comment: C; onReply: (payload: { type: 'text'|'voice'; text?: string; voiceUrl?: string }) => Promise<void>; onToggleResolve: (resolved: boolean) => Promise<void>; onDelete: (id: string) => Promise<void> }) {
   const { user } = useAuth();
@@ -16,11 +17,23 @@ export default function CommentItem({ comment, onReply, onToggleResolve, onDelet
           <div className="text-xs text-neutral-400">{formatDistanceToNow(new Date(comment.createdAt))} ago</div>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => onToggleResolve(!comment.resolved)} className={`px-2 py-1 rounded-md text-xs ${comment.resolved ? 'bg-green-700 text-white' : 'bg-neutral-800 text-neutral-200'}`}>
-            {comment.resolved ? 'Resolved' : 'Resolve'}
+          <button
+            onClick={() => onToggleResolve(!comment.resolved)}
+            className={`p-1.5 rounded-lg transition-all duration-150 cursor-pointer ${
+              comment.resolved ? 'bg-green-700 text-white hover:bg-green-800' : 'bg-neutral-800 text-neutral-400 hover:text-white'
+            }`}
+            title={comment.resolved ? 'Mark unresolved' : 'Mark resolved'}
+          >
+            <Check size={14} />
           </button>
           {user?.accountType === 'Approver' && (
-            <button onClick={() => onDelete(comment.id)} className="px-2 py-1 rounded-md text-xs bg-red-700 text-white">Delete</button>
+            <button
+              onClick={() => onDelete(comment.id)}
+              className="p-1.5 rounded-lg bg-red-950/40 hover:bg-red-900/50 border border-red-800/40 hover:border-red-700/60 text-red-400 hover:text-red-300 transition-all duration-150 cursor-pointer"
+              title="Delete Comment"
+            >
+              <Trash2 size={14} />
+            </button>
           )}
         </div>
       </div>

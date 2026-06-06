@@ -287,9 +287,15 @@ export default function LeftPane() {
                                                 {block.type.replace(/([A-Z])/g, ' $1')}
                                             </span>
                                             {/* comment count badge */}
-                                            { (commentsByBlock?.[block.id]?.length || 0) > 0 && (
-                                                <span className="ml-2 px-2 py-0.5 rounded-full text-[10px] bg-[#2b2b2b] text-yellow-400 font-semibold">{commentsByBlock[block.id].length}</span>
-                                            )}
+                                            {(() => {
+                                                const blockComments = commentsByBlock?.[block.id] || [];
+                                                const unresolvedCount = blockComments.filter(c => !c.resolved).length;
+                                                return unresolvedCount > 0 ? (
+                                                    <span className="ml-2 px-2 py-0.5 rounded-full text-[10px] bg-[#2b2b2b] text-yellow-400 font-semibold">
+                                                        {unresolvedCount}
+                                                    </span>
+                                                ) : null;
+                                            })()}
                                             {block.hidden && (
                                                 <EyeOff size={10} className="text-neutral-600 shrink-0" />
                                             )}
