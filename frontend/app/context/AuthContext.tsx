@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useState, useContext, ReactNode } from "react";
+import { createContext, useState, useContext, useCallback, ReactNode } from "react";
 import { User } from "@/types/User"
 
 interface AuthContextType {
@@ -17,14 +17,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User|null|undefined>(null);
 
 
-    const setLoginState = (userData:User) =>{
+    const setLoginState = useCallback((userData:User) =>{
         setIsAuthenticated(true);
         setUser(userData);
-    }
-    const setLogoutState = () =>{
+    }, [])
+    const setLogoutState = useCallback(() =>{
         setIsAuthenticated(false);
         setUser(null);
-    }
+    }, [])
 
     const value ={
         isAuthenticated,

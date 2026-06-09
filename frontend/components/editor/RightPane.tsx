@@ -51,9 +51,11 @@ export default function RightPane() {
   } = useEditor();
 
   const [activeTab, setActiveTab] = React.useState<"settings" | "comments">("settings");
+  const [showReadMore, setShowReadMore] = React.useState(false);
 
   React.useEffect(() => {
     setActiveTab("settings");
+    setShowReadMore(!!selectedBlock?.readMoreUrl?.trim());
   }, [selectedBlock?.id]);
 
   const supportsLogo = selectedBlock ? ["header", "footer"].includes(selectedBlock.type) : false;
@@ -267,6 +269,42 @@ export default function RightPane() {
                   onChange={(e) => updateSelectedBlockField("paragraphs", e.target.value)}
                   className="w-full bg-black border border-neutral-800 focus:border-neutral-600 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none transition-all duration-200"
                 />
+              </div>
+            )}
+
+            {/* READ MORE TOGGLE + URL */}
+            {selectedBlock.readMoreUrl !== undefined && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between bg-neutral-900 border border-neutral-800 rounded-2xl px-4 py-3">
+                  <div>
+                    <p className="text-xs font-semibold text-neutral-300 uppercase tracking-widest">Read More Link</p>
+                    <p className="text-[10px] text-neutral-500 mt-0.5">Appends a styled link after the text</p>
+                  </div>
+                  <label className="relative cursor-pointer select-none shrink-0">
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={showReadMore}
+                      onChange={(e) => {
+                        setShowReadMore(e.target.checked);
+                        if (!e.target.checked) updateSelectedBlockField("readMoreUrl", "");
+                      }}
+                    />
+                    <div className="w-10 h-6 bg-neutral-700 peer-checked:bg-[#b654a7] rounded-full transition-colors duration-200" />
+                    <div className="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 peer-checked:translate-x-4" />
+                  </label>
+                </div>
+                {showReadMore && (
+                  <div>
+                    <label className="block mb-2 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Read More Target URL</label>
+                    <AutoResizingTextarea
+                      value={selectedBlock.readMoreUrl}
+                      onChange={(e) => updateSelectedBlockField("readMoreUrl", e.target.value)}
+                      className="w-full bg-black border border-neutral-800 focus:border-[#b654a7] rounded-2xl px-4 py-3 text-sm text-white focus:outline-none transition-all duration-200 font-mono"
+                      placeholder="https://example.com/full-article"
+                    />
+                  </div>
+                )}
               </div>
             )}
 
