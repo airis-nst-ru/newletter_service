@@ -271,9 +271,9 @@ export default function SendPage() {
           </button>
           <button
             onClick={() => router.push("/recipients")}
-            className="text-neutral-500 hover:text-white transition-colors text-sm cursor-pointer border border-neutral-800 hover:border-neutral-600 px-3 py-1 rounded-lg"
+            className="text-neutral-400 hover:text-white transition-colors text-sm cursor-pointer"
           >
-            👥 Recipients
+            Recipients
           </button>
         </div>
         <span className="text-sm text-neutral-500">
