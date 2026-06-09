@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await prisma.subscribeFeedback.create({
+    await prisma.unsubscribeFeedback.create({
       data: { email: email.trim(), feedback: feedback.trim() },
     });
 
