@@ -283,16 +283,16 @@ export default function AIRISDashboard() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="border border-neutral-700 px-5 py-3 rounded-2xl font-semibold hover:bg-neutral-900 transition-all duration-200 cursor-pointer" onClick={handleLogout}>
-              Logout
-            </button>
-
             <button
               onClick={() => router.push("/recipients")}
               className="border border-neutral-700 px-5 py-3 rounded-2xl font-semibold hover:bg-neutral-900 transition-all duration-200 cursor-pointer"
             >
-              👥 Recipients
+            Recipients
             </button>
+            <button className="border border-neutral-700 px-5 py-3 rounded-2xl font-semibold hover:bg-neutral-900 transition-all duration-200 cursor-pointer" onClick={handleLogout}>
+              Logout
+            </button>
+
 
             {user?.accountType === "Editor" && <button
               onClick={() =>
@@ -467,14 +467,14 @@ export default function AIRISDashboard() {
                             newsletter.status === "Approved" && !newsletter.sent ? (
                               <button
                                 onClick={() => router.push(`/send/${newsletter.id}`)}
-                                className="px-4 py-2 rounded-xl bg-white text-black font-semibold hover:scale-105 transition-all cursor-pointer text-sm"
+                                className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer text-sm"
                               >
-                                Send →
+                                Send
                               </button>
                             ) : newsletter.sent ? (
                               <button
                                 onClick={() => router.push(`/send/${newsletter.id}`)}
-                                className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer text-sm text-neutral-400 hover:text-white"
+                                className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer text-sm"
                               >
                                 View
                               </button>

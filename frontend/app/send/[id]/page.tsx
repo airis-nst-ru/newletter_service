@@ -267,7 +267,7 @@ export default function SendPage() {
             onClick={() => router.push("/dashboard")}
             className="text-neutral-400 hover:text-white transition-colors text-sm cursor-pointer"
           >
-            ← Back to Dashboard
+            Back to Dashboard
           </button>
           <button
             onClick={() => router.push("/recipients")}
