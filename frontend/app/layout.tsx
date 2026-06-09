@@ -3,6 +3,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TitleProvider } from "./context/TitleContext";
 import TitleManager from "@/components/TitleManager";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Airis Chronicle Admin Panel",
-  description: "Admin Panel for Airis Chronicle",
+  description: "One Place for All AI read - Airis Chronicle",
 };
 
 export default function RootLayout({
@@ -31,6 +32,15 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-MYYCKHTRVQ" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-MYYCKHTRVQ');
+          `}
+        </Script>
         <TitleProvider>
           <AuthProvider>
             <TitleManager/>
