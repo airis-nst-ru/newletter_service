@@ -41,7 +41,7 @@ export default function AIRISDashboard() {
   const [creating, setCreating] = useState(false);
   const [newsletterTitle, setNewsletterTitle] = useState("");
   const [newsletterDueDate, setNewsletterDueDate] = useState("");
-  const [hasSupportingNews, setHasSupportingNews] = useState(false);
+  const [isSupportingNews, setIsSupportingNews] = useState(false);
   const [editionNumber, setEditionNumber] = useState("");
 
   const { setLogoutState, setLoginState, user } = useAuth()
@@ -77,7 +77,7 @@ export default function AIRISDashboard() {
             content:
               "<div></div>",
 
-            hasSupportingNews,
+            isSupportingNews,
             editionNumber: Number(editionNumber),
           }),
         }
@@ -396,7 +396,7 @@ export default function AIRISDashboard() {
                       </td>
 
                       <td className="px-6 py-5">
-                        {newsletter.hasSupportingNews ? (
+                        {newsletter.isSupportingNews ? (
                           <span className="text-green-400">
                             Yes
                           </span>
@@ -647,17 +647,17 @@ export default function AIRISDashboard() {
 
                   <button
                     onClick={() =>
-                      setHasSupportingNews(
-                        !hasSupportingNews
+                      setIsSupportingNews(
+                        !isSupportingNews
                       )
                     }
-                    className={`w-14 h-8 rounded-full transition-all relative ${hasSupportingNews
+                    className={`w-14 h-8 rounded-full transition-all relative ${isSupportingNews
                       ? "bg-white"
                       : "bg-neutral-700"
                       }`}
                   >
                     <div
-                      className={`absolute top-1 w-6 h-6 rounded-full transition-all ${hasSupportingNews
+                      className={`absolute top-1 w-6 h-6 rounded-full transition-all ${isSupportingNews
                         ? "bg-black left-7"
                         : "bg-white left-1"
                         }`}

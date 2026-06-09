@@ -53,7 +53,7 @@ model Newsletter {
 
   status NewsletterStatus @default(Draft)
 
-  hasSupportingNews Boolean @default(false)
+  isSupportingNews Boolean @default(false)
 
   editionNumber Int? @default(1)
 
@@ -138,4 +138,13 @@ model Recipients {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model UnsubscribeFeedback {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  email    String
+  feedback String
+
+  createdAt DateTime @default(now())
 }

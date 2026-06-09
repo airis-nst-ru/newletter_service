@@ -23,6 +23,7 @@ export default async function Page({ params }: { params: Promise<{ id?: string |
     updatedAt: newsletter.updatedAt ? newsletter.updatedAt.toISOString() : null,
     createdByName: newsletter.createdBy?.username || null,
     editionNumber: newsletter.editionNumber || null,
+    isSupportingNews: newsletter.isSupportingNews ?? false,
   };
 
   return (

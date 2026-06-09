@@ -62,8 +62,54 @@ export default function ApproverReviewClient({ newsletterId, compiledHtml, meta 
   const [loadingBlocks, setLoadingBlocks] = useState(false);
   const [commentsCollapsed, setCommentsCollapsed] = useState(false);
   const [showSendModal, setShowSendModal] = useState(false);
-  const [sendEmails, setSendEmails] = useState("");
+  const [emailInput, setEmailInput] = useState("");
+  const [recipients, setRecipients] = useState<string[]>([]);
+  const [sendSubject, setSendSubject] = useState("");
   const [sending, setSending] = useState(false);
+  const [sendingToSelf, setSendingToSelf] = useState(false);
+  const [sendResult, setSendResult] = useState<{ succeeded: number; failed: number } | null>(null);
+  const [loadingSubscribers, setLoadingSubscribers] = useState(false);
+
+  const LS_KEY = "airis_saved_recipients";
+
+  // Load persisted recipients from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(LS_KEY);
+      if (saved) setRecipients(JSON.parse(saved));
+    } catch {}
+  }, []);
+
+  const persistRecipients = (list: string[]) => {
+    setRecipients(list);
+    localStorage.setItem(LS_KEY, JSON.stringify(list));
+  };
+
+  const addRecipient = (email: string) => {
+    const trimmed = email.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!trimmed || !emailRegex.test(trimmed) || recipients.includes(trimmed)) return;
+    persistRecipients([...recipients, trimmed]);
+    setEmailInput("");
+  };
+
+  const removeRecipient = (email: string) => {
+    persistRecipients(recipients.filter((r) => r !== email));
+  };
+
+  const loadSubscribers = async () => {
+    setLoadingSubscribers(true);
+    try {
+      const res = await fetch("/api/v1/email/recipients");
+      const data = await res.json();
+      if (data.success && Array.isArray(data.data)) {
+        const emails: string[] = data.data.map((r: any) => r.email);
+        const merged = [...new Set([...recipients, ...emails])];
+        persistRecipients(merged);
+      }
+    } catch (err) { console.error(err); }
+    finally { setLoadingSubscribers(false); }
+  };
 
   useEffect(() => {
     const root = document.querySelector('.approver-root');
@@ -120,17 +166,43 @@ export default function ApproverReviewClient({ newsletterId, compiledHtml, meta 
     } finally { setApproving(false); }
   };
 
-  const handleSend = async () => {
+  const handleSendToSelf = async () => {
     try {
-      setSending(true);
-      const emails = sendEmails.split(',').map(s => s.trim()).filter(Boolean);
-      const payload = { to: emails };
-      await fetch(`/api/v1/newsletters/${newsletterId}/send`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-      setShowSendModal(false);
-      alert('Send request queued (UI only).');
+      setSendingToSelf(true);
+      const res = await fetch("/api/v1/email/send-to-self", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newsletterId }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.message || "Failed");
+      setSendResult({ succeeded: 1, failed: 0 });
     } catch (err) {
       console.error(err);
-      alert('Failed to send');
+      alert("Failed to send to self");
+    } finally { setSendingToSelf(false); }
+  };
+
+  const handleSend = async () => {
+    if (recipients.length === 0) return;
+    try {
+      setSending(true);
+      setSendResult(null);
+      const res = await fetch("/api/v1/email/send-newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          newsletterId,
+          emails: recipients,
+          subject: sendSubject.trim() || undefined,
+        }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.message || "Failed");
+      setSendResult({ succeeded: d.succeeded, failed: d.failed });
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send newsletter");
     } finally { setSending(false); }
   };
 
@@ -187,9 +259,11 @@ export default function ApproverReviewClient({ newsletterId, compiledHtml, meta 
           <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className={`p-2 rounded-lg transition-colors ${theme === 'dark' ? 'hover:bg-neutral-800' : 'hover:bg-neutral-100'}`} title="Toggle theme">
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-          <button onClick={() => setShowSendModal(true)} className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${theme === 'dark' ? 'bg-neutral-800 hover:bg-neutral-700 text-white' : 'bg-neutral-200 hover:bg-neutral-300 text-black'}`}>
-            <Send size={16} /> Send
-          </button>
+          {!meta?.isSupportingNews && (
+            <button onClick={() => setShowSendModal(true)} className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${theme === 'dark' ? 'bg-neutral-800 hover:bg-neutral-700 text-white' : 'bg-neutral-200 hover:bg-neutral-300 text-black'}`}>
+              <Send size={16} /> Send
+            </button>
+          )}
           {status === "Seeking_Approval" && (
             <button onClick={() => setShowApproveModal(true)} disabled={approving} className="px-3 py-2 rounded-lg bg-[#b654a7] hover:bg-[#a54a97] text-white text-sm font-medium transition-colors flex items-center gap-2">
               <CheckCircle size={16} /> {approving ? 'Approving…' : 'Approve'}
@@ -302,19 +376,93 @@ export default function ApproverReviewClient({ newsletterId, compiledHtml, meta 
         </aside>
       </div>
 
-      {/* Send Modal */}
       {showSendModal && (
-        <div onClick={() => setShowSendModal(false)} className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-6">
-          <div onClick={(e) => e.stopPropagation()} className={`border rounded-2xl p-6 w-full max-w-md ${theme === 'dark' ? 'bg-neutral-950 border-neutral-800' : 'bg-white border-neutral-200'}`}>
-            <h3 className="text-lg font-bold mb-4">Send newsletter</h3>
-            <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>Send a test or share with others. Enter comma-separated emails below.</p>
-            <div className="mb-4">
-              <label className={`text-xs mb-2 block ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}`}>Emails</label>
-              <input value={sendEmails} onChange={(e) => setSendEmails(e.target.value)} placeholder="you@company.com, other@org.com" className={`w-full rounded-lg px-3 py-2 text-sm ${theme === 'dark' ? 'bg-neutral-900 border border-neutral-800 text-neutral-200' : 'bg-neutral-50 border border-neutral-200 text-black'}`} />
+        <div onClick={() => { setShowSendModal(false); setSendResult(null); }} className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-6">
+          <div onClick={(e) => e.stopPropagation()} className={`border rounded-2xl p-6 w-full max-w-lg flex flex-col gap-4 ${theme === 'dark' ? 'bg-neutral-950 border-neutral-800' : 'bg-white border-neutral-200'}`}>
+            <h3 className="text-lg font-bold">Send Newsletter</h3>
+
+            {/* Send to self */}
+            <div className={`flex items-center justify-between rounded-xl px-4 py-3 ${theme === 'dark' ? 'bg-neutral-900 border border-neutral-800' : 'bg-neutral-50 border border-neutral-200'}`}>
+              <div>
+                <p className="text-sm font-semibold">Send to myself</p>
+                <p className={`text-xs mt-0.5 ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'}`}>{user?.email || 'your account email'}</p>
+              </div>
+              <button
+                onClick={handleSendToSelf}
+                disabled={sendingToSelf}
+                className="px-3 py-1.5 rounded-lg bg-[#b654a7] text-white text-xs font-semibold disabled:opacity-50"
+              >
+                {sendingToSelf ? 'Sending…' : 'Send Preview'}
+              </button>
             </div>
-            <div className="flex justify-end gap-2">
-              <button onClick={() => setShowSendModal(false)} className={`px-3 py-2 rounded-lg text-sm ${theme === 'dark' ? 'bg-neutral-800 text-white' : 'bg-neutral-200 text-black hover:bg-neutral-300'}`}>Cancel</button>
-              <button onClick={handleSend} disabled={sending} className="px-3 py-2 rounded-lg bg-[#7aa4e6] text-white text-sm">{sending ? 'Sending…' : 'Send'}</button>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3">
+              <div className={`flex-1 h-px ${theme === 'dark' ? 'bg-neutral-800' : 'bg-neutral-200'}`} />
+              <span className={`text-xs ${theme === 'dark' ? 'text-neutral-500' : 'text-neutral-400'}`}>or send to a list</span>
+              <div className={`flex-1 h-px ${theme === 'dark' ? 'bg-neutral-800' : 'bg-neutral-200'}`} />
+            </div>
+
+            {/* Subject */}
+            <div>
+              <label className={`text-xs mb-1.5 block font-semibold ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'}`}>Subject (optional)</label>
+              <input
+                value={sendSubject}
+                onChange={(e) => setSendSubject(e.target.value)}
+                placeholder="The AIRIS Chronicle"
+                className={`w-full rounded-lg px-3 py-2 text-sm ${theme === 'dark' ? 'bg-neutral-900 border border-neutral-800 text-neutral-200' : 'bg-neutral-50 border border-neutral-200 text-black'}`}
+              />
+            </div>
+
+            {/* Add recipient input */}
+            <div>
+              <label className={`text-xs font-semibold mb-1.5 block ${theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'}`}>Recipients ({recipients.length})</label>
+              <div className="flex gap-2">
+                <input
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addRecipient(emailInput); } }}
+                  placeholder="name@example.com"
+                  className={`flex-1 rounded-lg px-3 py-2 text-sm ${theme === 'dark' ? 'bg-neutral-900 border border-neutral-800 text-neutral-200' : 'bg-neutral-50 border border-neutral-200 text-black'}`}
+                />
+                <button
+                  onClick={() => addRecipient(emailInput)}
+                  className="px-3 py-2 rounded-lg text-sm bg-[#b654a7]/20 text-[#b654a7] hover:bg-[#b654a7]/30 font-semibold"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+
+            {/* Recipient chips (scrollable) */}
+            {recipients.length > 0 && (
+              <div className={`max-h-36 overflow-y-auto rounded-xl p-2 flex flex-wrap gap-1.5 ${theme === 'dark' ? 'bg-neutral-900 border border-neutral-800' : 'bg-neutral-50 border border-neutral-200'}`}>
+                {recipients.map((email) => (
+                  <div key={email} className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full ${theme === 'dark' ? 'bg-neutral-800 text-neutral-300' : 'bg-neutral-100 text-neutral-700'}`}>
+                    <span className="max-w-[180px] truncate">{email}</span>
+                    <button onClick={() => removeRecipient(email)} className="text-neutral-500 hover:text-red-400 leading-none">✕</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Send result */}
+            {sendResult && (
+              <p className={`text-sm font-medium ${sendResult.failed === 0 ? 'text-green-400' : 'text-yellow-400'}`}>
+                ✓ Sent to {sendResult.succeeded} — {sendResult.failed} failed
+              </p>
+            )}
+
+            {/* Actions */}
+            <div className="flex justify-end gap-2 pt-1">
+              <button onClick={() => { setShowSendModal(false); setSendResult(null); }} className={`px-3 py-2 rounded-lg text-sm ${theme === 'dark' ? 'bg-neutral-800 text-white' : 'bg-neutral-200 text-black hover:bg-neutral-300'}`}>Close</button>
+              <button
+                onClick={handleSend}
+                disabled={sending || recipients.length === 0}
+                className="px-4 py-2 rounded-lg bg-[#b654a7] text-white text-sm font-semibold disabled:opacity-50"
+              >
+                {sending ? 'Sending…' : `Send to ${recipients.length} recipient${recipients.length !== 1 ? 's' : ''}`}
+              </button>
             </div>
           </div>
         </div>

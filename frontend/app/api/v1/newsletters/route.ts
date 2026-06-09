@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       editionNumber,
       content,
       state,
-      hasSupportingNews,
+      isSupportingNews,
     } = await req.json();
 
     if (!dueDate || !title || !content) {
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
       await prisma.newsletter.create({
         data: {
           dueDate: dueDateObj,
-          hasSupportingNews: hasSupportingNews || false,
+          isSupportingNews: isSupportingNews || false,
           createdById: user.id,
           editionNumber: editionNumber,
 
