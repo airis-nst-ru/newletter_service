@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middlewares/error.middleware";
 import { httpLogger } from "./middlewares/httpLogger.middleware";
@@ -13,6 +14,7 @@ import { httpLogger } from "./middlewares/httpLogger.middleware";
 const app = express();
 
 // app-level middleware config
+app.use(cors());
 app.use(httpLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -86,17 +88,11 @@ app.get("/", (_req, res) => {
 
 // router imports
 import healthCheckRouter from "./routes/healthcheck.routes"
-import emailRouter from "./routes/email.routes"
-import authRouter from "./routes/auth.routes"
-import newsletterRouter from "./routes/newsletter.routes"
-import mediaRouter from "./routes/media.routes"
+import sendRouter from "./routes/send.routes"
 
 // url mapping
 app.use("/healthcheck", healthCheckRouter)
-app.use("/api/v1/email", emailRouter)
-app.use("/api/v1/auth", authRouter)
-app.use("/api/v1/newsletters", newsletterRouter)
-app.use("/api/v1/media", mediaRouter)
+app.use("/api/v1/send", sendRouter)
 
 
 

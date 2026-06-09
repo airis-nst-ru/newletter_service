@@ -457,12 +457,21 @@ export default function AIRISDashboard() {
                           )}
 
                           {user?.accountType === "Sender" && (
-                            <button
-                              onClick={() => router.push(`/editor/${newsletter.id}`)}
-                              className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer text-sm"
-                            >
-                              Send
-                            </button>
+                            newsletter.status === "Approved" && !newsletter.sent ? (
+                              <button
+                                onClick={() => router.push(`/send/${newsletter.id}`)}
+                                className="px-4 py-2 rounded-xl bg-white text-black font-semibold hover:scale-105 transition-all cursor-pointer text-sm"
+                              >
+                                Send →
+                              </button>
+                            ) : newsletter.sent ? (
+                              <button
+                                onClick={() => router.push(`/send/${newsletter.id}`)}
+                                className="px-4 py-2 rounded-xl border border-neutral-700 hover:bg-neutral-800 transition-colors cursor-pointer text-sm text-neutral-400 hover:text-white"
+                              >
+                                View
+                              </button>
+                            ) : null
                           )}
 
                           <div>
