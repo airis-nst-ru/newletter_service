@@ -37,7 +37,7 @@ export function SendTerminal({ logs, finalResult, onClear }: Props) {
   };
 
   return (
-    <div className="w-[420px] shrink-0 border-l border-neutral-800 bg-neutral-950 flex flex-col h-full overflow-hidden">
+    <div className="w-1/2 shrink-0 border-l border-neutral-800 bg-neutral-950 flex flex-col h-full overflow-hidden">
       {/* Traffic-light header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-800 shrink-0">
         <div className="flex items-center gap-2">

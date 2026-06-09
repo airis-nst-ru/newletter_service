@@ -9,6 +9,7 @@ import { useTitle } from "@/app/context/TitleContext";
 import { io as socketIO } from "socket.io-client";
 import { SendTerminal, type LogEntry, type SendResult } from "./_components/SendTerminal";
 import { RecipientsSection } from "./_components/RecipientsSection";
+import { SendConfirmDialog, type DBRecipient } from "./_components/SendConfirmDialog";
 
 // ── localStorage keys ─────────────────────────────────────────────────────────
 const LS_BACKEND_URL  = "sender_backend_url";
@@ -45,6 +46,7 @@ export default function SendPage() {
 
   // Newsletter meta
   const [newsletter, setNewsletter] = useState<Newsletter | null>(null);
+  const [newsletterHtml, setNewsletterHtml] = useState<string>("");
   const [loadingMeta, setLoadingMeta] = useState(true);
 
   // Config (all persisted to localStorage)
@@ -65,6 +67,12 @@ export default function SendPage() {
   const [sending, setSending]         = useState(false);
   const [testSending, setTestSending] = useState(false);
   const [sendResult, setSendResult]   = useState<{ success: boolean; message: string; isTest?: boolean } | null>(null);
+
+  // Confirm dialog state
+  const [dialogOpen, setDialogOpen]     = useState(false);
+  const [dbRecipients, setDbRecipients] = useState<DBRecipient[]>([]);
+  const [dialogLoading, setDialogLoading] = useState(false);
+  const [dialogError, setDialogError]   = useState<string | null>(null);
 
   // Terminal / socket state
   const [logs, setLogs]               = useState<LogEntry[]>([]);
@@ -114,6 +122,10 @@ export default function SendPage() {
             editionNumber: n.editionNumber ?? null,
             sent: n.sent || false,
           });
+          // Store the compiled HTML for sending
+          if (n.content?.content) {
+            setNewsletterHtml(n.content.content);
+          }
           setTitle(`Send — ${n.content?.title || "Newsletter"}`);
         }
       })
@@ -180,7 +192,7 @@ export default function SendPage() {
   const canSend = backendUrl.trim().length > 0 && secretKey.trim().length > 0 && parsedEmails.length > 0;
 
   const doSend = async (emailList: string[], isTest: boolean) => {
-    if (!canSend) return;
+    if (!backendUrl.trim() || !secretKey.trim() || emailList.length === 0) return;
     isTest ? setTestSending(true) : setSending(true);
     setSendResult(null);
     setLogs([]);
@@ -189,7 +201,11 @@ export default function SendPage() {
       const res = await fetch(`${backendUrl.trim()}/api/v1/send`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-api-key": secretKey.trim() },
-        body: JSON.stringify({ emails: emailList, subject: subject.trim() || "The AIRIS Chronicle" }),
+        body: JSON.stringify({
+          emails: emailList,
+          subject: subject.trim() || "The AIRIS Chronicle",
+          html: newsletterHtml || undefined,
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -205,18 +221,61 @@ export default function SendPage() {
     }
   };
 
+  // ── Confirm dialog handlers ────────────────────────────────────────────────────────
+  const openSendDialog = async () => {
+    setDialogOpen(true);
+    setDialogLoading(true);
+    setDialogError(null);
+    setDbRecipients([]);
+    try {
+      const res = await fetch("/api/v1/email/recipients", { credentials: "include" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to fetch recipients");
+      setDbRecipients(data.data || []);
+    } catch (err: any) {
+      setDialogError(err.message || "Could not load recipients");
+    } finally {
+      setDialogLoading(false);
+    }
+  };
+
+  const confirmSend = () => {
+    setDialogOpen(false);
+    doSend(dbRecipients.map((r) => r.email), false);
+  };
+
   // ── Render ──────────────────────────────────────────────────────────────────
   return (
     <div className="h-screen bg-black text-white flex flex-col overflow-hidden">
 
+      {/* Confirm dialog */}
+      <SendConfirmDialog
+        open={dialogOpen}
+        loading={dialogLoading}
+        recipients={dbRecipients}
+        fetchError={dialogError}
+        newsletterTitle={newsletter?.title || "Newsletter"}
+        subject={subject.trim() || "The AIRIS Chronicle"}
+        onConfirm={confirmSend}
+        onCancel={() => setDialogOpen(false)}
+      />
+
       {/* Top bar */}
       <div className="border-b border-neutral-800 px-6 py-4 flex items-center justify-between shrink-0">
-        <button
-          onClick={() => router.push("/dashboard")}
-          className="text-neutral-400 hover:text-white transition-colors text-sm cursor-pointer"
-        >
-          ← Back to Dashboard
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => router.push("/dashboard")}
+            className="text-neutral-400 hover:text-white transition-colors text-sm cursor-pointer"
+          >
+            ← Back to Dashboard
+          </button>
+          <button
+            onClick={() => router.push("/recipients")}
+            className="text-neutral-500 hover:text-white transition-colors text-sm cursor-pointer border border-neutral-800 hover:border-neutral-600 px-3 py-1 rounded-lg"
+          >
+            👥 Recipients
+          </button>
+        </div>
         <span className="text-sm text-neutral-500">
           Logged in as <span className="text-white font-medium">{capitalize(user?.username || "")}</span>
         </span>
@@ -392,10 +451,10 @@ export default function SendPage() {
             <div className="flex items-center gap-4">
               <button
                 id="send-newsletter-btn"
-                disabled={!canSend || sending || testSending}
-                onClick={() => doSend(parsedEmails, false)}
+                disabled={!backendUrl.trim() || !secretKey.trim() || sending || testSending}
+                onClick={openSendDialog}
                 className={`flex-1 py-4 rounded-2xl font-semibold text-base transition-all ${
-                  canSend && !sending && !testSending
+                  backendUrl.trim() && secretKey.trim() && !sending && !testSending
                     ? "bg-white text-black hover:scale-[1.02] cursor-pointer"
                     : "bg-neutral-900 text-neutral-600 cursor-not-allowed"
                 }`}

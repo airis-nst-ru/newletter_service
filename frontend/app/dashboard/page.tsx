@@ -287,6 +287,13 @@ export default function AIRISDashboard() {
               Logout
             </button>
 
+            <button
+              onClick={() => router.push("/recipients")}
+              className="border border-neutral-700 px-5 py-3 rounded-2xl font-semibold hover:bg-neutral-900 transition-all duration-200 cursor-pointer"
+            >
+              👥 Recipients
+            </button>
+
             {user?.accountType === "Editor" && <button
               onClick={() =>
                 setShowCreateModal(true)
