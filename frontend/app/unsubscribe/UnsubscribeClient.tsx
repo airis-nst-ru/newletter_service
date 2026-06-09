@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 
 interface UnsubscribeClientProps {
   email: string;
@@ -164,9 +163,8 @@ export default function UnsubscribeClient({ email, initialError }: UnsubscribeCl
                   disabled={!feedback.trim() || loading}
                   style={{
                     marginTop: "10px", width: "100%", padding: "12px",
-                    border: "none", borderRadius: "12px",
+                    border: "1px solid rgba(182,84,167,0.3)", borderRadius: "12px",
                     background: "rgba(182,84,167,0.15)",
-                    border: "1px solid rgba(182,84,167,0.3)" as any,
                     color: "#d4a5d6", fontFamily: "Inter, sans-serif",
                     fontSize: "0.9rem", fontWeight: 600, cursor: "pointer",
                     opacity: (!feedback.trim() || loading) ? 0.5 : 1,
