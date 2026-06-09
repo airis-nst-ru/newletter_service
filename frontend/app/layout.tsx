@@ -19,6 +19,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Airis Chronicle Admin Panel",
   description: "One Place for All AI read - Airis Chronicle",
+  verification: {
+    google: "Y8OYIHs9T_3yfezZL5jnJiDED1-hifOW0eOOGdMbtMQ",
+  },
 };
 
 export default function RootLayout({
