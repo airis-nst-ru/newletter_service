@@ -153,7 +153,8 @@ model UnsubscribeFeedback {
 model BlogPost {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   title         String
-  content       String   // HTML content
+  content       String?  // HTML content
+  state         Json?    // Editor state JSON
   editionNumber Int?
   newsletterId  String?  @db.ObjectId
 

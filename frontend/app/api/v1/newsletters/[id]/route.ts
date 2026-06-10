@@ -200,7 +200,7 @@ export async function PUT(
       });
       if (existingNewsletter) {
         const titleToUse = title || existingNewsletter.content?.title || "Untitled";
-        const contentToUse = content || existingNewsletter.content?.content || "<div></div>";
+        const stateToUse = state || existingNewsletter.content?.state || null;
         const editionNumberToUse = existingNewsletter.editionNumber;
         const authorIdToUse = existingNewsletter.createdById;
 
@@ -213,7 +213,7 @@ export async function PUT(
             where: { id: existingBlogPost.id },
             data: {
               title: titleToUse,
-              content: contentToUse,
+              state: stateToUse,
               editionNumber: editionNumberToUse,
               authorId: authorIdToUse,
             }
@@ -222,7 +222,7 @@ export async function PUT(
           await prisma.blogPost.create({
             data: {
               title: titleToUse,
-              content: contentToUse,
+              state: stateToUse,
               editionNumber: editionNumberToUse,
               newsletterId: id,
               authorId: authorIdToUse,
