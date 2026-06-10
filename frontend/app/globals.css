@@ -547,3 +547,28 @@ body {
 .newsletter-editor.light-theme table span {
   color: #171717 !important;
 }
+
+/* --- Blog Post Seamless Renderer overrides --- */
+.blog-post-renderer .airis-news-card,
+.blog-post-renderer .airis-tool-card,
+.blog-post-renderer .airis-event-card,
+.blog-post-renderer .airis-ai-box,
+.blog-post-renderer .bg-black,
+.blog-post-renderer .bg-neutral-900,
+.blog-post-renderer .bg-neutral-950,
+.blog-post-renderer .bg-neutral-800 {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 1.5rem 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.blog-post-renderer .airis-news-card *,
+.blog-post-renderer .airis-tool-card *,
+.blog-post-renderer .airis-event-card *,
+.blog-post-renderer .airis-ai-box * {
+  border-color: transparent !important;
+}

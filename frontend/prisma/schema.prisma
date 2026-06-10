@@ -33,6 +33,7 @@ model User {
   newsletters    Newsletter[]
   comments       Comment[]
   commentReplies CommentReply[]
+  blogPosts      BlogPost[]
 }
 
 enum NewsletterStatus {
@@ -148,3 +149,18 @@ model UnsubscribeFeedback {
 
   createdAt DateTime @default(now())
 }
+
+model BlogPost {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  content       String   // HTML content
+  editionNumber Int?
+  newsletterId  String?  @db.ObjectId
+
+  authorId      String?  @db.ObjectId
+  author        User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+

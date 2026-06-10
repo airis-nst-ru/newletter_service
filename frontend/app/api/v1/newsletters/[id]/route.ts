@@ -193,6 +193,45 @@ export async function PUT(
       });
     }
 
+    if (status === "Approved") {
+      const existingNewsletter = await prisma.newsletter.findUnique({
+        where: { id },
+        include: { content: true }
+      });
+      if (existingNewsletter) {
+        const titleToUse = title || existingNewsletter.content?.title || "Untitled";
+        const contentToUse = content || existingNewsletter.content?.content || "<div></div>";
+        const editionNumberToUse = existingNewsletter.editionNumber;
+        const authorIdToUse = existingNewsletter.createdById;
+
+        const existingBlogPost = await prisma.blogPost.findFirst({
+          where: { newsletterId: id }
+        });
+
+        if (existingBlogPost) {
+          await prisma.blogPost.update({
+            where: { id: existingBlogPost.id },
+            data: {
+              title: titleToUse,
+              content: contentToUse,
+              editionNumber: editionNumberToUse,
+              authorId: authorIdToUse,
+            }
+          });
+        } else {
+          await prisma.blogPost.create({
+            data: {
+              title: titleToUse,
+              content: contentToUse,
+              editionNumber: editionNumberToUse,
+              newsletterId: id,
+              authorId: authorIdToUse,
+            }
+          });
+        }
+      }
+    }
+
     const updatedNewsletter =
       await prisma.newsletter.findUnique({
         where: { id },
