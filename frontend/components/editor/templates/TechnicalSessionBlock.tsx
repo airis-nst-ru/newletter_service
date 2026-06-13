@@ -1,5 +1,6 @@
 import React from "react";
 import { Block } from "../../../types/types";
+import { renderParagraphsPreview, formatRichHtmlForEmail, isRichHtml } from "../../../utils/richText";
 
 export function TechnicalSessionPreview({ block }: { block: Block }) {
   const parsedParagraphs = block.paragraphs
@@ -19,9 +20,7 @@ export function TechnicalSessionPreview({ block }: { block: Block }) {
               <img src={block.imageUrl} alt={block.title || ""} className="max-w-full h-auto rounded-xl my-6 block mx-auto" />
             )}
 
-            {parsedParagraphs.map((p, pIdx) => (
-              <p key={pIdx} className="pt-4 font-sans text-sm text-neutral-700 leading-relaxed">{p}</p>
-            ))}
+            {renderParagraphsPreview(block.paragraphs)}
 
             {block.gridCards && (
               <div className="grid grid-cols-2 gap-4 my-4">
@@ -39,7 +38,14 @@ export function TechnicalSessionPreview({ block }: { block: Block }) {
             )}
 
             {block.endingParagraph && (
-              <p className="pt-5 font-sans text-sm text-neutral-700 leading-relaxed">{block.endingParagraph}</p>
+              isRichHtml(block.endingParagraph) ? (
+                <div 
+                  className="font-sans text-sm text-neutral-700 leading-relaxed pt-5 [&_a]:text-[#b654a7] [&_a]:font-bold [&_a]:underline" 
+                  dangerouslySetInnerHTML={{ __html: block.endingParagraph }} 
+                />
+              ) : (
+                <p className="pt-5 font-sans text-sm text-neutral-700 leading-relaxed">{block.endingParagraph}</p>
+              )
             )}
           </td>
         </tr>
@@ -75,9 +81,7 @@ export function TechnicalSessionHtml(block: Block): string {
                   style="max-width:850px;height:auto;display:block;margin:25px auto;border-radius:12px;"
                 >` : ''}
                 
-                ${parsedParagraphs.map(p => `
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">${p}</p>
-                `).join('')}
+                ${formatRichHtmlForEmail(block.paragraphs)}
                 
                 ${parsedGridCards.length > 0 ? `
                 <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:20px">
@@ -117,9 +121,11 @@ export function TechnicalSessionHtml(block: Block): string {
                 </table>
                 ` : ''}
                 
-                ${block.endingParagraph ? `
-                <p style="padding:22px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">${block.endingParagraph}</p>
-                ` : ''}
+                ${block.endingParagraph ? (
+                  isRichHtml(block.endingParagraph)
+                    ? `<div style="padding:22px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333;">${formatRichHtmlForEmail(block.endingParagraph)}</div>`
+                    : `<p style="padding:22px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">${block.endingParagraph}</p>`
+                ) : ''}
               </td>
             </tr>
             <tr><td height="1" style="border-bottom:1px solid #cccccc;font-size:0;line-height:0">&nbsp;</td></tr>

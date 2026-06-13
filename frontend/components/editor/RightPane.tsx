@@ -4,6 +4,7 @@ import React from "react";
 import { useEditor } from "../../app/context/EditorContext";
 import { Settings, Trash2, Image as ImageIcon } from "lucide-react";
 import CommentThread from "@/components/comments/CommentThread";
+import RichTextEditor from "./RichTextEditor";
 
 interface AutoResizingTextareaProps {
   value: string;
@@ -240,10 +241,10 @@ export default function RightPane() {
             {selectedBlock.quoteText !== undefined && (
               <div>
                 <label className="block mb-2 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Quote Text</label>
-                <AutoResizingTextarea
+                <RichTextEditor
                   value={selectedBlock.quoteText || ""}
-                  onChange={(e) => updateSelectedBlockField("quoteText", e.target.value)}
-                  className="w-full bg-black border border-neutral-800 focus:border-neutral-600 rounded-2xl px-4 py-3 text-white focus:outline-none transition-all duration-200 font-mono text-xs"
+                  onChange={(val) => updateSelectedBlockField("quoteText", val)}
+                  placeholder="Enter quote text..."
                 />
               </div>
             )}
@@ -263,11 +264,11 @@ export default function RightPane() {
             {/* PARAGRAPHS */}
             {selectedBlock.paragraphs !== undefined && (
               <div>
-                <label className="block mb-2 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Paragraphs (Double Newline Separated)</label>
-                <AutoResizingTextarea
+                <label className="block mb-2 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Paragraphs</label>
+                <RichTextEditor
                   value={selectedBlock.paragraphs || ""}
-                  onChange={(e) => updateSelectedBlockField("paragraphs", e.target.value)}
-                  className="w-full bg-black border border-neutral-800 focus:border-neutral-600 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none transition-all duration-200"
+                  onChange={(val) => updateSelectedBlockField("paragraphs", val)}
+                  placeholder="Enter paragraphs here..."
                 />
               </div>
             )}
@@ -362,10 +363,10 @@ export default function RightPane() {
             {selectedBlock.closingParagraph !== undefined && (
               <div>
                 <label className="block mb-2 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Closing/Footer Paragraph</label>
-                <AutoResizingTextarea
+                <RichTextEditor
                   value={selectedBlock.closingParagraph || ""}
-                  onChange={(e) => updateSelectedBlockField("closingParagraph", e.target.value)}
-                  className="w-full bg-black border border-neutral-800 focus:border-neutral-600 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none transition-all duration-200"
+                  onChange={(val) => updateSelectedBlockField("closingParagraph", val)}
+                  placeholder="Enter closing/footer paragraph..."
                 />
               </div>
             )}
@@ -424,10 +425,10 @@ export default function RightPane() {
             {selectedBlock.endingParagraph !== undefined && (
               <div>
                 <label className="block mb-2 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Ending Paragraph</label>
-                <AutoResizingTextarea
+                <RichTextEditor
                   value={selectedBlock.endingParagraph || ""}
-                  onChange={(e) => updateSelectedBlockField("endingParagraph", e.target.value)}
-                  className="w-full bg-black border border-neutral-800 focus:border-neutral-600 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none transition-all duration-200"
+                  onChange={(val) => updateSelectedBlockField("endingParagraph", val)}
+                  placeholder="Enter ending paragraph..."
                 />
               </div>
             )}
@@ -460,10 +461,10 @@ export default function RightPane() {
             {selectedBlock.text !== undefined && selectedBlock.type === "unsubscribe" && (
               <div>
                 <label className="block mb-2 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Unsubscribe Text</label>
-                <AutoResizingTextarea
+                <RichTextEditor
                   value={selectedBlock.text || ""}
-                  onChange={(e) => updateSelectedBlockField("text", e.target.value)}
-                  className="w-full bg-black border border-neutral-800 focus:border-neutral-600 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none transition-all duration-200"
+                  onChange={(val) => updateSelectedBlockField("text", val)}
+                  placeholder="Enter unsubscribe text..."
                 />
               </div>
             )}
