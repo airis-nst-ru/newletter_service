@@ -27,5 +27,6 @@ export interface Block {
   unsubscribeUrl?: string;
   buttonText?: string;
   buttonUrl?: string;
+  htmlContent?: string;
   hidden?: boolean;
 }

@@ -22,7 +22,8 @@ import {
     CheckSquare,
     Square,
     Eye,
-    EyeOff
+    EyeOff,
+    Code
 } from "lucide-react";
 
 const blockTypeIcons: Record<string, React.ComponentType<any>> = {
@@ -38,6 +39,7 @@ const blockTypeIcons: Record<string, React.ComponentType<any>> = {
     footer: Settings,
     unsubscribe: AlertCircle,
     divider: Minus,
+    html: Code,
 };
 
 export default function LeftPane() {

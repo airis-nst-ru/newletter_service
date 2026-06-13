@@ -480,6 +480,19 @@ export default function RightPane() {
               </div>
             )}
 
+            {/* HTML CONTENT */}
+            {selectedBlock.htmlContent !== undefined && (
+              <div>
+                <label className="block mb-2 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Custom HTML Content</label>
+                <AutoResizingTextarea
+                  value={selectedBlock.htmlContent || ""}
+                  onChange={(e) => updateSelectedBlockField("htmlContent", e.target.value)}
+                  className="w-full bg-black border border-neutral-800 focus:border-neutral-600 rounded-2xl px-4 py-3 text-white focus:outline-none transition-all duration-200 font-mono text-xs"
+                  placeholder="<tr><td>Custom HTML here...</td></tr>"
+                />
+              </div>
+            )}
+
           </div>
           ) : (
             <div className="pt-2">

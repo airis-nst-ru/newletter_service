@@ -30,6 +30,7 @@ import { ConclusionSkeleton } from "./templates/ConclusionBlock";
 import { FooterSkeleton } from "./templates/FooterBlock";
 import { UnsubscribeSkeleton } from "./templates/UnsubscribeBlock";
 import { DividerSkeleton } from "./templates/DividerBlock";
+import { HtmlBlockSkeleton } from "./templates/HtmlBlock";
 import { FaSyncAlt } from "react-icons/fa";
 import { SiTicktick } from "react-icons/si";
 import { MdError } from "react-icons/md";
@@ -411,6 +412,12 @@ function NewsletterEditorContent() {
                     type: "divider",
                     description: "Decorative border line to separate structural visual modules.",
                     skeleton: <DividerSkeleton />
+                  },
+                  {
+                    name: "Custom HTML",
+                    type: "html",
+                    description: "Insert raw HTML or embed widgets directly. Fits into the blog layout.",
+                    skeleton: <HtmlBlockSkeleton />
                   }
                 ].map(item => (
                   <div

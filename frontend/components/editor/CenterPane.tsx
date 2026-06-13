@@ -27,6 +27,7 @@ import { ConclusionPreview } from "./templates/ConclusionBlock";
 import { FooterPreview } from "./templates/FooterBlock";
 import { UnsubscribePreview } from "./templates/UnsubscribeBlock";
 import { DividerPreview } from "./templates/DividerBlock";
+import { HtmlBlockPreview, HtmlBlockHtml } from "./templates/HtmlBlock";
 
 export default function CenterPane() {
   const {
@@ -58,6 +59,7 @@ export default function CenterPane() {
       case "footer": return FooterHtml(block);
       case "unsubscribe": return UnsubscribeHtml(block);
       case "divider": return DividerHtml(block);
+      case "html": return HtmlBlockHtml(block);
       default: return "";
     }
   };
@@ -229,6 +231,7 @@ export default function CenterPane() {
                                 {block.type === "footer" && <FooterPreview block={block} />}
                                 {block.type === "unsubscribe" && <UnsubscribePreview block={block} />}
                                 {block.type === "divider" && <DividerPreview block={block} />}
+                                {block.type === "html" && <HtmlBlockPreview block={block} />}
                               </td>
                             </tr>
                           );
