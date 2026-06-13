@@ -158,11 +158,11 @@ export default function BlogHomeClient({ posts }: BlogHomeClientProps) {
               </div>
             </Link>
 
-            <div className="flex items-center gap-6">
+            {/* <div className="flex items-center gap-6">
               <Link href="/dashboard" className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors duration-200">
                 Dashboard
               </Link>
-            </div>
+            </div> */}
           </div>
 
           {/* Hero Layout */}

@@ -351,7 +351,7 @@ export default function AIRISDashboard() {
                   <th className="px-6 py-4 font-medium">Edition Number</th>
                   <th className="px-6 py-4 font-medium">Due Date</th>
                   <th className="px-6 py-4 font-medium">Author</th>
-                  <th className="px-6 py-4 font-medium">Has Supporting News</th>
+                  <th className="px-6 py-4 font-medium">Is Supporting News</th>
                   <th className="px-6 py-4 font-medium">Status</th>
                   <th className="px-6 py-4 font-medium">Actions</th>
                 </tr>
@@ -653,7 +653,7 @@ export default function AIRISDashboard() {
 
                   <div>
                     <p className="font-semibold">
-                      Will have Supporting News?
+                      Is Supporting Newsletter?
                     </p>
 
                     <p className="text-sm text-neutral-500 mt-1">
