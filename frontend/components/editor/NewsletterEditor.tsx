@@ -179,6 +179,11 @@ function NewsletterEditorContent() {
     }
   };
 
+  const handleOpenPreviewPage = async () => {
+    await handleSave();
+    window.open(`/preview/${newsletterId}`, "_blank");
+  };
+
   if (authLoading) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-black text-white">
@@ -282,6 +287,14 @@ function NewsletterEditorContent() {
           >
             <Send size={14} />
             Send Preview
+          </button>
+
+          <button
+            onClick={handleOpenPreviewPage}
+            className="btn-preview bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-white px-4 py-1.5 rounded-xl font-semibold transition-all duration-150 cursor-pointer text-xs flex items-center gap-1.5"
+          >
+            <Eye size={14} />
+            Preview Page
           </button>
 
           {/* Send for Approval (visible to non-approvers while in Draft) */}
