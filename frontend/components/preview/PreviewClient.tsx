@@ -214,12 +214,26 @@ export default function PreviewClient({ newsletterId, compiledHtml, meta }: { ne
             {/* Frame Content */}
             <iframe
               srcDoc={compiledHtml}
-              className="w-full h-full border-none"
+              className="border-none"
               title="Newsletter Preview"
-              style={{
-                height: device !== "desktop" ? "calc(100% - 24px)" : "100%",
-                background: "white",
-              }}
+              style={
+                device === "mobile"
+                  ? {
+                      position: "absolute",
+                      top: "24px",
+                      left: "0",
+                      width: "600px",
+                      height: "calc((100% - 24px) / 0.625)",
+                      transform: "scale(0.625)",
+                      transformOrigin: "top left",
+                      background: "white",
+                    }
+                  : {
+                      width: "100%",
+                      height: device === "tablet" ? "calc(100% - 24px)" : "100%",
+                      background: "white",
+                    }
+              }
             />
           </div>
         </div>

@@ -476,6 +476,13 @@ export default function ApproverReviewClient({ newsletterId, compiledHtml, meta 
         .preview-wrapper.desktop { max-width: 900px; margin: 0 auto; }
         .preview-wrapper.tablet { max-width: 720px; margin: 0 auto; }
         .preview-wrapper.mobile { max-width: 420px; margin: 0 auto; }
+        .preview-wrapper :global(table) {
+          max-width: 100% !important;
+        }
+        .preview-wrapper :global(img) {
+          max-width: 100% !important;
+          height: auto !important;
+        }
         .ap-selected-block { outline: 3px solid rgba(182, 84, 167, 0.6); border-radius: 6px; }
       `}</style>
     </div>
