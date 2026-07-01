@@ -228,7 +228,7 @@ export default function SendPage() {
     setDialogError(null);
     setDbRecipients([]);
     try {
-      const res = await fetch("/api/v1/email/recipients", { credentials: "include" });
+      const res = await fetch("/api/v1/email/recipients?all=true", { credentials: "include" });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to fetch recipients");
       setDbRecipients(data.data || []);
