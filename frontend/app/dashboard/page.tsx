@@ -524,7 +524,7 @@ export default function AIRISDashboard() {
             Preview
           </button>
 
-          {!newsletters.find((n) => n.id === openMenuId)?.sent && (
+          {user?.accountType === "Sender" && !newsletters.find((n) => n.id === openMenuId)?.sent && (
             <button
               onClick={() => {
                 const id = openMenuId;

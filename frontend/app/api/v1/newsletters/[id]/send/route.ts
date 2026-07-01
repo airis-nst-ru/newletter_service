@@ -39,14 +39,11 @@ export async function PATCH(
       );
     }
 
-    if (
-      newsletter.createdById !== user.id
-    ) {
+    if (user.accountType !== "Sender") {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Unauthorized",
+          message: "Unauthorized: Only Sender can mark as sent",
         },
         { status: 403 }
       );
