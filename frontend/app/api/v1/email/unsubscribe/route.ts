@@ -45,16 +45,17 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token");
-
-  if (!token) {
-    return NextResponse.redirect(new URL("/unsubscribe?error=missing_email", req.url));
-  }
+  const emailParam = searchParams.get("email");
 
   let email = "";
-  try {
-    email = Buffer.from(token, "base64url").toString("utf-8").trim();
-  } catch {
-    return NextResponse.redirect(new URL("/unsubscribe?error=invalid_token", req.url));
+  if (token) {
+    try {
+      email = Buffer.from(token, "base64url").toString("utf-8").trim();
+    } catch {
+      return NextResponse.redirect(new URL("/unsubscribe?error=invalid_token", req.url));
+    }
+  } else if (emailParam) {
+    email = emailParam.trim();
   }
 
   if (!email) {
