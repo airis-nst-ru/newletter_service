@@ -39,6 +39,27 @@ export async function PATCH(
       );
     }
 
+    if (newsletter.sent) {
+      return NextResponse.json(
+        {
+          success: true,
+          message: "Newsletter is already marked as sent",
+          data: newsletter, // Note: returning without relations to keep it simple and early
+        },
+        { status: 200 }
+      );
+    }
+
+    if (newsletter.status !== "Approved") {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Only approved newsletters can be marked as sent",
+        },
+        { status: 400 }
+      );
+    }
+
     if (user.accountType !== "Sender") {
       return NextResponse.json(
         {
@@ -56,6 +77,7 @@ export async function PATCH(
         data: {
           sent: true,
           sentDate: new Date(),
+          status: "Sent",
         },
 
         include: {
