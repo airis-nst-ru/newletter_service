@@ -8,6 +8,7 @@ import Link from "@tiptap/extension-link";
 import { TextStyle } from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
 import { Bold, Italic, Underline as UnderlineIcon, Link as LinkIcon } from "lucide-react";
+import { FontSize } from "./extensions/FontSize";
 
 interface RichTextEditorProps {
   value: string;
@@ -28,6 +29,7 @@ export default function RichTextEditor({ value, onChange, placeholder = "" }: Ri
       }),
       TextStyle,
       Color,
+      FontSize,
     ],
     content: value,
     onUpdate: ({ editor }) => {
@@ -76,6 +78,31 @@ export default function RichTextEditor({ value, onChange, placeholder = "" }: Ri
     <div className="w-full bg-black border border-neutral-800 focus-within:border-neutral-600 rounded-2xl overflow-hidden transition-all duration-200">
       {/* Mini formatting toolbar */}
       <div className="flex flex-wrap items-center gap-1 bg-neutral-900/40 border-b border-neutral-900 px-3 py-1.5 select-none">
+        <select
+          onChange={(e) => {
+            if (e.target.value === "") {
+              editor.chain().focus().unsetFontSize().run();
+            } else {
+              editor.chain().focus().setFontSize(e.target.value).run();
+            }
+          }}
+          value={editor.getAttributes("textStyle").fontSize || ""}
+          className="bg-transparent text-neutral-300 text-sm border border-neutral-800 rounded px-1 py-0.5 focus:ring-0 cursor-pointer outline-none hover:text-white"
+          title="Font Size"
+        >
+          <option value="" className="bg-neutral-900">Size</option>
+          <option value="12px" className="bg-neutral-900">12px</option>
+          <option value="14px" className="bg-neutral-900">14px</option>
+          <option value="16px" className="bg-neutral-900">16px</option>
+          <option value="18px" className="bg-neutral-900">18px</option>
+          <option value="20px" className="bg-neutral-900">20px</option>
+          <option value="24px" className="bg-neutral-900">24px</option>
+          <option value="30px" className="bg-neutral-900">30px</option>
+          <option value="36px" className="bg-neutral-900">36px</option>
+        </select>
+
+        <div className="w-px h-5 bg-neutral-850 mx-1" />
+
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
