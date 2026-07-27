@@ -107,7 +107,7 @@ function Home() {
   };
 
   return (
-    <div className="bg-[rgba(255,255,255,0.04)] w-full min-h-screen flex flex-col items-center justify-center gap-4 px-4">
+    <div className="bg-black w-full min-h-screen flex flex-col items-center justify-center gap-4 px-4">
       <h1 className="text-4xl font-bold text-center">
         AIRIS Chronicle
       </h1>
@@ -122,14 +122,14 @@ function Home() {
           e.preventDefault();
           handleLogin();
         }}
-        className="border border-white rounded-lg px-6 py-6 w-full max-w-md"
+        className="border border-[#FF007F] shadow-[0_0_15px_rgba(255,0,127,0.2)] bg-black/60 rounded-xl px-6 py-6 w-full max-w-md"
       >
-        <p className="text-2xl font-semibold text-center mb-6">
+        <p className="text-2xl font-bold text-center mb-6 text-white">
           Login
         </p>
 
         <div className="flex flex-col gap-2 mb-4">
-          <label htmlFor="email">
+          <label htmlFor="email" className="text-sm font-medium text-neutral-300">
             Email
           </label>
 
@@ -141,12 +141,12 @@ function Home() {
             onChange={(e) =>
               setEmail(e.target.value)
             }
-            className="border border-white py-2 px-3 rounded-lg bg-transparent outline-none"
+            className="border border-neutral-700 py-2 px-3 rounded-lg bg-transparent outline-none text-white focus:border-[#FF007F] focus:ring-1 focus:ring-[#FF007F] transition-all"
           />
         </div>
 
         <div className="flex flex-col gap-2 mb-4">
-          <label htmlFor="password">
+          <label htmlFor="password" className="text-sm font-medium text-neutral-300">
             Password
           </label>
 
@@ -160,7 +160,7 @@ function Home() {
                 e.target.value
               )
             }
-            className="border border-white py-2 px-3 rounded-lg bg-transparent outline-none"
+            className="border border-neutral-700 py-2 px-3 rounded-lg bg-transparent outline-none text-white focus:border-[#FF007F] focus:ring-1 focus:ring-[#FF007F] transition-all"
           />
         </div>
 

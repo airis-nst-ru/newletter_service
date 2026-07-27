@@ -6,7 +6,7 @@ export function MemberSpotlightPreview({ block }: { block: Block }) {
   const parsedParagraphs = splitRichHtmlParagraphs(block.paragraphs);
 
   return (
-    <table className="w-full bg-white">
+    <table className="w-full" style={{ backgroundColor: block.backgroundColor || "#ffffff" }}>
       <tbody>
         <tr className="bg-[#b654a7] text-white">
           <td className="p-[10px_20px] font-sans text-[11px] font-bold tracking-widest uppercase">{block.sectionLabel}</td>
@@ -93,7 +93,7 @@ export function MemberSpotlightHtml(block: Block): string {
               </td>
             </tr>
             <tr>
-              <td style="padding:40px 20px 30px;background-color:#ffffff;text-align:left">
+              <td style="padding:40px 20px 30px;background-color:${block.backgroundColor || '#ffffff'};text-align:left">
                 <!-- Pull quote -->
                 <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-bottom:24px">
                   <tr>

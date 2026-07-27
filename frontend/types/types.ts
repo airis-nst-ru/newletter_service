@@ -29,4 +29,19 @@ export interface Block {
   buttonUrl?: string;
   htmlContent?: string;
   hidden?: boolean;
+  backgroundColor?: string;
+}
+
+export interface NewsletterVersion {
+  id: string;
+  name: string | null;
+  description: string | null;
+  state: any;
+  content: string;
+  createdAt: string;
+  createdBy: {
+    id: string;
+    username: string;
+    email: string;
+  };
 }

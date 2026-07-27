@@ -34,6 +34,7 @@ model User {
   comments       Comment[]
   commentReplies CommentReply[]
   blogPosts      BlogPost[]
+  newsletterVersions NewsletterVersion[]
 }
 
 enum NewsletterStatus {
@@ -67,6 +68,7 @@ model Newsletter {
 
   content  NewsletterContent?
   comments Comment[]
+  versions NewsletterVersion[]
 }
 
 model NewsletterContent {
@@ -165,3 +167,19 @@ model BlogPost {
   updatedAt     DateTime @updatedAt
 }
 
+model NewsletterVersion {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  newsletterId String @db.ObjectId
+  newsletter   Newsletter @relation(fields: [newsletterId], references: [id], onDelete: Cascade)
+
+  name        String?
+  description String?
+  state       Json
+  content     String
+
+  createdById String @db.ObjectId
+  createdBy   User   @relation(fields: [createdById], references: [id])
+
+  createdAt DateTime @default(now())
+}
