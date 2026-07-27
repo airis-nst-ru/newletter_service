@@ -1,10 +1,9 @@
 import React from "react";
 import { Block } from "../../../types/types";
+import { formatRichHtmlForEmail, isRichHtml, splitRichHtmlParagraphs } from "../../../utils/richText";
 
 export function MemberSpotlightPreview({ block }: { block: Block }) {
-  const parsedParagraphs = block.paragraphs
-    ? block.paragraphs.split("\n").map((p) => p.trim()).filter((p) => p.length > 0)
-    : [];
+  const parsedParagraphs = splitRichHtmlParagraphs(block.paragraphs);
 
   return (
     <table className="w-full" style={{ backgroundColor: block.backgroundColor || "#ffffff" }}>
@@ -19,7 +18,11 @@ export function MemberSpotlightPreview({ block }: { block: Block }) {
                 <tr>
                   <td width="4" className="bg-[#b654a7] rounded-sm">&nbsp;</td>
                   <td className="pl-4">
-                    <p className="m-0 font-sans text-[16px] italic leading-relaxed text-neutral-900">"{block.quoteText}"</p>
+                    {isRichHtml(block.quoteText) ? (
+                      <div className="m-0 font-sans text-[16px] italic leading-relaxed text-neutral-900 [&_p]:m-0" dangerouslySetInnerHTML={{ __html: block.quoteText || "" }} />
+                    ) : (
+                      <p className="m-0 font-sans text-[16px] italic leading-relaxed text-neutral-900">"{block.quoteText}"</p>
+                    )}
                     <p className="pt-1.5 font-sans text-xs font-bold text-[#b654a7]">— {block.quoteAuthor}</p>
                   </td>
                 </tr>
@@ -31,7 +34,11 @@ export function MemberSpotlightPreview({ block }: { block: Block }) {
               <img src={block.imageUrl} alt={block.title || ""} className="max-w-full h-auto rounded-xl my-6 block mx-auto" />
             )}
 
-            <p className="pt-4 font-sans text-sm text-neutral-700 leading-relaxed">{parsedParagraphs[0]}</p>
+            {isRichHtml(block.paragraphs) ? (
+              <div className="pt-4 font-sans text-sm text-neutral-700 leading-relaxed rich-text-p" dangerouslySetInnerHTML={{ __html: parsedParagraphs[0] || "" }} />
+            ) : (
+              <p className="pt-4 font-sans text-sm text-neutral-700 leading-relaxed">{parsedParagraphs[0]}</p>
+            )}
             {block.readMoreUrl && (
               <p className="pt-4 font-sans text-sm leading-relaxed">
                 <a href={block.readMoreUrl} className="text-[#b654a7] font-bold text-sm tracking-wide">Read More &rarr;</a>
@@ -58,7 +65,11 @@ export function MemberSpotlightPreview({ block }: { block: Block }) {
             )}
 
             {parsedParagraphs.slice(1).map((p, pIdx) => (
-              <p key={pIdx} className="pt-5 font-sans text-sm text-neutral-700 leading-relaxed">{p}</p>
+              isRichHtml(block.paragraphs) ? (
+                <div key={pIdx} className="pt-5 font-sans text-sm text-neutral-700 leading-relaxed rich-text-p" dangerouslySetInnerHTML={{ __html: p }} />
+              ) : (
+                <p key={pIdx} className="pt-5 font-sans text-sm text-neutral-700 leading-relaxed">{p}</p>
+              )
             ))}
           </td>
         </tr>
@@ -68,9 +79,7 @@ export function MemberSpotlightPreview({ block }: { block: Block }) {
 }
 
 export function MemberSpotlightHtml(block: Block): string {
-  const parsedParagraphs = block.paragraphs
-    ? block.paragraphs.split("\n").map((p) => p.trim()).filter((p) => p.length > 0)
-    : [];
+  const parsedParagraphs = splitRichHtmlParagraphs(block.paragraphs);
   const parsedGridCards = block.gridCards ? block.gridCards.split('\n').map(line => {
     const parts = line.split('|');
     return { title: parts[0]?.trim(), text: parts[1]?.trim() };
@@ -90,7 +99,9 @@ export function MemberSpotlightHtml(block: Block): string {
                   <tr>
                     <td width="4" style="background-color:#b654a7;border-radius:2px">&nbsp;</td>
                     <td style="padding:0 0 0 16px">
-                      <p style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:18px;font-style:italic;line-height:26px;color:#333333">"${block.quoteText || ''}"</p>
+                      ${isRichHtml(block.quoteText)
+                        ? formatRichHtmlForEmail(block.quoteText)
+                        : `<p style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:18px;font-style:italic;line-height:26px;color:#333333">"${block.quoteText || ''}"</p>`}
                       <p style="padding:6px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:12px;color:#b654a7;font-weight:700">— ${block.quoteAuthor || ''}</p>
                     </td>
                   </tr>
@@ -106,9 +117,9 @@ export function MemberSpotlightHtml(block: Block): string {
                   style="max-width:850px;height:auto;display:block;margin:25px auto;border-radius:12px;"
                 >` : ''}
                 
-                ${parsedParagraphs.slice(0, 1).map(p => `
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">${p}</p>
-                `).join('')}
+                ${isRichHtml(block.paragraphs)
+                  ? formatRichHtmlForEmail(parsedParagraphs[0])
+                  : `<p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">${parsedParagraphs[0] || ''}</p>`}
                  ${block.readMoreUrl?.trim() ? `
                  <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="${block.readMoreUrl.trim()}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
                  ` : ''}
@@ -153,9 +164,11 @@ export function MemberSpotlightHtml(block: Block): string {
                 </table>
                 ` : ''}
                 
-                ${parsedParagraphs.slice(1).map(p => `
-                <p style="padding:20px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">${p}</p>
-                `).join('')}
+                ${isRichHtml(block.paragraphs)
+                  ? parsedParagraphs.slice(1).map(p => formatRichHtmlForEmail(p)).join('')
+                  : parsedParagraphs.slice(1).map(p => `
+                  <p style="padding:20px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">${p}</p>
+                  `).join('')}
               </td>
             </tr>
             <tr><td height="1" style="border-bottom:1px solid #cccccc;font-size:0;line-height:0">&nbsp;</td></tr>

@@ -11,11 +11,12 @@ import { ConclusionHtml } from "@/components/editor/templates/ConclusionBlock";
 import { FooterHtml } from "@/components/editor/templates/FooterBlock";
 import { UnsubscribeHtml } from "@/components/editor/templates/UnsubscribeBlock";
 import { DividerHtml } from "@/components/editor/templates/DividerBlock";
+import { HtmlBlockHtml } from "@/components/editor/templates/HtmlBlock";
 
 const VALID_BLOCK_TYPES = [
   "header", "hero", "section", "featureComparison", "benchmarkTable",
   "memberSpotlight", "technicalSession", "airisReads", "conclusion",
-  "footer", "unsubscribe", "divider",
+  "footer", "unsubscribe", "divider", "html",
 ];
 
 export interface ValidationResult {
@@ -67,6 +68,7 @@ export function getBlockHtml(block: Block): string {
     case "footer":            return FooterHtml(block);
     case "unsubscribe":       return UnsubscribeHtml(block);
     case "divider":           return DividerHtml(block);
+    case "html":              return HtmlBlockHtml(block);
     default:                  return "";
   }
 }

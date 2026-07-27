@@ -11,6 +11,7 @@ type ReplyComposerProps = {
 export default function ReplyComposer({ onSend, uploading }: ReplyComposerProps) {
   const [text, setText] = useState("");
   const [recording, setRecording] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
 
@@ -32,7 +33,12 @@ export default function ReplyComposer({ onSend, uploading }: ReplyComposerProps)
         reader.onloadend = async () => {
           const base64 = reader.result as string;
           // parent will handle upload and create reply
-          await onSend({ type: 'voice', voiceUrl: base64 });
+          setSubmitting(true);
+          try {
+            await onSend({ type: 'voice', voiceUrl: base64 });
+          } finally {
+            setSubmitting(false);
+          }
         };
         reader.readAsDataURL(blob);
       };
@@ -51,19 +57,26 @@ export default function ReplyComposer({ onSend, uploading }: ReplyComposerProps)
 
   const handleSendText = async () => {
     if (!text.trim()) return;
-    await onSend({ type: 'text', text: text.trim() });
-    setText("");
+    setSubmitting(true);
+    try {
+      await onSend({ type: 'text', text: text.trim() });
+      setText("");
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  const isLoading = uploading || submitting;
 
   return (
     <div className="flex items-center gap-2">
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder={uploading ? "Uploading voice comment..." : "Write a reply or record voice..."}
-        disabled={uploading}
+        placeholder={isLoading ? (uploading ? "Uploading voice comment..." : "Sending...") : "Write a reply or record voice..."}
+        disabled={isLoading}
         className={`flex-1 bg-neutral-900 border border-neutral-50 rounded-xl px-3 py-2 text-sm outline-none text-white transition-opacity ${
-          uploading ? "opacity-50" : ""
+          isLoading ? "opacity-50" : ""
         }`}
       />
       <button
@@ -71,23 +84,23 @@ export default function ReplyComposer({ onSend, uploading }: ReplyComposerProps)
         onClick={() => {
           if (recording) stopRecording(); else startRecording();
         }}
-        disabled={uploading}
+        disabled={isLoading}
         className={`px-3 py-2 rounded-xl transition-all ${
-          recording ? 'bg-red-600 animate-pulse' : uploading ? 'bg-neutral-900 text-neutral-600' : 'bg-neutral-800'
+          recording ? 'bg-red-600 animate-pulse' : isLoading ? 'bg-neutral-900 text-neutral-600' : 'bg-neutral-800'
         } text-white flex items-center justify-center`}
-        title={recording ? 'Stop recording' : uploading ? 'Uploading...' : 'Record voice'}
+        title={recording ? 'Stop recording' : isLoading ? 'Loading...' : 'Record voice'}
       >
-        {uploading ? <Loader2 className="animate-spin" size={16} /> : <Mic size={16} />}
+        {isLoading ? <Loader2 className="animate-spin" size={16} /> : <Mic size={16} />}
       </button>
       <button
         type="button"
         onClick={handleSendText}
-        disabled={uploading || !text.trim()}
+        disabled={isLoading || !text.trim()}
         className={`px-3 py-2 rounded-xl text-black transition-all ${
-          uploading || !text.trim() ? 'bg-neutral-800 text-neutral-600 cursor-not-allowed' : 'bg-white hover:bg-neutral-200'
+          isLoading || !text.trim() ? 'bg-neutral-800 text-neutral-600 cursor-not-allowed' : 'bg-white hover:bg-neutral-200'
         }`}
       >
-        <Send size={14} />
+        {isLoading && !uploading ? <Loader2 className="animate-spin text-black" size={14} /> : <Send size={14} />}
       </button>
     </div>
   );

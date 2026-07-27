@@ -32,6 +32,21 @@ function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 }
 
+function parseBulkEmails(text: string): string[] {
+  const trimmed = text.trim();
+  if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (Array.isArray(parsed)) {
+        return parsed.map((e) => String(e).trim()).filter(Boolean);
+      }
+    } catch {
+      // fallback
+    }
+  }
+  return text.split(",").map((e) => e.trim()).filter(Boolean);
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function RecipientsPage() {
   const router = useRouter();
@@ -165,7 +180,7 @@ export default function RecipientsPage() {
 
   // ── Bulk import ─────────────────────────────────────────────────────────────
   const handleBulkImport = async () => {
-    const emails = bulkText.split(",").map((e) => e.trim()).filter(Boolean);
+    const emails = parseBulkEmails(bulkText);
     if (emails.length === 0) return;
     setBulkLoading(true); setBulkResult(null);
     try {
@@ -546,10 +561,10 @@ export default function RecipientsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm" onClick={() => setAddModal(null)}>
           <div className="w-full max-w-lg mx-4 bg-neutral-950 border border-neutral-800 rounded-2xl p-6 space-y-4" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-lg font-semibold">Bulk Import</h2>
-            <p className="text-sm text-neutral-500">Paste emails separated by commas.</p>
+            <p className="text-sm text-neutral-500">Paste emails separated by commas or as a JSON array.</p>
             <textarea
               rows={8}
-              placeholder={"alice@example.com, bob@example.com, charlie@uni.edu"}
+              placeholder={'alice@example.com, bob@example.com\n\nor JSON:\n["alice@example.com", "bob@example.com"]'}
               value={bulkText}
               onChange={(e) => setBulkText(e.target.value)}
               autoFocus
@@ -572,7 +587,7 @@ export default function RecipientsPage() {
                 disabled={bulkLoading || !bulkText.trim()}
                 className="flex-1 py-2.5 rounded-xl bg-white text-black text-sm font-medium hover:bg-neutral-200 transition-colors cursor-pointer disabled:opacity-50"
               >
-                {bulkLoading ? "Importing..." : `Import ${bulkText.split(",").filter((e) => e.trim()).length} emails`}
+                {bulkLoading ? "Importing..." : `Import ${parseBulkEmails(bulkText).length} emails`}
               </button>
             </div>
           </div>

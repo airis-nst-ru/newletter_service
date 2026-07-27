@@ -1,5 +1,6 @@
 import React from "react";
 import { Block } from "../../../types/types";
+import { renderParagraphsPreview, formatRichHtmlForEmail } from "../../../utils/richText";
 
 export function SectionPreview({ block }: { block: Block }) {
   const parsedParagraphs = block.paragraphs
@@ -15,9 +16,7 @@ export function SectionPreview({ block }: { block: Block }) {
             {block.imageUrl && (
               <img src={block.imageUrl} alt={block.imageAlt || block.title || ""} className="max-w-full h-auto rounded-xl my-6 block mx-auto" />
             )}
-            {parsedParagraphs.map((p, pIdx) => (
-              <p key={pIdx} className="pt-4 font-sans text-sm text-neutral-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: p }}></p>
-            ))}
+            {renderParagraphsPreview(block.paragraphs)}
             {block.readMoreUrl && (
               <p className="pt-4 font-sans text-sm leading-relaxed">
                 <a href={block.readMoreUrl} className="text-[#b654a7] font-bold text-sm tracking-wide">Read More &rarr;</a>
@@ -47,9 +46,7 @@ export function SectionHtml(block: Block): string {
                   width="100%"
                   style="max-width:850px;height:auto;display:block;margin:25px auto;border-radius:12px;"
                 >` : ''}
-                ${parsedParagraphs.map(p => `
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">${p}</p>
-                `).join('')}
+                ${formatRichHtmlForEmail(block.paragraphs)}
                 ${block.readMoreUrl?.trim() ? `
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="${block.readMoreUrl.trim()}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
                 ` : ''}

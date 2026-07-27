@@ -12,7 +12,8 @@ import {
   Sun,
   Moon,
   History,
-  BookmarkPlus
+  BookmarkPlus,
+  Send
 } from "lucide-react";
 
 import { NewsletterVersion } from "@/types/types";
@@ -34,6 +35,7 @@ import { ConclusionSkeleton } from "./templates/ConclusionBlock";
 import { FooterSkeleton } from "./templates/FooterBlock";
 import { UnsubscribeSkeleton } from "./templates/UnsubscribeBlock";
 import { DividerSkeleton } from "./templates/DividerBlock";
+import { HtmlBlockSkeleton } from "./templates/HtmlBlock";
 import { FaSyncAlt } from "react-icons/fa";
 import { SiTicktick } from "react-icons/si";
 import { MdError } from "react-icons/md";
@@ -67,6 +69,7 @@ function NewsletterEditorContent() {
   }, [router, setLoginState, setLogoutState]);
 
   const {
+    newsletterId,
     user,
     newsletterId,
     blocks,
@@ -181,6 +184,95 @@ function NewsletterEditorContent() {
       fetchVersions();
     }
   }, [showVersionHistory]);
+
+  const [showSendModal, setShowSendModal] = React.useState(false);
+  const [sendingToSelf, setSendingToSelf] = React.useState(false);
+  const [sendResult, setSendResult] = React.useState<{ succeeded: number; failed: number } | null>(null);
+  const [emailInput, setEmailInput] = React.useState("");
+  const [recipients, setRecipients] = React.useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("airis_saved_recipients");
+        return saved ? JSON.parse(saved) : [];
+      } catch {}
+    }
+    return [];
+  });
+  const [sendSubject, setSendSubject] = React.useState("");
+  const [sendingList, setSendingList] = React.useState(false);
+
+  const LS_KEY = "airis_saved_recipients";
+
+  const persistRecipients = (list: string[]) => {
+    setRecipients(list);
+    localStorage.setItem(LS_KEY, JSON.stringify(list));
+  };
+
+  const addRecipient = (email: string) => {
+    const trimmed = email.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!trimmed || !emailRegex.test(trimmed) || recipients.includes(trimmed)) return;
+    persistRecipients([...recipients, trimmed]);
+    setEmailInput("");
+  };
+
+  const removeRecipient = (email: string) => {
+    persistRecipients(recipients.filter((r) => r !== email));
+  };
+
+  const handleSendToSelf = async () => {
+    try {
+      setSendingToSelf(true);
+      setSendResult(null);
+      await handleSave();
+      const res = await fetch("/api/v1/email/send-to-self", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newsletterId }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.message || "Failed");
+      setSendResult({ succeeded: 1, failed: 0 });
+    } catch (err: unknown) {
+      console.error(err);
+      const errMsg = err instanceof Error ? err.message : String(err);
+      alert("Failed to send preview email: " + errMsg);
+    } finally {
+      setSendingToSelf(false);
+    }
+  };
+
+  const handleSendList = async () => {
+    if (recipients.length === 0) return;
+    try {
+      setSendingList(true);
+      setSendResult(null);
+      await handleSave();
+      const res = await fetch("/api/v1/email/send-newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          newsletterId,
+          emails: recipients,
+          subject: sendSubject.trim() || undefined,
+        }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.message || "Failed");
+      setSendResult({ succeeded: d.succeeded, failed: d.failed });
+    } catch (err: unknown) {
+      console.error(err);
+      const errMsg = err instanceof Error ? err.message : String(err);
+      alert("Failed to send newsletter: " + errMsg);
+    } finally {
+      setSendingList(false);
+    }
+  };
+
+  const handleOpenPreviewPage = async () => {
+    await handleSave();
+    window.open(`/preview/${newsletterId}`, "_blank");
+  };
 
   if (authLoading) {
     return (
@@ -304,6 +396,22 @@ function NewsletterEditorContent() {
             Save
           </button>
 
+          <button
+            onClick={() => setShowSendModal(true)}
+            className="btn-send bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-white px-4 py-1.5 rounded-xl font-semibold transition-all duration-150 cursor-pointer text-xs flex items-center gap-1.5"
+          >
+            <Send size={14} />
+            Send Preview
+          </button>
+
+          <button
+            onClick={handleOpenPreviewPage}
+            className="btn-preview bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-white px-4 py-1.5 rounded-xl font-semibold transition-all duration-150 cursor-pointer text-xs flex items-center gap-1.5"
+          >
+            <Eye size={14} />
+            Preview Page
+          </button>
+
           {/* Send for Approval (visible to non-approvers while in Draft) */}
           {user?.accountType !== "Approver" && newsletterStatus === "Draft" && (
             <button
@@ -355,6 +463,112 @@ function NewsletterEditorContent() {
         <RightPane />
       </div>
 
+      {/* SEND PREVIEW MODAL */}
+      {showSendModal && (
+        <div
+          onClick={() => { setShowSendModal(false); setSendResult(null); }}
+          className="fixed inset-0 z-60 bg-black/60 flex items-center justify-center p-6"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-neutral-950 border border-neutral-850 rounded-2xl p-6 w-full max-w-lg flex flex-col gap-4"
+          >
+            <h3 className="text-lg font-bold">Send Newsletter Preview</h3>
+
+            {/* Send to self */}
+            <div className="flex items-center justify-between rounded-xl px-4 py-3 bg-neutral-900 border border-neutral-850">
+              <div>
+                <p className="text-sm font-semibold text-white">Send to myself</p>
+                <p className="text-xs mt-0.5 text-neutral-400">{user?.email || 'your account email'}</p>
+              </div>
+              <button
+                onClick={handleSendToSelf}
+                disabled={sendingToSelf}
+                className="px-3 py-1.5 rounded-lg bg-[#b654a7] text-white text-xs font-semibold disabled:opacity-50 transition-colors hover:bg-[#a04692]"
+              >
+                {sendingToSelf ? 'Sending…' : 'Send Preview'}
+              </button>
+            </div>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-px bg-neutral-800" />
+              <span className="text-xs text-neutral-500">or send to others</span>
+              <div className="flex-1 h-px bg-neutral-800" />
+            </div>
+
+            {/* Subject */}
+            <div>
+              <label className="text-xs mb-1.5 block font-semibold text-neutral-400">Subject (optional)</label>
+              <input
+                value={sendSubject}
+                onChange={(e) => setSendSubject(e.target.value)}
+                placeholder="[Preview] The AIRIS Chronicle"
+                className="w-full rounded-lg px-3 py-2 text-sm bg-neutral-900 border border-neutral-850 text-neutral-200 outline-none"
+              />
+            </div>
+
+            {/* Add recipient input */}
+            <div>
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="text-xs font-semibold text-neutral-400">Recipients ({recipients.length})</label>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addRecipient(emailInput); } }}
+                  placeholder="name@example.com"
+                  className="flex-1 rounded-lg px-3 py-2 text-sm bg-neutral-900 border border-neutral-850 text-neutral-200 outline-none"
+                />
+                <button
+                  onClick={() => addRecipient(emailInput)}
+                  className="px-3 py-2 rounded-lg text-sm bg-[#b654a7]/20 text-[#b654a7] hover:bg-[#b654a7]/30 font-semibold"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+
+            {/* Recipient chips (scrollable) */}
+            {recipients.length > 0 && (
+              <div className="max-h-24 overflow-y-auto rounded-xl p-2 flex flex-wrap gap-1.5 bg-neutral-900 border border-neutral-850">
+                {recipients.map((email) => (
+                  <div key={email} className="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-neutral-800 text-neutral-300 border border-neutral-750">
+                    <span className="max-w-[180px] truncate">{email}</span>
+                    <button onClick={() => removeRecipient(email)} className="text-neutral-500 hover:text-red-400 leading-none">✕</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Send result */}
+            {sendResult && (
+              <p className={`text-sm font-medium ${sendResult.failed === 0 ? 'text-green-400' : 'text-yellow-400'}`}>
+                ✓ Sent to {sendResult.succeeded} — {sendResult.failed} failed
+              </p>
+            )}
+
+            {/* Actions */}
+            <div className="flex justify-end gap-2 pt-1">
+              <button
+                onClick={() => { setShowSendModal(false); setSendResult(null); }}
+                className="px-3 py-2 rounded-lg text-sm bg-neutral-800 text-white hover:bg-neutral-700 transition-colors"
+              >
+                Close
+              </button>
+              <button
+                onClick={handleSendList}
+                disabled={sendingList || recipients.length === 0}
+                className="px-4 py-2 rounded-lg bg-[#b654a7] text-white text-sm font-semibold disabled:opacity-50 hover:bg-[#a04692] transition-colors"
+              >
+                {sendingList ? 'Sending…' : `Send to ${recipients.length} recipient${recipients.length !== 1 ? 's' : ''}`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* SEND FOR APPROVAL MODAL */}
       {showSendForApprovalModal && (
         <div
@@ -366,7 +580,7 @@ function NewsletterEditorContent() {
             className="bg-neutral-950 border border-neutral-850 rounded-2xl p-6 w-full max-w-md"
           >
             <h3 className="text-lg font-bold mb-2">Send for approval?</h3>
-            <p className="text-sm text-neutral-400 mb-4">This will save current changes and set the newsletter status to "Seeking_Approval". Approvers will be notified.</p>
+            <p className="text-sm text-neutral-400 mb-4">This will save current changes and set the newsletter status to &quot;Seeking_Approval&quot;. Approvers will be notified.</p>
             <div className="flex justify-end gap-2">
               <button onClick={() => setShowSendForApprovalModal(false)} className="px-3 py-2 rounded-md bg-neutral-800 text-white">Cancel</button>
               <button onClick={async () => { setShowSendForApprovalModal(false); await handleSendForApproval(); }} className="px-3 py-2 rounded-md bg-[#b654a7] text-white">Confirm</button>
@@ -525,6 +739,12 @@ function NewsletterEditorContent() {
                     type: "divider",
                     description: "Decorative border line to separate structural visual modules.",
                     skeleton: <DividerSkeleton />
+                  },
+                  {
+                    name: "Custom HTML",
+                    type: "html",
+                    description: "Insert raw HTML or embed widgets directly. Fits into the blog layout.",
+                    skeleton: <HtmlBlockSkeleton />
                   }
                 ].map(item => (
                   <div

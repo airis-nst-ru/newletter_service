@@ -1,5 +1,6 @@
 import React from "react";
 import { Block } from "../../../types/types";
+import { renderParagraphsPreview, formatRichHtmlForEmail } from "../../../utils/richText";
 
 export function BenchmarkTablePreview({ block }: { block: Block }) {
   const parsedParagraphs = block.paragraphs
@@ -12,9 +13,7 @@ export function BenchmarkTablePreview({ block }: { block: Block }) {
         <tr>
           <td className="p-[40px_20px] text-left">
             <h1 className="m-0 font-sans text-[24px] font-normal leading-tight text-white">{block.title}</h1>
-            {parsedParagraphs.map((p, pIdx) => (
-              <p key={pIdx} className="pt-4 font-sans text-sm text-neutral-200 leading-relaxed">{p}</p>
-            ))}
+            {renderParagraphsPreview(block.paragraphs, "text-neutral-200", "text-[#b654a7]")}
 
             {block.tableHeaders && (
               <table cellPadding="8" cellSpacing="0" className="w-full mt-5 font-sans text-xs border-collapse">
@@ -75,9 +74,7 @@ export function BenchmarkTableHtml(block: Block): string {
             <tr>
               <td style="padding:40px 20px;background-color:${block.backgroundColor || '#666666'};text-align:left">
                 <h1 style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:30px;font-weight:normal;line-height:36px;color:#ffffff">${block.title || ''}</h1>
-                ${parsedParagraphs.map(p => `
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#ffffff">${p}</p>
-                `).join('')}
+                ${formatRichHtmlForEmail(block.paragraphs, "#ffffff", "#b654a7")}
                 
                 ${parsedHeaders.length > 0 ? `
                 <table cellpadding="8" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:20px;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:12px">

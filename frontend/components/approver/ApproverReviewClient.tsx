@@ -63,22 +63,21 @@ export default function ApproverReviewClient({ newsletterId, compiledHtml, meta 
   const [commentsCollapsed, setCommentsCollapsed] = useState(false);
   const [showSendModal, setShowSendModal] = useState(false);
   const [emailInput, setEmailInput] = useState("");
-  const [recipients, setRecipients] = useState<string[]>([]);
+  const [recipients, setRecipients] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("airis_saved_recipients");
+        return saved ? JSON.parse(saved) : [];
+      } catch {}
+    }
+    return [];
+  });
   const [sendSubject, setSendSubject] = useState("");
   const [sending, setSending] = useState(false);
   const [sendingToSelf, setSendingToSelf] = useState(false);
   const [sendResult, setSendResult] = useState<{ succeeded: number; failed: number } | null>(null);
-  const [loadingSubscribers, setLoadingSubscribers] = useState(false);
 
   const LS_KEY = "airis_saved_recipients";
-
-  // Load persisted recipients from localStorage on mount
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem(LS_KEY);
-      if (saved) setRecipients(JSON.parse(saved));
-    } catch {}
-  }, []);
 
   const persistRecipients = (list: string[]) => {
     setRecipients(list);
@@ -95,20 +94,6 @@ export default function ApproverReviewClient({ newsletterId, compiledHtml, meta 
 
   const removeRecipient = (email: string) => {
     persistRecipients(recipients.filter((r) => r !== email));
-  };
-
-  const loadSubscribers = async () => {
-    setLoadingSubscribers(true);
-    try {
-      const res = await fetch("/api/v1/email/recipients");
-      const data = await res.json();
-      if (data.success && Array.isArray(data.data)) {
-        const emails: string[] = data.data.map((r: any) => r.email);
-        const merged = [...new Set([...recipients, ...emails])];
-        persistRecipients(merged);
-      }
-    } catch (err) { console.error(err); }
-    finally { setLoadingSubscribers(false); }
   };
 
   useEffect(() => {
@@ -491,6 +476,13 @@ export default function ApproverReviewClient({ newsletterId, compiledHtml, meta 
         .preview-wrapper.desktop { max-width: 900px; margin: 0 auto; }
         .preview-wrapper.tablet { max-width: 720px; margin: 0 auto; }
         .preview-wrapper.mobile { max-width: 420px; margin: 0 auto; }
+        .preview-wrapper :global(table) {
+          max-width: 100% !important;
+        }
+        .preview-wrapper :global(img) {
+          max-width: 100% !important;
+          height: auto !important;
+        }
         .ap-selected-block { outline: 3px solid rgba(182, 84, 167, 0.6); border-radius: 6px; }
       `}</style>
     </div>

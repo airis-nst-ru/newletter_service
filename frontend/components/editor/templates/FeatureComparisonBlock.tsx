@@ -1,5 +1,6 @@
 import React from "react";
 import { Block } from "../../../types/types";
+import { renderParagraphsPreview, formatRichHtmlForEmail, isRichHtml } from "../../../utils/richText";
 
 export function FeatureComparisonPreview({ block }: { block: Block }) {
   const parsedParagraphs = block.paragraphs
@@ -15,9 +16,7 @@ export function FeatureComparisonPreview({ block }: { block: Block }) {
             {block.imageUrl && (
               <img src={block.imageUrl} alt={block.imageAlt || block.title || ""} className="max-w-full h-auto rounded-xl my-6 block mx-auto" />
             )}
-            {parsedParagraphs.map((p, pIdx) => (
-              <p key={pIdx} className="pt-4 font-sans text-sm text-neutral-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: p }}></p>
-            ))}
+            {renderParagraphsPreview(block.paragraphs)}
 
             {block.tableHeaders && (
               <table cellPadding="8" cellSpacing="0" className="w-full mt-4 font-sans text-xs border-collapse">
@@ -44,7 +43,14 @@ export function FeatureComparisonPreview({ block }: { block: Block }) {
             )}
 
             {block.closingParagraph && (
-              <p className="pt-4 font-sans text-sm text-neutral-700 leading-relaxed font-medium italic">{block.closingParagraph}</p>
+              isRichHtml(block.closingParagraph) ? (
+                <div 
+                  className="font-sans text-sm text-neutral-700 leading-relaxed font-medium italic pt-4 [&_a]:text-[#b654a7] [&_a]:font-bold [&_a]:underline" 
+                  dangerouslySetInnerHTML={{ __html: block.closingParagraph }} 
+                />
+              ) : (
+                <p className="pt-4 font-sans text-sm text-neutral-700 leading-relaxed font-medium italic">{block.closingParagraph}</p>
+              )
             )}
           </td>
         </tr>
@@ -72,9 +78,7 @@ export function FeatureComparisonHtml(block: Block): string {
                   width="100%"
                   style="max-width:850px;height:auto;display:block;margin:25px auto;border-radius:12px;"
                 >` : ''}
-                ${parsedParagraphs.map(p => `
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">${p}</p>
-                `).join('')}
+                ${formatRichHtmlForEmail(block.paragraphs)}
                 ${parsedHeaders.length > 0 ? `
                 <table cellpadding="8" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:16px;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:13px;line-height:20px">
                   <tr style="background-color:#333333;color:#ffffff">
@@ -92,9 +96,11 @@ export function FeatureComparisonHtml(block: Block): string {
   }).join('')}
                 </table>
                 ` : ''}
-                ${block.closingParagraph ? `
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">${block.closingParagraph}</p>
-                ` : ''}
+                ${block.closingParagraph ? (
+                  isRichHtml(block.closingParagraph)
+                    ? `<div style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333;font-style:italic;">${formatRichHtmlForEmail(block.closingParagraph)}</div>`
+                    : `<p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333;font-style:italic;">${block.closingParagraph}</p>`
+                ) : ''}
               </td>
             </tr>
             <tr><td height="1" style="border-bottom:1px solid #cccccc;font-size:0;line-height:0">&nbsp;</td></tr>

@@ -225,6 +225,13 @@ export function createBlockWithDefaults(type: string, id: string): Block {
       break;
     case "divider":
       break;
+    case "html":
+      newBlock = {
+        ...newBlock,
+        title: "Custom HTML Block",
+        htmlContent: `<div style="padding: 24px; text-align: center; background-color: #f9f9f9; border: 1px solid #eeeeee; border-radius: 12px; font-family: arial, 'helvetica neue', helvetica, sans-serif;">\n  <h3 style="margin-top: 0; color: #b654a7; font-size: 18px;">Custom HTML Block</h3>\n  <p style="margin-bottom: 0; font-size: 14px; color: #666666;">You can write any custom raw HTML here. It will display seamlessly in your newsletter and blog posts!</p>\n</div>`
+      };
+      break;
   }
 
   return newBlock;

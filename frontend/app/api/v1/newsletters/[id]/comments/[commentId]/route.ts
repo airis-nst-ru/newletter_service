@@ -13,7 +13,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
 
     const { id, commentId } = await context.params;
     const body = await req.json();
-    const { resolved } = body as { resolved?: boolean };
+    const { resolved, content } = body as { resolved?: boolean; content?: string };
 
     const comment = await localPrisma.comment.findUnique({ where: { id: commentId }, include: { newsletter: true } });
     if (!comment || comment.newsletterId !== id) return NextResponse.json({ success: false, message: "Comment not found" }, { status: 404 });
@@ -22,11 +22,30 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
     const newsletter = await localPrisma.newsletter.findUnique({ where: { id } });
     if (!newsletter) return NextResponse.json({ success: false, message: "Newsletter not found" }, { status: 404 });
 
-    if (user.accountType !== 'Approver' && newsletter.createdById !== user.id && user.accountType !== 'Editor') {
-      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 403 });
+    if (resolved !== undefined) {
+      if (user.accountType !== 'Approver' && newsletter.createdById !== user.id && user.accountType !== 'Editor') {
+        return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 403 });
+      }
     }
 
-    const updated = await localPrisma.comment.update({ where: { id: commentId }, data: { resolved: Boolean(resolved) }, include: { replies: true, author: true } });
+    if (content !== undefined) {
+      if (comment.authorId !== user.id) {
+        return NextResponse.json({ success: false, message: "Only the author can edit this comment" }, { status: 403 });
+      }
+    }
+
+    const updateData: any = {};
+    if (resolved !== undefined) updateData.resolved = Boolean(resolved);
+    if (content !== undefined) {
+      if (!content.trim()) return NextResponse.json({ success: false, message: "Comment content cannot be empty" }, { status: 400 });
+      updateData.content = content.trim();
+    }
+
+    const updated = await localPrisma.comment.update({
+      where: { id: commentId },
+      data: updateData,
+      include: { replies: { include: { author: true } }, author: true }
+    });
     return NextResponse.json({ success: true, data: updated });
   } catch (err) {
     console.error("[PATCH /comments/:id]", err);

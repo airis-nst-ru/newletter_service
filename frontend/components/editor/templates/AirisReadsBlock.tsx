@@ -1,5 +1,6 @@
 import React from "react";
 import { Block } from "../../../types/types";
+import { renderParagraphsPreview, formatRichHtmlForEmail } from "../../../utils/richText";
 
 export function AirisReadsPreview({ block }: { block: Block }) {
   const parsedParagraphs = block.paragraphs
@@ -18,9 +19,7 @@ export function AirisReadsPreview({ block }: { block: Block }) {
               <p className="m-0 font-sans text-xs font-bold text-[#b654a7] tracking-wider uppercase">{block.author}</p>
             )}
             <h1 className="m-0 mt-2.5 font-sans text-[22px] font-bold leading-tight text-neutral-900">{block.title}</h1>
-            {parsedParagraphs.map((p, pIdx) => (
-              <p key={pIdx} className="pt-4 font-sans text-sm text-neutral-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: p }}></p>
-            ))}
+            {renderParagraphsPreview(block.paragraphs)}
             {block.readMoreUrl && (
               <p className="pt-4 font-sans text-sm leading-relaxed">
                 <a href={block.readMoreUrl} className="text-[#b654a7] font-bold text-sm tracking-wide">Read More &rarr;</a>
@@ -49,9 +48,7 @@ export function AirisReadsHtml(block: Block): string {
               <td style="padding:40px 20px;background-color:${block.backgroundColor || '#ffffff'};text-align:left">
                 ${block.author ? `<p style="margin:0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#b654a7">${block.author}</p>` : ''}
                 <h1 style="margin:12px 0 0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:26px;font-weight:700;line-height:32px;color:#333333">${block.title || ''}</h1>
-                ${parsedParagraphs.map(p => `
-                <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#333333">${p}</p>
-                `).join('')}
+                ${formatRichHtmlForEmail(block.paragraphs)}
                  ${block.readMoreUrl?.trim() ? `
                  <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;line-height:21px;color:#333333"><a href="${block.readMoreUrl.trim()}" target="_blank" style="color:#b654a7;font-weight:700;text-decoration:none">Read More &rarr;</a></p>
                  ` : ''}
