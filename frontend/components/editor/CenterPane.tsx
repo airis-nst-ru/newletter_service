@@ -290,7 +290,7 @@ export default function CenterPane() {
                     className="bg-neutral-950 border border-neutral-900 rounded-2xl overflow-hidden"
                   >
                     {/* Accordion header */}
-                    <button
+                    <div
                       onClick={() => setExpandedBlockId(isOpen ? null : block.id)}
                       className="w-full flex items-center justify-between px-5 py-3.5 cursor-pointer hover:bg-neutral-900/50 transition-colors"
                     >
@@ -310,7 +310,7 @@ export default function CenterPane() {
                         <Copy size={10} />
                         {copiedId === block.id ? "Copied!" : "Copy"}
                       </button>
-                    </button>
+                    </div>
 
                     {/* Accordion body */}
                     {isOpen && (
