@@ -10,8 +10,12 @@ import {
   Eye,
   Code,
   Sun,
-  Moon
+  Moon,
+  History,
+  BookmarkPlus
 } from "lucide-react";
+
+import { NewsletterVersion } from "@/types/types";
 
 import { EditorProvider, useEditor } from "../../app/context/EditorContext";
 import LeftPane from "./LeftPane";
@@ -64,7 +68,10 @@ function NewsletterEditorContent() {
 
   const {
     user,
+    newsletterId,
     blocks,
+    setBlocks,
+    compiledHtml,
     newsletterTitle,
     setNewsletterTitle,
     newsletterStatus,
@@ -92,6 +99,80 @@ function NewsletterEditorContent() {
 
   const [showSendForApprovalModal, setShowSendForApprovalModal] = React.useState(false);
   const [showUnsavedModal, setShowUnsavedModal] = React.useState(false);
+  const [showVersionHistory, setShowVersionHistory] = React.useState(false);
+  const [versions, setVersions] = React.useState<NewsletterVersion[]>([]);
+  const [loadingVersions, setLoadingVersions] = React.useState(false);
+  const [savingVersion, setSavingVersion] = React.useState(false);
+  
+  const fetchVersions = async () => {
+    setLoadingVersions(true);
+    try {
+      const res = await fetch(`/api/v1/newsletters/${newsletterId}/versions`);
+      const data = await res.json();
+      if (data.success) {
+        setVersions(data.versions);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingVersions(false);
+    }
+  };
+
+  const handleSaveVersion = async () => {
+    if (savingVersion) return;
+    setSavingVersion(true);
+    try {
+      // First ensure the latest state is saved as draft
+      await handleSave();
+      
+      const res = await fetch(`/api/v1/newsletters/${newsletterId}/versions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          state: blocks,
+          content: compiledHtml
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert("Version saved successfully!");
+        if (showVersionHistory) fetchVersions();
+      } else {
+        alert("Failed to save version: " + data.message);
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error saving version");
+    } finally {
+      setSavingVersion(false);
+    }
+  };
+
+  const restoreVersion = async (versionId: string) => {
+    if (!confirm("Are you sure you want to restore this version? Your current unsaved progress will be lost.")) return;
+    
+    try {
+      const res = await fetch(`/api/v1/newsletters/${newsletterId}/versions/${versionId}`);
+      const data = await res.json();
+      if (data.success && data.version.state) {
+        let parsed = data.version.state;
+        if (typeof parsed === 'string') parsed = JSON.parse(parsed);
+        setBlocks(parsed);
+        setShowVersionHistory(false);
+        alert("Version restored!");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error restoring version");
+    }
+  };
+
+  React.useEffect(() => {
+    if (showVersionHistory) {
+      fetchVersions();
+    }
+  }, [showVersionHistory]);
 
   if (authLoading) {
     return (
@@ -172,6 +253,31 @@ function NewsletterEditorContent() {
             title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
             {isDarkMode ? <Sun size={14} /> : <Moon size={14} />}
+          </button>
+
+          <button
+            onClick={() => setShowVersionHistory(true)}
+            className="text-neutral-400 hover:text-white p-1.5 rounded-xl hover:bg-neutral-900/60 transition-all duration-150 cursor-pointer flex items-center justify-center shrink-0"
+            title="Version History"
+          >
+            <History size={16} />
+          </button>
+          
+          <button
+            onClick={handleSaveVersion}
+            disabled={savingVersion}
+            className={`btn-save-version px-3 py-1.5 rounded-xl font-semibold transition-all duration-150 flex items-center gap-1.5 cursor-pointer text-xs ${savingVersion
+                ? "bg-neutral-850 text-neutral-500 cursor-not-allowed"
+                : "bg-neutral-800 text-neutral-200 hover:bg-neutral-700"
+              }`}
+            title="Save a snapshot of the current state"
+          >
+            {savingVersion ? (
+              <span className="h-3 w-3 animate-spin rounded-full border-2 border-neutral-400 border-t-transparent"></span>
+            ) : (
+              <BookmarkPlus size={14} />
+            )}
+            Save Version
           </button>
 
           <button
@@ -438,6 +544,53 @@ function NewsletterEditorContent() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* VERSION HISTORY MODAL */}
+      {showVersionHistory && (
+        <div
+          onClick={() => setShowVersionHistory(false)}
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-end p-0"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-neutral-950 border-l border-neutral-850 h-full w-full max-w-sm flex flex-col shadow-2xl"
+          >
+            <div className="flex justify-between items-center p-6 border-b border-neutral-900">
+              <h2 className="text-xl font-bold text-white">Version History</h2>
+              <button
+                onClick={() => setShowVersionHistory(false)}
+                className="text-neutral-400 hover:text-white"
+              >
+                Close
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              {loadingVersions ? (
+                <div className="flex justify-center py-10">
+                  <span className="h-6 w-6 animate-spin rounded-full border-2 border-[#b654a7] border-t-transparent"></span>
+                </div>
+              ) : versions.length === 0 ? (
+                <p className="text-sm text-neutral-500 text-center py-10">No saved versions found.</p>
+              ) : (
+                versions.map((v) => (
+                  <div key={v.id} className="bg-neutral-900 border border-neutral-800 rounded-xl p-4 hover:border-neutral-700 transition-colors">
+                    <h4 className="font-semibold text-white text-sm">{v.name}</h4>
+                    <p className="text-xs text-neutral-400 mt-1">
+                      {new Date(v.createdAt).toLocaleString()} by {v.createdBy?.username || "Unknown"}
+                    </p>
+                    <button 
+                      onClick={() => restoreVersion(v.id)}
+                      className="mt-3 text-xs bg-[#b654a7] hover:bg-[#9a458d] text-white px-3 py-1.5 rounded-lg font-medium transition-colors w-full"
+                    >
+                      Restore this version
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
