@@ -28,4 +28,5 @@ export interface Block {
   buttonText?: string;
   buttonUrl?: string;
   hidden?: boolean;
+  backgroundColor?: string;
 }

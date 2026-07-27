@@ -7,7 +7,7 @@ export function AirisReadsPreview({ block }: { block: Block }) {
     : [];
 
   return (
-    <table className="w-full bg-white">
+    <table className="w-full" style={{ backgroundColor: block.backgroundColor || "#ffffff" }}>
       <tbody>
         <tr className="bg-[#333333] text-white">
           <td className="p-[10px_20px] font-sans text-[11px] font-bold tracking-widest uppercase">{block.sectionLabel}</td>
@@ -46,7 +46,7 @@ export function AirisReadsHtml(block: Block): string {
               </td>
             </tr>
             <tr>
-              <td style="padding:40px 20px;background-color:#ffffff;text-align:left">
+              <td style="padding:40px 20px;background-color:${block.backgroundColor || '#ffffff'};text-align:left">
                 ${block.author ? `<p style="margin:0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#b654a7">${block.author}</p>` : ''}
                 <h1 style="margin:12px 0 0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:26px;font-weight:700;line-height:32px;color:#333333">${block.title || ''}</h1>
                 ${parsedParagraphs.map(p => `

@@ -3,7 +3,7 @@ import { Block } from "../../../types/types";
 
 export function HeroPreview({ block }: { block: Block }) {
   return (
-    <table cellPadding="0" cellSpacing="0" className="w-full bg-[#333333] text-white">
+    <table cellPadding="0" cellSpacing="0" className="w-full text-white" style={{ backgroundColor: block.backgroundColor || "#333333" }}>
       <tbody>
         <tr>
           <td className="p-[40px_20px] text-left">
@@ -20,7 +20,7 @@ export function HeroHtml(block: Block): string {
   return `
             <!-- Hero -->
             <tr>
-              <td style="padding:40px 20px;background-color:#333333;text-align:left">
+              <td style="padding:40px 20px;background-color:${block.backgroundColor || '#333333'};text-align:left">
                 <h1 class="hero-title" style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:48px;font-weight:700;line-height:1.1;color:#ffffff;letter-spacing:0">${block.title || ''}</h1>
                 <p style="padding:10px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:700;line-height:21px;color:#ffffff">${block.subtitle || ''}</p>
               </td>

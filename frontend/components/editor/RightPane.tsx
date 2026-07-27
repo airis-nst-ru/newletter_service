@@ -132,6 +132,26 @@ export default function RightPane() {
             /* Block Editable Settings Fields */
             <div className="space-y-4">
 
+            {/* BACKGROUND COLOR (All blocks) */}
+            <div>
+              <label className="block mb-2 text-xs font-semibold text-neutral-400 uppercase tracking-widest">Background Color</label>
+              <div className="flex gap-2 items-center">
+                <input
+                  type="color"
+                  value={selectedBlock.backgroundColor || "#ffffff"}
+                  onChange={(e) => updateSelectedBlockField("backgroundColor", e.target.value)}
+                  className="w-10 h-10 p-0 border-0 bg-transparent rounded cursor-pointer shrink-0"
+                  title="Pick background color"
+                />
+                <AutoResizingTextarea
+                  value={selectedBlock.backgroundColor || ""}
+                  onChange={(e) => updateSelectedBlockField("backgroundColor", e.target.value)}
+                  placeholder="#ffffff or transparent"
+                  className="flex-1 bg-black border border-neutral-800 focus:border-neutral-600 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none transition-all duration-200"
+                />
+              </div>
+            </div>
+
             {/* LOGO URL */}
             {(selectedBlock.logoUrl !== undefined || supportsLogo) && (
               <div>

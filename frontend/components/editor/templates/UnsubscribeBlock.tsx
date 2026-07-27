@@ -3,7 +3,7 @@ import { Block } from "../../../types/types";
 
 export function UnsubscribePreview({ block }: { block: Block }) {
   return (
-    <table className="w-full bg-[#f5f5f5] text-neutral-400 p-[15px_20px]">
+    <table className="w-full text-neutral-400 p-[15px_20px]" style={{ backgroundColor: block.backgroundColor || "#f5f5f5" }}>
       <tbody>
         <tr>
           <td className="text-center font-sans text-[11px] leading-relaxed py-4">
@@ -20,7 +20,7 @@ export function UnsubscribeHtml(block: Block): string {
   return `
             <!-- Unsubscribe -->
             <tr>
-              <td style="padding:15px 20px;background-color:#f5f5f5;text-align:center">
+              <td style="padding:15px 20px;background-color:${block.backgroundColor || '#f5f5f5'};text-align:center">
                 <p style="margin:0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:12px;line-height:18px;color:#999999">
                   ${block.text || ''}
                   <a href="${block.unsubscribeUrl || ''}" target="_blank" style="color:#b654a7;text-decoration:underline;font-size:12px">Unsubscribe</a>

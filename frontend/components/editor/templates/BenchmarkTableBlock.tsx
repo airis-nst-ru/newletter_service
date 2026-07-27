@@ -7,7 +7,7 @@ export function BenchmarkTablePreview({ block }: { block: Block }) {
     : [];
 
   return (
-    <table className="w-full bg-[#666666] text-white">
+    <table className="w-full text-white" style={{ backgroundColor: block.backgroundColor || "#666666" }}>
       <tbody>
         <tr>
           <td className="p-[40px_20px] text-left">
@@ -73,7 +73,7 @@ export function BenchmarkTableHtml(block: Block): string {
   return `
             <!-- Benchmark Table -->
             <tr>
-              <td style="padding:40px 20px;background-color:#666666;text-align:left">
+              <td style="padding:40px 20px;background-color:${block.backgroundColor || '#666666'};text-align:left">
                 <h1 style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:30px;font-weight:normal;line-height:36px;color:#ffffff">${block.title || ''}</h1>
                 ${parsedParagraphs.map(p => `
                 <p style="padding:15px 0 0;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:14px;font-weight:400;line-height:21px;color:#ffffff">${p}</p>
