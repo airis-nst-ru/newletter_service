@@ -10,7 +10,7 @@ function button({ buttonName, onClick, buttonType = "Primary", className = "" ,o
 
     if (buttonType === "Primary") {
         return (
-            <button onClick={onClick} onKeyDown={onKeyDown} className={`${className} bg-[#B654A7] text-white px-4 py-2 rounded-lg font-medium`}>{buttonName}</button>
+            <button onClick={onClick} onKeyDown={onKeyDown} className={`${className} bg-[#FF007F] hover:bg-[#FF3399] transition-colors duration-200 text-white px-4 py-2 rounded-lg font-medium`}>{buttonName}</button>
         )
     }
     else if (buttonType === "Secondary") {

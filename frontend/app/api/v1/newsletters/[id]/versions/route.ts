@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyToken } from "@/lib/auth";
+import { MongoClient, ObjectId } from "mongodb";
+
+const mongoClient = new MongoClient(process.env.DATABASE_URL!);
 
 // GET /api/v1/newsletters/[id]/versions
 export async function GET(
@@ -41,7 +44,6 @@ export async function GET(
 }
 
 // POST /api/v1/newsletters/[id]/versions
-// Body: { name?: string, description?: string, state: any, content: string }
 export async function POST(
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
@@ -63,18 +65,25 @@ export async function POST(
       );
     }
 
-    const version = await prisma.newsletterVersion.create({
-      data: {
-        newsletterId: id,
-        name: name || `Version - ${new Date().toLocaleString()}`,
-        description: description || "",
-        state,
-        content,
-        createdById: user.id,
-      },
+    // Use native MongoDB driver to avoid replica set requirement
+    await mongoClient.connect();
+    const db = mongoClient.db();
+    const now = new Date();
+
+    const result = await db.collection("NewsletterVersion").insertOne({
+      newsletterId: new ObjectId(id),
+      name: name || `Version — ${now.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`,
+      description: description || "",
+      state,
+      content,
+      createdById: new ObjectId(user.id),
+      createdAt: now,
     });
 
-    return NextResponse.json({ success: true, version: { id: version.id, createdAt: version.createdAt } }, { status: 201 });
+    return NextResponse.json({
+      success: true,
+      version: { id: result.insertedId.toString(), createdAt: now }
+    }, { status: 201 });
   } catch (error) {
     console.error("[POST /versions]", error);
     return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });

@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyToken } from "@/lib/auth";
 import { generateHtmlFromBlocks, validateBlocks } from "@/lib/htmlCompiler";
-import { Block } from "@/types/types";
+import { MongoClient, ObjectId } from "mongodb";
+
+const mongoClient = new MongoClient(process.env.DATABASE_URL!);
 
 // PATCH /api/v1/newsletters/:id/state
 // Body: { state: Block[] }
@@ -28,7 +30,7 @@ export async function PATCH(
       );
     }
 
-    // Auth check
+    // Auth check using Prisma (reads are fine without replica set)
     const newsletter = await prisma.newsletter.findUnique({ where: { id }, include: { content: true } });
     if (!newsletter) {
       return NextResponse.json({ success: false, message: "Newsletter not found" }, { status: 404 });
@@ -42,7 +44,6 @@ export async function PATCH(
     let stateToStore: any = state;
     let warnings: string[] = [];
 
-    // If the client sent an array of blocks, validate and recompile HTML
     if (Array.isArray(state)) {
       const validation = validateBlocks(state);
       if (!validation.valid) {
@@ -50,34 +51,42 @@ export async function PATCH(
       }
       warnings = validation.warnings;
       compiledHtml = generateHtmlFromBlocks(state);
-      stateToStore = state; // store array (Prisma Json field)
-    } else if (typeof state === 'string') {
-      // allow sentinel strings (e.g., "seeking approval") to be stored as state
+      stateToStore = state;
+    } else if (typeof state === "string") {
       stateToStore = state;
     } else {
       return NextResponse.json({ success: false, message: "Invalid field: state must be an array or a string" }, { status: 400 });
     }
 
-    // Upsert NewsletterContent with compiled HTML + block state (state stored as Json)
-    const updated = await prisma.newsletterContent.upsert({
-      where: { newsletterId: id },
-      create: {
-        newsletterId: id,
-        title: "Untitled Newsletter",
+    // Use native MongoDB driver for writes (avoids Prisma replica set requirement)
+    await mongoClient.connect();
+    const db = mongoClient.db();
+    const now = new Date();
+    const newsletterObjectId = new ObjectId(id);
+
+    const existingContent = await db.collection("NewsletterContent").findOne({ newsletterId: newsletterObjectId });
+
+    if (existingContent) {
+      await db.collection("NewsletterContent").updateOne(
+        { newsletterId: newsletterObjectId },
+        { $set: { content: compiledHtml, state: stateToStore, updatedAt: now } }
+      );
+    } else {
+      await db.collection("NewsletterContent").insertOne({
+        newsletterId: newsletterObjectId,
+        title: newsletter.content?.title || "Untitled Newsletter",
         content: compiledHtml,
         state: stateToStore,
-      },
-      update: {
-        content: compiledHtml,
-        state: stateToStore,
-      },
-    });
+        variables: null,
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
 
     return NextResponse.json({
       success: true,
-      updatedAt: updated.updatedAt,
+      updatedAt: now,
       compiledHtml,
-      // Return the canonical saved state (parsed) so frontend can reconcile if needed
       state: state,
       warnings,
     });

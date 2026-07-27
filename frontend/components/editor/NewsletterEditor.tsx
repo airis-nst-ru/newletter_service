@@ -100,6 +100,9 @@ function NewsletterEditorContent() {
   const [showSendForApprovalModal, setShowSendForApprovalModal] = React.useState(false);
   const [showUnsavedModal, setShowUnsavedModal] = React.useState(false);
   const [showVersionHistory, setShowVersionHistory] = React.useState(false);
+  const [showSaveVersionModal, setShowSaveVersionModal] = React.useState(false);
+  const [versionNameInput, setVersionNameInput] = React.useState("");
+  const [versionDescInput, setVersionDescInput] = React.useState("");
   const [versions, setVersions] = React.useState<NewsletterVersion[]>([]);
   const [loadingVersions, setLoadingVersions] = React.useState(false);
   const [savingVersion, setSavingVersion] = React.useState(false);
@@ -119,7 +122,7 @@ function NewsletterEditorContent() {
     }
   };
 
-  const handleSaveVersion = async () => {
+  const handleSaveVersion = async (name?: string, description?: string) => {
     if (savingVersion) return;
     setSavingVersion(true);
     try {
@@ -130,6 +133,8 @@ function NewsletterEditorContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          name: name || undefined,
+          description: description || undefined,
           state: blocks,
           content: compiledHtml
         })
@@ -137,6 +142,9 @@ function NewsletterEditorContent() {
       const data = await res.json();
       if (data.success) {
         alert("Version saved successfully!");
+        setShowSaveVersionModal(false);
+        setVersionNameInput("");
+        setVersionDescInput("");
         if (showVersionHistory) fetchVersions();
       } else {
         alert("Failed to save version: " + data.message);
@@ -264,7 +272,7 @@ function NewsletterEditorContent() {
           </button>
           
           <button
-            onClick={handleSaveVersion}
+            onClick={() => setShowSaveVersionModal(true)}
             disabled={savingVersion}
             className={`btn-save-version px-3 py-1.5 rounded-xl font-semibold transition-all duration-150 flex items-center gap-1.5 cursor-pointer text-xs ${savingVersion
                 ? "bg-neutral-850 text-neutral-500 cursor-not-allowed"
@@ -591,6 +599,63 @@ function NewsletterEditorContent() {
                   </div>
                 ))
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SAVE VERSION MODAL */}
+      {showSaveVersionModal && (
+        <div
+          onClick={() => setShowSaveVersionModal(false)}
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-neutral-950 border border-neutral-850 w-full max-w-md rounded-2xl p-6 shadow-2xl"
+          >
+            <h2 className="text-xl font-bold text-white mb-2">Save New Version</h2>
+            <p className="text-sm text-neutral-400 mb-6">Create a snapshot of your current work. You can restore it later if needed.</p>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-neutral-300 mb-1.5">Version Name (Optional)</label>
+                <input 
+                  type="text" 
+                  value={versionNameInput}
+                  onChange={(e) => setVersionNameInput(e.target.value)}
+                  placeholder={`e.g. "Draft before adding feature table"`}
+                  className="w-full bg-neutral-900 border border-neutral-800 focus:border-[#b654a7] outline-none rounded-xl px-4 py-2.5 text-sm text-white transition-colors"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-xs font-semibold text-neutral-300 mb-1.5">Description (Optional)</label>
+                <textarea 
+                  value={versionDescInput}
+                  onChange={(e) => setVersionDescInput(e.target.value)}
+                  placeholder="What changed in this version?"
+                  rows={3}
+                  className="w-full bg-neutral-900 border border-neutral-800 focus:border-[#b654a7] outline-none rounded-xl px-4 py-2.5 text-sm text-white transition-colors resize-none"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 mt-8">
+              <button
+                onClick={() => setShowSaveVersionModal(false)}
+                className="px-4 py-2 text-sm font-semibold text-neutral-400 hover:text-white transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleSaveVersion(versionNameInput, versionDescInput)}
+                disabled={savingVersion}
+                className={`px-5 py-2 text-sm font-semibold text-white rounded-xl transition-colors flex items-center justify-center gap-2 ${savingVersion ? "bg-[#9a458d] cursor-not-allowed" : "bg-[#b654a7] hover:bg-[#a04692]"}`}
+              >
+                {savingVersion && <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>}
+                Save Snapshot
+              </button>
             </div>
           </div>
         </div>
