@@ -8,7 +8,7 @@ export function TechnicalSessionPreview({ block }: { block: Block }) {
     : [];
 
   return (
-    <table className="w-full bg-white">
+    <table className="w-full" style={{ backgroundColor: block.backgroundColor || "#ffffff" }}>
       <tbody>
         <tr className="bg-[#b654a7] text-white">
           <td className="p-[10px_20px] font-sans text-[11px] font-bold tracking-widest uppercase">{block.sectionLabel}</td>
@@ -64,14 +64,14 @@ export function TechnicalSessionHtml(block: Block): string {
   }).filter(c => c.title) : [];
 
   return `
-            <!-- Section label -->
+            <!-- Section label bar -->
             <tr>
               <td style="padding:0;background-color:#b654a7">
                 <p style="padding:10px 20px;font-family:arial,'helvetica neue',helvetica,sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#ffffff;text-transform:uppercase;margin:0">${block.sectionLabel || ''}</p>
               </td>
             </tr>
             <tr>
-              <td style="padding:40px 20px;background-color:#ffffff;text-align:left">
+              <td style="padding:40px 20px;background-color:${block.backgroundColor || '#ffffff'};text-align:left">
                 <h1 style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:30px;font-weight:normal;line-height:36px;color:#333333">${block.title || ''}</h1>
                 ${block.imageUrl ? `
                 <img 

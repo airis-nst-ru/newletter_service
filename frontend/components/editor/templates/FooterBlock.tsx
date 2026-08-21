@@ -3,7 +3,7 @@ import { Block } from "../../../types/types";
 
 export function FooterPreview({ block }: { block: Block }) {
   return (
-    <table cellPadding="0" cellSpacing="0" className="w-full bg-[#333333] text-white p-5">
+    <table cellPadding="0" cellSpacing="0" className="w-full text-white p-5" style={{ backgroundColor: block.backgroundColor || "#333333" }}>
       <tbody>
         <tr>
           <td>
@@ -25,7 +25,7 @@ export function FooterHtml(block: Block): string {
   return `
             <!-- Footer -->
             <tr>
-              <td style="padding:20px;background-color:#333333">
+              <td style="padding:20px;background-color:${block.backgroundColor || '#333333'}">
                 <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
                   <tr>
                     <td valign="middle" class="footer-col" style="text-align:left">

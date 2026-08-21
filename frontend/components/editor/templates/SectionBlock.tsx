@@ -8,7 +8,7 @@ export function SectionPreview({ block }: { block: Block }) {
     : [];
 
   return (
-    <table className="w-full bg-white">
+    <table className="w-full" style={{ backgroundColor: block.backgroundColor || "#ffffff" }}>
       <tbody>
         <tr>
           <td className="p-[40px_20px] text-left text-neutral-800">
@@ -37,7 +37,7 @@ export function SectionHtml(block: Block): string {
   return `
             <!-- Section -->
             <tr>
-              <td style="padding:40px 20px;background-color:#ffffff;text-align:left">
+              <td style="padding:40px 20px;background-color:${block.backgroundColor || '#ffffff'};text-align:left">
                 <h1 style="margin:0;font-family:helvetica,'helvetica neue',arial,verdana,sans-serif;font-size:30px;font-weight:normal;line-height:36px;color:#333333">${block.title || ''}</h1>
                 ${block.imageUrl ? `
                 <img 

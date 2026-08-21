@@ -3,7 +3,7 @@ import { Block } from "../../../types/types";
 
 export function HeaderPreview({ block }: { block: Block }) {
   return (
-    <table cellPadding="0" cellSpacing="0" className="w-full bg-[#333333] text-white">
+    <table cellPadding="0" cellSpacing="0" className="w-full text-white" style={{ backgroundColor: block.backgroundColor || "#333333" }}>
       <tbody>
         <tr>
           <td className="p-[10px_20px]">
@@ -20,7 +20,7 @@ export function HeaderHtml(block: Block): string {
   return `
             <!-- Header -->
             <tr>
-              <td style="padding:10px 20px;background-color:#333333">
+              <td style="padding:10px 20px;background-color:${block.backgroundColor || '#333333'}">
                 <a href="https://airis-club.vercel.app/" target="_blank">
                   <img alt="AIRIS" src="${block.logoUrl || ''}" width="100" style="display:block;max-width:100px;height:auto">
                 </a>
